@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "BVPS School Website"
+version = "1.0.0"
+id = "artifacts/bvps-website"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23920
+
+[services.development]
+run = "pnpm --filter @workspace/bvps-website run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/bvps-website", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/bvps-website/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23920"
+BASE_PATH = "/"

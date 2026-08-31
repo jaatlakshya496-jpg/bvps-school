@@ -1,0 +1,8 @@
+{
+  "name": "BVPS School Website",
+  "description": "Official website of Bal Vikas Public School featuring admissions, academics, facilities, results, fee structure, principal message, online applications, and interactive AI voice chatbot.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
