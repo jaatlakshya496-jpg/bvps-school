@@ -1,0 +1,22 @@
+databases:
+  - name: bvps-db
+    plan: free
+
+services:
+  - type: web
+    name: bvps-api
+    runtime: node
+    plan: free
+    nodeVersion: 20
+    buildCommand: npm install && npm run build --workspace=@workspace/api-server
+    startCommand: cd artifacts/api-server && node --enable-source-maps ./dist/index.mjs
+    healthCheckPath: /api/healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: bvps-db
+          property: connectionString

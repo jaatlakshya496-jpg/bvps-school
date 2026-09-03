@@ -12,6 +12,7 @@
   "scripts": {
     "dev": "npm run dev --workspace=@workspace/bvps-website",
     "build": "npm run build --workspace=@workspace/bvps-website",
+    "start": "node artifacts/api-server/build.mjs && node --enable-source-maps artifacts/api-server/dist/index.mjs",
     "lint": "tsc --noEmit"
   },
   "dependencies": {},
