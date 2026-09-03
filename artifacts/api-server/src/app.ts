@@ -29,6 +29,16 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Root health check — hamesha 200 return karta hai, taaki cron/uptime services
+// (jaise cron-job.org, UptimeRobot) base URL pe bhi successive response paayein.
+app.get("/", (_req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
+app.get("/health", (_req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 app.use("/api", router);
 
 export default app;
