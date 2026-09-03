@@ -30,6 +30,11 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
 - **[2026-09-02]** Frontend production deploy Vercel par ✅ — Production URL: https://bvps-school.vercel.app
 - **[2026-09-03]** Backend Render deploy fix — `render.yaml` + `package-lock.json` pehle git mein committed NAHI the, isliye Render build fail ho raha tha. Dono commit kar ke push kiya. `render.yaml` mein `nodeVersion: 20` aur `NODE_ENV: production` add kiya. `esbuild-plugin-pino` peer dep mismatch `legacy-peer-deps=true` (`.npmrc`) se handle hai.
 - **[2026-09-03]** Cron/uptime health URL add ki — `app.ts` mein root `/` aur `/health` endpoints add kiye jo hamesha 200 return karte hain. `.onrender.com/` pehle 404/timeout deta tha isliye cron job error aa raha tha. Ab cron ke liye `https://bvps-school-1.onrender.com/` (ya `/health`) use karo.
+- **[2026-09-03]** Frontend Vercel pe verified — live URL https://bvps-school.vercel.app serving BVPS SPA (title "Bal Vikas Public School, Kalayat (BVPS)"). `main` branch GitHub → Vercel auto-deploy hai (`bal-vikas/bvps-school`).
+- **[2026-09-03]** Important architecture note — **Frontend abhi backend (Render) se connect NAHI hai.** Chatbot, admission form, feedback sab CLIENT-SIDE hain:
+  - Chatbot (`UnifiedAiAgent.tsx`, `VoiceBot.tsx`) = hardcoded knowledge base + browser Web Speech API (kisi API call ki zaroorat nahi).
+  - Forms (`enquiry-store.ts`, `feedback-store.ts`) = `localStorage` me save hote hain.
+  - Isliye chatbot/form Vercel pe bina backend ke kaam karte hain. Backend (Render) sirf health endpoints provide karta hai abhi.
 
 ## To-Do Notes
 - (Yahan pending kaam note karein)
