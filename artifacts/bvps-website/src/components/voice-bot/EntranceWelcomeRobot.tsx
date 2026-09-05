@@ -21,13 +21,13 @@ export function EntranceWelcomeRobot({ onOpenVoiceAssistant }: EntranceWelcomeRo
   useEffect(() => {
     // Check if shown in current session
     const hasSeenWelcome = sessionStorage.getItem('bvps_welcome_robot_seen');
-    if (!hasSeenWelcome) {
-      // Show welcoming robot after a brief 1.2s delay
-      const timer = setTimeout(() => {
-        setIsVisible(true);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
+    if (hasSeenWelcome) return;
+
+    // Show welcoming robot after a brief 1.2s delay
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 1000);
+    return () => clearTimeout(timer);
   }, []);
 
   const welcomeSpeechText = 

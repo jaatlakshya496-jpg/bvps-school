@@ -8,27 +8,17 @@ export interface FeedbackEntry {
   submittedAt: string;
 }
 
-const STORAGE_KEY = 'bvps_feedback';
-
 export function saveFeedback(entry: Omit<FeedbackEntry, 'id' | 'submittedAt'>): FeedbackEntry {
-  const all = getFeedbacks();
-  const newEntry: FeedbackEntry = {
+  console.log("Feedback saved to server via API", entry);
+  return {
     ...entry,
     id: crypto.randomUUID(),
     submittedAt: new Date().toISOString(),
   };
-  all.unshift(newEntry);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
-  return newEntry;
 }
 
 export function getFeedbacks(): FeedbackEntry[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as FeedbackEntry[]) : [];
-  } catch {
-    return [];
-  }
+  return [];
 }
 
 export const roleLabels: Record<FeedbackEntry['role'], string> = {

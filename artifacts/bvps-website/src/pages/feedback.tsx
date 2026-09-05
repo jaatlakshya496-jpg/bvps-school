@@ -23,17 +23,14 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Star, CheckCircle2 } from 'lucide-react';
-import { saveFeedback } from '@/lib/feedback-store';
+import { apiPost } from '@/lib/api';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
-  role: z.enum(['parent', 'student', 'alumni', 'visitor'], {
-    required_error: 'Please select your role',
-  }),
+  email: z.string().email('Enter a valid email'),
+  role: z.enum(['parent', 'student', 'alumni', 'visitor']),
   rating: z.number().min(1, 'Please select a rating').max(5),
-  category: z.enum(['academics', 'facilities', 'staff', 'overall', 'other'], {
-    required_error: 'Please select a category',
-  }),
+  category: z.enum(['academics', 'facilities', 'staff', 'overall', 'other']),
   feedback: z.string().min(10, 'Feedback must be at least 10 characters'),
 });
 
@@ -75,11 +72,14 @@ const ratingLabels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
 
 export default function Feedback() {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
+      email: '',
       rating: 0,
       feedback: '',
     },
@@ -87,10 +87,23 @@ export default function Feedback() {
 
   const rating = form.watch('rating');
 
-  function onSubmit(values: FormValues) {
-    saveFeedback(values);
-    setIsSubmitted(true);
-    form.reset();
+  async function onSubmit(values: FormValues) {
+    setIsLoading(true);
+    setError(null);
+    try {
+      await apiPost('/feedback', {
+        name: values.name,
+        email: values.email,
+        message: values.feedback,
+        rating: values.rating,
+      });
+      setIsSubmitted(true);
+      form.reset();
+    } catch (err: any) {
+      setError(err?.error || 'Failed to submit. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -141,7 +154,6 @@ export default function Feedback() {
                   </h3>
                   <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                      {/* Name */}
                       <FormField
                         control={form.control}
                         name="name"
@@ -156,7 +168,20 @@ export default function Feedback() {
                         )}
                       />
 
-                      {/* Role */}
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Your Email</FormLabel>
+                            <FormControl>
+                              <Input type="email" placeholder="Enter your email" className="rounded-lg" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
                       <FormField
                         control={form.control}
                         name="role"
@@ -181,7 +206,6 @@ export default function Feedback() {
                         )}
                       />
 
-                      {/* Category */}
                       <FormField
                         control={form.control}
                         name="category"
@@ -195,9 +219,9 @@ export default function Feedback() {
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="academics">Academics & Teaching</SelectItem>
-                                <SelectItem value="facilities">Facilities & Infrastructure</SelectItem>
-                                <SelectItem value="staff">Staff & Administration</SelectItem>
+                                <SelectItem value="academics">Academics &amp; Teaching</SelectItem>
+                                <SelectItem value="facilities">Facilities &amp; Infrastructure</SelectItem>
+                                <SelectItem value="staff">Staff &amp; Administration</SelectItem>
                                 <SelectItem value="overall">Overall Experience</SelectItem>
                                 <SelectItem value="other">Other</SelectItem>
                               </SelectContent>
@@ -207,7 +231,6 @@ export default function Feedback() {
                         )}
                       />
 
-                      {/* Star Rating */}
                       <FormField
                         control={form.control}
                         name="rating"
@@ -216,10 +239,7 @@ export default function Feedback() {
                             <FormLabel>Your Rating</FormLabel>
                             <FormControl>
                               <div className="flex items-center gap-4">
-                                <StarRating
-                                  value={field.value}
-                                  onChange={field.onChange}
-                                />
+                                <StarRating value={field.value} onChange={field.onChange} />
                                 {rating > 0 && (
                                   <span className="text-sm font-medium text-secondary">
                                     {ratingLabels[rating]}
@@ -232,7 +252,6 @@ export default function Feedback() {
                         )}
                       />
 
-                      {/* Feedback Message */}
                       <FormField
                         control={form.control}
                         name="feedback"
@@ -257,6 +276,16 @@ export default function Feedback() {
                       >
                         Submit Feedback
                       </Button>
+                      {isLoading && (
+                        <div className="mt-4">
+                          <span className="text-primary">Submitting...</span>
+                        </div>
+                      )}
+                      {error && (
+                        <div className="mt-4 bg-red-50 border-red-200 text-red-800 rounded-md p-4">
+                          <p className="text-red-700">{error}</p>
+                        </div>
+                      )}
                     </form>
                   </Form>
                 </>

@@ -16,29 +16,45 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { apiPost } from '@/lib/api';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Enter a valid email'),
   phone: z.string().min(10, 'Please enter a valid phone number'),
+  subject: z.string().min(2, 'Subject must be at least 2 characters'),
   message: z.string().min(10, 'Message must be at least 10 characters'),
 });
 
 export default function Contact() {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
+      email: '',
       phone: '',
+      subject: '',
       message: '',
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    setIsSubmitted(true);
-    form.reset();
+    setIsLoading(true);
+    setError(null);
+    apiPost("/contact", values)
+      .then(() => {
+        setIsSubmitted(true);
+        setIsLoading(false);
+        form.reset();
+      })
+      .catch((err: any) => {
+        setError(err.error || "Failed to submit. Please try again.");
+        setIsLoading(false);
+      });
   }
 
   return (
@@ -120,6 +136,15 @@ export default function Contact() {
                     referrerPolicy="no-referrer-when-downgrade"
                     title="Bal Vikas Public School Kalayat — Location"
                   ></iframe>
+                  <a
+                    href="https://maps.google.com/?q=Bal+Vikas+Public+School,Railway+Road,Kalayat,Haryana"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex items-center gap-2 text-sm text-primary font-semibold hover:text-secondary transition-colors"
+                  >
+                    <MapPin className="w-4 h-4" />
+                    Open in Google Maps
+                  </a>
                 </div>
                 <a
                   href="https://maps.google.com/?q=Bal+Vikas+Public+School,Railway+Road,Kalayat,Haryana"
@@ -172,12 +197,38 @@ export default function Contact() {
                       />
                       <FormField
                         control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-foreground">Email</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter your email" type="email" className="bg-background rounded-lg border-border" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
                         name="phone"
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel className="text-foreground">Phone Number</FormLabel>
                             <FormControl>
                               <Input placeholder="Enter your mobile number" type="tel" className="bg-background rounded-lg border-border" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="subject"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-foreground">Subject</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter subject" className="bg-background rounded-lg border-border" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -200,9 +251,19 @@ export default function Contact() {
                           </FormItem>
                         )}
                       />
+                      {error && (
+                        <div className="bg-red-50 border-red-200 text-red-800 rounded-md p-4 mb-4">
+                          <p className="text-red-700">{error}</p>
+                        </div>
+                      )}
                       <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg py-6 text-lg font-bold">
                         Submit Enquiry
                       </Button>
+                      {isLoading && (
+                        <div className="mt-4">
+                          <span className="text-primary">Submitting...</span>
+                        </div>
+                      )}
                     </form>
                   </Form>
                 )}

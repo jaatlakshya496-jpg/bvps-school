@@ -15,28 +15,18 @@ try {
     throw new Error("No DATABASE_URL provided");
   }
 } catch {
-  console.warn("[AI Studio] Database not connected — using mock");
-  const noOp = {
-    findMany: async () => [],
-    findFirst: async () => null,
-    findUnique: async () => null,
-    create: async (d: any) => d?.data ?? {},
-    update: async (d: any) => d?.data ?? {},
-    delete: async () => ({}),
+  const message =
+    "Database not configured: DATABASE_URL is missing. Set it in environment variables (Render) or lib/db/.env.";
+  console.warn("[@workspace/db] " + message);
+  const failChain: any = () => {
+    throw new Error(message);
   };
-  db = new Proxy(
-    {},
-    {
-      get: (_, prop) =>
-        prop === "query" ? new Proxy({}, { get: () => noOp }) : async () => [],
-    },
-  );
+  db = new Proxy({}, { get: () => failChain });
   pool = {
-    query: async () => ({ rows: [] }),
-    connect: async () => ({
-      query: async () => ({ rows: [] }),
-      release: () => {},
-    }),
+    query: failChain,
+    connect: async () => {
+      throw new Error(message);
+    },
   };
 }
 

@@ -2,20 +2,20 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Link } from 'wouter';
-import {
-  Send, CheckCircle2, Phone, ArrowLeft,
-  User, Briefcase,
-} from 'lucide-react';
+import { Link as RouterLink } from 'wouter';
+import { Send, CheckCircle2, Phone, ArrowLeft, User, Briefcase } from 'lucide-react';
 import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg';
-import { saveApplication } from '@/lib/enquiry-store';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { apiPost } from '@/lib/api';
 
 export default function Application() {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
     studentName: '', dob: '', gender: '', classApplying: '', stream: '',
     parentName: '', relation: '', mobile: '', email: '',
@@ -45,9 +45,35 @@ export default function Application() {
     const errs = validate();
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
-    saveApplication({ ...form });
-    setSubmitted(true);
-    setForm({ studentName: '', dob: '', gender: '', classApplying: '', stream: '', parentName: '', relation: '', mobile: '', email: '', address: '', previousSchool: '', message: '' });
+    setIsLoading(true);
+    setError(null);
+    apiPost("/admissions", {
+      studentName: form.studentName,
+      dob: form.dob,
+      gender: form.gender,
+      classApplying: form.classApplying,
+      stream: form.stream,
+      parentName: form.parentName,
+      relation: form.relation,
+      phone: form.mobile,
+      email: form.email,
+      address: form.address,
+      previousSchool: form.previousSchool,
+      message: form.message,
+    })
+      .then(() => {
+        setSubmitted(true);
+        setIsLoading(false);
+        setForm({
+          studentName: '', dob: '', gender: '', classApplying: '', stream: '',
+          parentName: '', relation: '', mobile: '', email: '',
+          address: '', previousSchool: '', message: '',
+        });
+      })
+      .catch((err: any) => {
+        setError(err.error || "Failed to submit. Please try again.");
+        setIsLoading(false);
+      });
   }
 
   return (
@@ -200,6 +226,16 @@ export default function Application() {
                   <Button type="submit" className="bg-secondary text-primary hover:bg-secondary/90 font-bold rounded-xl px-10 h-12 text-base gap-2 w-full sm:w-auto">
                     <Send className="w-4 h-4" /> Submit Application
                   </Button>
+                  {isLoading && (
+                    <div className="mt-4">
+                      <span className="text-primary">Submitting...</span>
+                    </div>
+                  )}
+                  {error && (
+                    <div className="mt-4 bg-red-50 border-red-200 text-red-800 rounded-md p-4">
+                      <p className="text-red-700">{error}</p>
+                    </div>
+                  )}
                 </form>
               )}
             </div>

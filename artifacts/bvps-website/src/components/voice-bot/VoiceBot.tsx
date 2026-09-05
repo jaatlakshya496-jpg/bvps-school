@@ -114,7 +114,7 @@ const KNOWLEDGE_BASE: KnowledgeItem[] = [
   }
 ];
 
-function findAnswer(query: string, lang: 'hi' | 'en'): { text: string; actionLink?: { label: string; path: string }; options?: string[] } {
+function findAnswer(query: string, lang: 'hi' | 'en'): { text: string; actionLink?: { label: string; path: string; isExternal?: boolean }; options?: string[] } {
   const normalized = query.toLowerCase().trim();
 
   // Greetings
