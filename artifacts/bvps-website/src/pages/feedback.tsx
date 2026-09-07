@@ -94,6 +94,8 @@ export default function Feedback() {
       await apiPost('/feedback', {
         name: values.name,
         email: values.email,
+        role: values.role,
+        category: values.category,
         message: values.feedback,
         rating: values.rating,
       });

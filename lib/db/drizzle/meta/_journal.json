@@ -15,6 +15,13 @@
       "when": 1788587304735,
       "tag": "0001_omniscient_peter_parker",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788763798530,
+      "tag": "0002_light_wallop",
+      "breakpoints": true
     }
   ]
 }

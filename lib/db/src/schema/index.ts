@@ -41,6 +41,8 @@ export const feedbackSubmissionsTable = pgTable("feedback_submissions", {
 	id: serial("id").primaryKey(),
 	name: text("name").notNull(),
 	email: text("email").notNull(),
+	role: text("role").notNull().default(""),
+	category: text("category").notNull().default(""),
 	message: text("message").notNull(),
 	rating: integer("rating").notNull(),
 	createdAt: timestamp("created_at").defaultNow().notNull(),

@@ -8,6 +8,8 @@ const router = Router();
 const insertSchema = z.object({
 	name: z.string().min(2),
 	email: z.string().email(),
+	role: z.enum(["parent", "student", "alumni", "visitor"]),
+	category: z.enum(["academics", "facilities", "staff", "overall", "other"]),
 	message: z.string().min(10),
 	rating: z.number().int().min(1).max(5),
 });
@@ -18,6 +20,8 @@ router.post("/", async (req: Request, res: Response) => {
 		await db.insert(feedbackSubmissionsTable).values({
 			name: validated.name,
 			email: validated.email,
+			role: validated.role,
+			category: validated.category,
 			message: validated.message,
 			rating: validated.rating,
 			createdAt: new Date(),
