@@ -35,6 +35,7 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - Chatbot (`UnifiedAiAgent.tsx`, `VoiceBot.tsx`) = hardcoded knowledge base + browser Web Speech API (kisi API call ki zaroorat nahi).
   - Forms (`enquiry-store.ts`, `feedback-store.ts`) = `localStorage` me save hote hain.
   - Isliye chatbot/form Vercel pe bina backend ke kaam karte hain. Backend (Render) sirf health endpoints provide karta hai abhi.
+- **[2026-09-08]** Contact form email sending add ki — naya backend endpoint `POST /contact-email` (`contact-email.ts`) jo Gmail SMTP (nodemailer) se email bhejta hai. `GMAIL_USER` aur `GMAIL_APP_PASSWORD` env vars required hain (Render pe set karne hain). Frontend `contact.tsx` ab `/contact` nahi `/contact-email` call karta hai. ⚠️ Render pe GMAIL env vars set karna baaki hai — warna contact form 500 dega.
 
 ## To-Do Notes
-- (Yahan pending kaam note karein)
+- ⚠️ Render pe `GMAIL_USER` aur `GMAIL_APP_PASSWORD` env vars set karne hain (contact email ke liye).
