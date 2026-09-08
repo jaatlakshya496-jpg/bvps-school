@@ -45,7 +45,7 @@ export default function Contact() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     setError(null);
-    apiPost("/contact", values)
+    apiPost("/contact-email", values)
       .then(() => {
         setIsSubmitted(true);
         setIsLoading(false);
