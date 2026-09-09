@@ -3,6 +3,7 @@ import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Button } from '@/components/ui/button';
 import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
 import heroImg from '@assets/bal-vikas-public-school_1784611430239.jpg';
+import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -59,13 +60,27 @@ export default function Contact() {
 
   return (
     <div className="flex flex-col">
+      <Helmet>
+        <title>Contact Bal Vikas Public School Kalayat | Get in Touch</title>
+        <meta name="description" content="Contact Bal Vikas Public School Kalayat. Get address, phone number (+91 98125 50200), and reach out for admissions, queries, or just to say hello." />
+        <meta name="keywords" content="Contact Bal Vikas Public School Kalayat, school in Kalayat, admissions enquiry, phone number school Kalayat Haryana" />
+        <link rel="canonical" href="https://bvps-school.vercel.app/contact" />
+        <meta property="og:title" content="Contact Bal Vikas Public School Kalayat | Get in Touch" />
+        <meta property="og:description" content="Contact Bal Vikas Public School Kalayat. Get address, phone number, and reach out for admissions, queries, or just to say hello." />
+        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg" />
+        <meta property="og:url" content="https://bvps-school.vercel.app/contact" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Contact Bal Vikas Public School Kalayat | Get in Touch" />
+        <meta name="twitter:description" content="Contact Bal Vikas Public School Kalayat. Get address, phone number, and reach out for admissions, queries, or just to say hello." />
+      </Helmet>
+
       {/* Page Header */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
         <img src={heroImg} alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/30 to-primary/55" />
         <div className="container mx-auto text-center relative z-10">
           <ScrollReveal>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">Contact Us</h1>
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">Contact Bal Vikas Public School Kalayat</h1>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full"></div>
             <p className="mt-6 text-primary-foreground/80 text-lg max-w-2xl mx-auto">
               We're here to help. Reach out to us for admissions, queries, or just to say hello.

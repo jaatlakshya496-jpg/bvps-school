@@ -2,6 +2,33 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
+
+const EducationalOrganizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "Bal Vikas Public School",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Railway Road",
+    "addressLocality": "Kalayat",
+    "addressRegion": "Haryana",
+    "postalCode": "136117",
+    "addressCountry": "India"
+  },
+  "telephone": "+91 98125 50200",
+  "email": "admissions@bvpskalayat.edu.in",
+  "website": "https://bvps-school.vercel.app",
+  "sameAs": [
+    "https://facebook.com/BalVikasPublicSchool",
+    "https://instagram.com/BalVikasPublicSchool",
+    "https://twitter.com/BalVikasSchool"
+  ],
+  "logo": "https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg",
+  "founded": "2004",
+  "curriculum": "CBSE",
+  "director": "Sh. Ramphal Sharma",
+  "founder": "Sh. Ramphal Sharma"
+};
 import { 
   Users, GraduationCap, Building2, Calendar, ArrowRight, 
   ChevronLeft, ChevronRight, BookOpen, Dumbbell, Monitor, 
@@ -349,6 +376,19 @@ export default function Home() {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
+  // Inject EducationalOrganization schema.org JSON-LD into head
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(EducationalOrganizationSchema);
+    const existing = document.querySelector('script[type="application/ld+json"]');
+    if (existing) existing.remove();
+    document.head.appendChild(script);
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, [EducationalOrganizationSchema]);
+
   const prev = () => setCurrentSlide((s) => (s - 1 + heroSlides.length) % heroSlides.length);
   const next = () => setCurrentSlide((s) => (s + 1) % heroSlides.length);
 
@@ -368,8 +408,6 @@ export default function Home() {
         <meta name="twitter:title" content="Bal Vikas Public School Kalayat | Best School in Kalayat Haryana" />
         <meta name="twitter:description" content="Bal Vikas Public School in Kalayat, Kaithal, Haryana. Providing quality education from Nursery to 12th with excellent faculty, smart classrooms, and comprehensive facilities." />
       </Helmet>
-
-      {/* ── HERO SLIDESHOW ── */}
       <section className="relative h-[88vh] min-h-[540px] max-h-[780px] overflow-hidden bg-black">
         <AnimatePresence mode="sync">
           <motion.div

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { BookOpen, Clock, GraduationCap, FlaskConical, Calculator, Globe, Music, Dumbbell, Monitor } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 /* ── Timetable data ──────────────────────────────────── */
 
@@ -105,11 +106,25 @@ export default function Academics() {
 
   return (
     <div className="flex flex-col">
+      <Helmet>
+        <title>Academics — Bal Vikas Public School Kalayat | CBSE School</title>
+        <meta name="description" content="Academics at Bal Vikas Public School Kalayat — curriculum, subjects, and timetable for Classes 1 to 12 aligned with CBSE guidelines." />
+        <meta name="keywords" content="Academics Bal Vikas Public School Kalayat, CBSE school Kalayat, curriculum subjects, school in Kalayat Haryana" />
+        <link rel="canonical" href="https://bvps-school.vercel.app/academics" />
+        <meta property="og:title" content="Academics — Bal Vikas Public School Kalayat | CBSE School" />
+        <meta property="og:description" content="Academics at Bal Vikas Public School Kalayat — curriculum, subjects, and timetable for Classes 1 to 12 aligned with CBSE guidelines." />
+        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg" />
+        <meta property="og:url" content="https://bvps-school.vercel.app/academics" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Academics — Bal Vikas Public School Kalayat | CBSE School" />
+        <meta name="twitter:description" content="Academics at Bal Vikas Public School Kalayat — curriculum, subjects, and timetable for Classes 1 to 12 aligned with CBSE guidelines." />
+      </Helmet>
+
       {/* Page Header */}
       <div className="bg-primary pt-24 pb-16 px-4">
         <div className="container mx-auto text-center">
           <ScrollReveal>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">Academics</h1>
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">Academics — Bal Vikas Public School Kalayat</h1>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full" />
             <p className="mt-6 text-primary-foreground/80 text-lg max-w-2xl mx-auto">
               A structured, well-rounded curriculum designed to nurture every student from Class 1 to 12.

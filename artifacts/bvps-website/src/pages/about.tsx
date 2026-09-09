@@ -248,7 +248,7 @@ export default function About() {
         <div className="absolute inset-0 bg-gradient-to-b from-primary/30 to-primary/55" />
         <div className="container mx-auto text-center relative z-10">
           <ScrollReveal>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">About BVPS</h1>
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">About Bal Vikas Public School Kalayat</h1>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full"></div>
             <p className="mt-6 text-primary-foreground/80 text-lg max-w-2xl mx-auto">
               Nurturing minds and shaping futures in Kalayat since 2004.
