@@ -408,7 +408,7 @@ export default function Home() {
         <meta name="twitter:title" content="Bal Vikas Public School Kalayat | Best School in Kalayat Haryana" />
         <meta name="twitter:description" content="Bal Vikas Public School in Kalayat, Kaithal, Haryana. Providing quality education from Nursery to 12th with excellent faculty, smart classrooms, and comprehensive facilities." />
       </Helmet>
-      <section className="relative h-[88vh] min-h-[540px] max-h-[780px] overflow-hidden bg-black">
+      <section className="relative min-h-[600px] overflow-hidden bg-black">
         <AnimatePresence mode="sync">
           <motion.div
             key={currentSlide}
@@ -421,7 +421,7 @@ export default function Home() {
             <img
               src={heroSlides[currentSlide].src}
               alt={heroSlides[currentSlide].label}
-              className="w-full h-full object-cover object-center brightness-105 contrast-105"
+              className="w-full h-full object-contain object-center bg-secondary/30 brightness-105 contrast-105"
             />
             {/* Crisp natural shadow for pure photo view with readable text */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/10" />
