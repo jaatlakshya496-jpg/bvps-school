@@ -484,39 +484,7 @@ export default function Home() {
           </motion.div>
         </div>
 
-        {/* Slide nav buttons */}
-        <button
-          onClick={prev}
-          aria-label="Previous slide"
-          className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-black/60 hover:bg-secondary hover:text-primary text-white flex items-center justify-center border border-white/20 transition-all shadow-lg hover:scale-110"
-        >
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-        <button
-          onClick={next}
-          aria-label="Next slide"
-          className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-black/60 hover:bg-secondary hover:text-primary text-white flex items-center justify-center border border-white/20 transition-all shadow-lg hover:scale-110"
-        >
-          <ChevronRight className="w-6 h-6" />
-        </button>
-
-        {/* Dots & Current Slide Info */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
-          {heroSlides.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentSlide(i)}
-              aria-label={`Slide ${i + 1}`}
-              className={`rounded-full transition-all duration-300 ${i === currentSlide ? 'w-8 h-2.5 bg-secondary' : 'w-2.5 h-2.5 bg-white/50 hover:bg-white'}`}
-            />
-          ))}
-        </div>
-
-        {/* Slide label */}
-        <div className="hidden md:block absolute bottom-6 right-8 z-20 bg-black/70 border border-white/15 px-4 py-1.5 rounded-full text-white/90 text-xs font-semibold">
-          {heroSlides[currentSlide].label}
-        </div>
-      </section>
+        </section>
 
       {/* ── OUR HIGHLIGHTS SECTION ── */}
       <section className="py-16 bg-white relative overflow-hidden border-b border-border">
