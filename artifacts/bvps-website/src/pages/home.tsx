@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { 
   Users, GraduationCap, Building2, Calendar, ArrowRight, 
   ChevronLeft, ChevronRight, BookOpen, Dumbbell, Monitor, 
@@ -353,6 +354,20 @@ export default function Home() {
 
   return (
     <div className="flex flex-col">
+
+      <Helmet>
+        <title>Bal Vikas Public School Kalayat | Best School in Kalayat Haryana</title>
+        <meta name="description" content="Bal Vikas Public School in Kalayat, Kaithal, Haryana. Providing quality education from Nursery to 12th with excellent faculty, smart classrooms, and comprehensive facilities." />
+        <meta name="keywords" content="Bal Vikas Public School Kalayat, Bal Vikas Public School, school in Kalayat, best school in Kalayat Haryana, admission Bal Vikas Public School Kalayat, HBSE school Kalayat" />
+        <link rel="canonical" href="https://bvps-school.vercel.app/" />
+        <meta property="og:title" content="Bal Vikas Public School Kalayat | Best School in Kalayat Haryana" />
+        <meta property="og:description" content="Bal Vikas Public School in Kalayat, Kaithal, Haryana. Providing quality education from Nursery to 12th with excellent faculty, smart classrooms, and comprehensive facilities." />
+        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg" />
+        <meta property="og:url" content="https://bvps-school.vercel.app/" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Bal Vikas Public School Kalayat | Best School in Kalayat Haryana" />
+        <meta name="twitter:description" content="Bal Vikas Public School in Kalayat, Kaithal, Haryana. Providing quality education from Nursery to 12th with excellent faculty, smart classrooms, and comprehensive facilities." />
+      </Helmet>
 
       {/* ── HERO SLIDESHOW ── */}
       <section className="relative h-[88vh] min-h-[540px] max-h-[780px] overflow-hidden bg-black">

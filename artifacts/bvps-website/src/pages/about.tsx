@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { 
   Target, BookOpen, Clock, Heart, Award, Quote, X, ArrowRight, Flag, 
@@ -226,6 +227,21 @@ export default function About() {
 
   return (
     <div className="flex flex-col">
+
+      <Helmet>
+        <title>About Bal Vikas Public School Kalayat | Admission & School Details</title>
+        <meta name="description" content="About Bal Vikas Public School Kalayat, Kaithal, Haryana. A private co-educational institution offering classes from 1 to 12 since 2004. HBSE affiliated school with focus on values-based education." />
+        <meta name="keywords" content="Bal Vikas Public School Kalayat, Bal Vikas Public School, school in Kalayat Haryana, HBSE school Kalayat, private co-educational school Kalayat" />
+        <link rel="canonical" href="https://bvps-school.vercel.app/about" />
+        <meta property="og:title" content="About Bal Vikas Public School Kalayat | Admission & School Details" />
+        <meta property="og:description" content="About Bal Vikas Public School Kalayat, Kaithal, Haryana. A private co-educational institution offering classes from 1 to 12 since 2004. HBSE affiliated school with focus on values-based education." />
+        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg" />
+        <meta property="og:url" content="https://bvps-school.vercel.app/about" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="About Bal Vikas Public School Kalayat | Admission & School Details" />
+        <meta name="twitter:description" content="About Bal Vikas Public School Kalayat, Kaithal, Haryana. A private co-educational institution offering classes from 1 to 12 since 2004. HBSE affiliated school with focus on values-based education." />
+      </Helmet>
+
       {/* Page Header */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
         <img src={aboutImg} alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
