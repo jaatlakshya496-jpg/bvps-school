@@ -23,9 +23,9 @@ const EducationalOrganizationSchema = {
     "https://instagram.com/BalVikasPublicSchool",
     "https://twitter.com/BalVikasSchool"
   ],
-  "logo": "https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg",
+  "logo": "https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp",
   "founded": "2004",
-  "curriculum": "CBSE",
+  "curriculum": "HBSE",
   "director": "Sh. Ramphal Sharma",
   "founder": "Sh. Ramphal Sharma"
 };
@@ -40,20 +40,20 @@ import {
 import { useLanguage } from '@/lib/language-context';
 
 // High-resolution real BVPS school photos
-import campusHeroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg';
-import studentsSportsImg from '@assets/Screenshot_20260721_101418_1784611875385.jpg';
-import awardsImg from '@assets/Screenshot_20260721_101356_1784611875357.jpg';
-import karateChampImg from '@assets/Screenshot_20260721_101612_1784612008888.jpg';
-import footballGoldImg from '@assets/Screenshot_20260721_101549_1784612008898.jpg';
-import celebrationsImg from '@assets/Screenshot_20260721_101332_1784611875316.jpg';
+import campusHeroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
+import studentsSportsImg from '@assets/Screenshot_20260721_101418_1784611875385.webp';
+import awardsImg from '@assets/Screenshot_20260721_101356_1784611875357.webp';
+import karateChampImg from '@assets/Screenshot_20260721_101612_1784612008888.webp';
+import footballGoldImg from '@assets/Screenshot_20260721_101549_1784612008898.webp';
+import celebrationsImg from '@assets/Screenshot_20260721_101332_1784611875316.webp';
 
-import libImg from '@assets/Screenshot_20260721_101220_1784611875234.jpg';
-import compImg from '@assets/Screenshot_20260721_100132_1784611430446.jpg';
-import smartImg from '@assets/Screenshot_20260721_100254_1784611512184.jpg';
-import playImg from '@assets/Screenshot_20260721_101549_1784612008898.jpg';
-import cctvImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg';
-import roImg from '@assets/Screenshot_20260721_100046_1784611430370.jpg';
-import classImg from '@assets/Screenshot_20260721_101356_1784611875357.jpg';
+import libImg from '@assets/Screenshot_20260721_101220_1784611875234.webp';
+import compImg from '@assets/Screenshot_20260721_100132_1784611430446.webp';
+import smartImg from '@assets/Screenshot_20260721_100254_1784611512184.webp';
+import playImg from '@assets/Screenshot_20260721_101549_1784612008898.webp';
+import cctvImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
+import roImg from '@assets/Screenshot_20260721_100046_1784611430370.webp';
+import classImg from '@assets/Screenshot_20260721_101356_1784611875357.webp';
 
 // Highlights Configuration as requested
 const schoolHighlights = [
@@ -340,12 +340,12 @@ const facilities = [
 
 // Gallery preview - top high-definition real photos
 const previewPhotos = [
-  { src: new URL('@assets/Screenshot_20260721_101418_1784611875385.jpg', import.meta.url).href, title: 'Student Sports Achievers' },
-  { src: new URL('@assets/Screenshot_20260721_101356_1784611875357.jpg', import.meta.url).href, title: 'Annual Award Ceremony' },
-  { src: new URL('@assets/Screenshot_20260721_101612_1784612008888.jpg', import.meta.url).href, title: 'Karate Championship Winners' },
-  { src: new URL('@assets/Screenshot_20260721_101517_1784612008914.jpg', import.meta.url).href, title: 'School Football Squad' },
-  { src: new URL('@assets/Screenshot_20260721_101405_1784611875372.jpg', import.meta.url).href, title: 'Trophy Presentation' },
-  { src: new URL('@assets/Screenshot_20260721_101720_1784612008775.jpg', import.meta.url).href, title: 'School Gathering & Pride' },
+  { src: new URL('@assets/Screenshot_20260721_101418_1784611875385.webp', import.meta.url).href, title: 'Student Sports Achievers' },
+  { src: new URL('@assets/Screenshot_20260721_101356_1784611875357.webp', import.meta.url).href, title: 'Annual Award Ceremony' },
+  { src: new URL('@assets/Screenshot_20260721_101612_1784612008888.webp', import.meta.url).href, title: 'Karate Championship Winners' },
+  { src: new URL('@assets/Screenshot_20260721_101517_1784612008914.webp', import.meta.url).href, title: 'School Football Squad' },
+  { src: new URL('@assets/Screenshot_20260721_101405_1784611875372.webp', import.meta.url).href, title: 'Trophy Presentation' },
+  { src: new URL('@assets/Screenshot_20260721_101720_1784612008775.webp', import.meta.url).href, title: 'School Gathering & Pride' },
 ];
 
 type Facility = typeof facilities[number];
@@ -376,19 +376,6 @@ export default function Home() {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
-  // Inject EducationalOrganization schema.org JSON-LD into head
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.text = JSON.stringify(EducationalOrganizationSchema);
-    const existing = document.querySelector('script[type="application/ld+json"]');
-    if (existing) existing.remove();
-    document.head.appendChild(script);
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, [EducationalOrganizationSchema]);
-
   const prev = () => setCurrentSlide((s) => (s - 1 + heroSlides.length) % heroSlides.length);
   const next = () => setCurrentSlide((s) => (s + 1) % heroSlides.length);
 
@@ -402,11 +389,12 @@ export default function Home() {
         <link rel="canonical" href="https://bvps-school.vercel.app/" />
         <meta property="og:title" content="Bal Vikas Public School Kalayat | Best School in Kalayat Haryana" />
         <meta property="og:description" content="Bal Vikas Public School in Kalayat, Kaithal, Haryana. Providing quality education from Nursery to 12th with excellent faculty, smart classrooms, and comprehensive facilities." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg" />
+        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
         <meta property="og:url" content="https://bvps-school.vercel.app/" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Bal Vikas Public School Kalayat | Best School in Kalayat Haryana" />
         <meta name="twitter:description" content="Bal Vikas Public School in Kalayat, Kaithal, Haryana. Providing quality education from Nursery to 12th with excellent faculty, smart classrooms, and comprehensive facilities." />
+        <script type="application/ld+json">{JSON.stringify(EducationalOrganizationSchema)}</script>
       </Helmet>
       <section className="relative min-h-[600px] overflow-hidden bg-black">
         <AnimatePresence mode="sync">
@@ -749,7 +737,7 @@ export default function Home() {
                 <div className="w-32 h-32 sm:w-36 sm:h-36 rounded-2xl p-1 bg-gradient-to-tr from-secondary via-amber-300 to-secondary shadow-2xl">
                   <div className="w-full h-full rounded-[14px] overflow-hidden bg-slate-900 border-2 border-white/20">
                     <img
-                      src={new URL('@assets/principal-ramphal-sharma.png', import.meta.url).href}
+                      src={new URL('@assets/principal-ramphal-sharma.webp', import.meta.url).href}
                       alt="Sh. Ramphal Sharma — Principal & Founder"
                       className="w-full h-full object-cover object-top filter brightness-[1.03]"
                     />

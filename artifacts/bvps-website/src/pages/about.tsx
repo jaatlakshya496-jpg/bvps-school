@@ -7,12 +7,12 @@ import {
   Building2, Trophy, Users, ShieldCheck, HeartHandshake, Scale, CheckCircle2, 
   Flame, Palette, UserCheck, Sparkles, Star, Eye
 } from 'lucide-react';
-import aboutImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg';
-import principalImg from '@assets/principal-ramphal-sharma.png';
-import schoolBuildingImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg';
-import studentsImg from '@assets/Screenshot_20260721_101418_1784611875385.jpg';
-import campusImg from '@assets/Screenshot_20260721_101549_1784612008898.jpg';
-import schoolEventImg from '@assets/Screenshot_20260721_101332_1784611875316.jpg';
+import aboutImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
+import principalImg from '@assets/principal-ramphal-sharma.webp';
+import schoolBuildingImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
+import studentsImg from '@assets/Screenshot_20260721_101418_1784611875385.webp';
+import campusImg from '@assets/Screenshot_20260721_101549_1784612008898.webp';
+import schoolEventImg from '@assets/Screenshot_20260721_101332_1784611875316.webp';
 import { useLanguage } from '@/lib/language-context';
 
 const schoolValues = [
@@ -235,7 +235,7 @@ export default function About() {
         <link rel="canonical" href="https://bvps-school.vercel.app/about" />
         <meta property="og:title" content="About Bal Vikas Public School Kalayat | Admission & School Details" />
         <meta property="og:description" content="About Bal Vikas Public School Kalayat, Kaithal, Haryana. A private co-educational institution offering classes from 1 to 12 since 2004. HBSE affiliated school with focus on values-based education." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg" />
+        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
         <meta property="og:url" content="https://bvps-school.vercel.app/about" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="About Bal Vikas Public School Kalayat | Admission & School Details" />

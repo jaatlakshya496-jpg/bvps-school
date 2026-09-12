@@ -113,7 +113,7 @@ export default function Academics() {
         <link rel="canonical" href="https://bvps-school.vercel.app/academics" />
         <meta property="og:title" content="Academics — Bal Vikas Public School Kalayat | CBSE School" />
         <meta property="og:description" content="Academics at Bal Vikas Public School Kalayat — curriculum, subjects, and timetable for Classes 1 to 12 aligned with CBSE guidelines." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg" />
+        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
         <meta property="og:url" content="https://bvps-school.vercel.app/academics" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Academics — Bal Vikas Public School Kalayat | CBSE School" />

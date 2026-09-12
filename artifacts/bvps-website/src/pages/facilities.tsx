@@ -1,4 +1,5 @@
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
+import { Helmet } from 'react-helmet-async';
 import { 
   BookOpen, 
   Monitor, 
@@ -8,13 +9,13 @@ import {
   Droplets,
   LayoutGrid
 } from 'lucide-react';
-import libImg from '@assets/Screenshot_20260721_101220_1784611875234.jpg';
-import compImg from '@assets/Screenshot_20260721_100132_1784611430446.jpg';
-import playImg from '@assets/Screenshot_20260721_101549_1784612008898.jpg';
-import smartImg from '@assets/Screenshot_20260721_100254_1784611512184.jpg';
-import campusImg from '@assets/Screenshot_20260721_100046_1784611430370.jpg';
-import schoolBuildingImg from '@assets/Screenshot_20260721_101356_1784611875357.jpg';
-import mainCampusImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg';
+import libImg from '@assets/Screenshot_20260721_101220_1784611875234.webp';
+import compImg from '@assets/Screenshot_20260721_100132_1784611430446.webp';
+import playImg from '@assets/Screenshot_20260721_101549_1784612008898.webp';
+import smartImg from '@assets/Screenshot_20260721_100254_1784611512184.webp';
+import campusImg from '@assets/Screenshot_20260721_100046_1784611430370.webp';
+import schoolBuildingImg from '@assets/Screenshot_20260721_101356_1784611875357.webp';
+import mainCampusImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
 
 export default function Facilities() {
   const facilities = [
@@ -64,6 +65,19 @@ export default function Facilities() {
 
   return (
     <div className="flex flex-col">
+      <Helmet>
+        <title>School Facilities — Bal Vikas Public School Kalayat | Modern Campus Amenities</title>
+        <meta name="description" content="Explore facilities at Bal Vikas Public School Kalayat — rich library, computer lab, smart classrooms, spacious playground, CCTV security, RO drinking water and more." />
+        <meta name="keywords" content="school facilities Kalayat, Bal Vikas Public School facilities, smart classrooms Kalayat, computer lab school, best school Kalayat Haryana" />
+        <link rel="canonical" href="https://bvps-school.vercel.app/facilities" />
+        <meta property="og:title" content="School Facilities — Bal Vikas Public School Kalayat" />
+        <meta property="og:description" content="Modern amenities — library, computer lab, smart classes, playground, CCTV security, RO water. Campus built for holistic learning." />
+        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
+        <meta property="og:url" content="https://bvps-school.vercel.app/facilities" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="School Facilities — Bal Vikas Public School Kalayat" />
+        <meta name="twitter:description" content="Modern campus amenities for holistic learning in Kalayat." />
+      </Helmet>
       {/* Page Header */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
         <img src={mainCampusImg} alt="BVPS Campus" className="absolute inset-0 w-full h-full object-cover object-center brightness-105 contrast-105" />

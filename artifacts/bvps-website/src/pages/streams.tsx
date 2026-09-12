@@ -1,7 +1,8 @@
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'wouter';
 import { GraduationCap, ArrowLeft, Phone, ArrowRight, BookOpen } from 'lucide-react';
-import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg';
+import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
 
 const classSections = [
   {
@@ -124,6 +125,19 @@ const classSections = [
 export default function Streams() {
   return (
     <div className="flex flex-col">
+      <Helmet>
+        <title>Streams & Curriculum — Bal Vikas Public School Kalayat</title>
+        <meta name="description" content="Subject streams at Bal Vikas Public School Kalayat — Primary, Middle, Secondary and Senior Secondary with Arts, Commerce and Non-Medical streams for classes 11 & 12." />
+        <meta name="keywords" content="streams school Kalayat, subjects class 11 12, arts commerce non-medical Kalayat, HBSE curriculum, curriculum Bal Vikas Public School" />
+        <link rel="canonical" href="https://bvps-school.vercel.app/streams" />
+        <meta property="og:title" content="Streams & Curriculum — Bal Vikas Public School Kalayat" />
+        <meta property="og:description" content="Subject breakdown for every class — Primary, Middle, Secondary and Senior Secondary." />
+        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
+        <meta property="og:url" content="https://bvps-school.vercel.app/streams" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Streams & Curriculum — Bal Vikas Public School Kalayat" />
+        <meta name="twitter:description" content="Arts, Commerce and Non-Medical streams for senior secondary." />
+      </Helmet>
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
         <img src={heroImg} alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/30 to-primary/55" />

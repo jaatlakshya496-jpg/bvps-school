@@ -5,7 +5,7 @@ import {
   Bot, PhoneCall, ArrowRight, MessageSquare, 
   RotateCcw, Check, Sparkle, Globe
 } from 'lucide-react';
-import schoolLogo from '@/assets/school-logo.png';
+import schoolLogo from '@/assets/school-logo-kalayat.webp';
 import { RobotAvatar } from './RobotAvatar';
 import { useLanguage, type Language } from '@/lib/language-context';
 

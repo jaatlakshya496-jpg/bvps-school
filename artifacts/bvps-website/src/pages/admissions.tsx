@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { Link } from 'wouter';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
@@ -7,8 +8,8 @@ import {
   GraduationCap, Quote, CheckCircle2, Star, ArrowRight,
   Phone,
 } from 'lucide-react';
-import principalImg from '@assets/principal-ramphal-sharma.png';
-import heroImg from '@assets/generated_images/hero-school.jpg';
+import principalImg from '@assets/principal-ramphal-sharma.webp';
+import heroImg from '@assets/generated_images/hero-school.webp';
 import { getFeedbacks, saveFeedback, type FeedbackEntry, roleLabels } from '@/lib/feedback-store';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -127,6 +128,19 @@ export default function Admissions() {
 
   return (
     <div className="flex flex-col">
+      <Helmet>
+        <title>Admissions 2025–26 — Bal Vikas Public School Kalayat | Apply Now</title>
+        <meta name="description" content="Admissions open for classes 1 to 12 at Bal Vikas Public School Kalayat, Kaithal. Simple application process, clear fee structure, and easy enrollment. Apply online today." />
+        <meta name="keywords" content="admissions Kalayat, school admission Bal Vikas Public School, admission 2025-26 Kalayat, admission in Kalayat Haryana, best school admission Kalayat" />
+        <link rel="canonical" href="https://bvps-school.vercel.app/admissions" />
+        <meta property="og:title" content="Admissions 2025–26 — Bal Vikas Public School Kalayat" />
+        <meta property="og:description" content="Admissions open for classes 1 to 12 at Bal Vikas Public School Kalayat. Apply online today." />
+        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
+        <meta property="og:url" content="https://bvps-school.vercel.app/admissions" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Admissions 2025–26 — Bal Vikas Public School Kalayat" />
+        <meta name="twitter:description" content="Admissions open for classes 1 to 12 at Bal Vikas Public School Kalayat." />
+      </Helmet>
       {/* Header */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
         <img src={heroImg} alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />

@@ -1,6 +1,6 @@
 import { Link } from 'wouter';
 import { MapPin, Phone, Mail, Clock, GraduationCap, Info } from 'lucide-react';
-import schoolLogo from '@/assets/school-logo-kalayat.jpg';
+import schoolLogo from '@/assets/school-logo-kalayat.webp';
 
 export function Footer() {
   return (

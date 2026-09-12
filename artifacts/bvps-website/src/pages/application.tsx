@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Link } from 'wouter';
 import { Link as RouterLink } from 'wouter';
 import { Send, CheckCircle2, Phone, ArrowLeft, User, Briefcase } from 'lucide-react';
-import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg';
+import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -78,6 +79,19 @@ export default function Application() {
 
   return (
     <div className="flex flex-col">
+      <Helmet>
+        <title>Application Form — Bal Vikas Public School Kalayat | Online Admission</title>
+        <meta name="description" content="Fill the online application form for admission at Bal Vikas Public School Kalayat, Kaithal. Register your admission enquiry for session 2025–26 in just 2 minutes." />
+        <meta name="keywords" content="school application form Kalayat, admission form Bal Vikas Public School, apply online school Kalayat, admission enquiry form, apply now Kalayat school" />
+        <link rel="canonical" href="https://bvps-school.vercel.app/application" />
+        <meta property="og:title" content="Application Form — Bal Vikas Public School Kalayat" />
+        <meta property="og:description" content="Online admission application form for Bal Vikas Public School Kalayat." />
+        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
+        <meta property="og:url" content="https://bvps-school.vercel.app/application" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Application Form — Bal Vikas Public School Kalayat" />
+        <meta name="twitter:description" content="Online admission application form for session 2025–26." />
+      </Helmet>
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
         <img src={heroImg} alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/30 to-primary/55" />

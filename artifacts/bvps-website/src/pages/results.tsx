@@ -1,39 +1,40 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Trophy, Medal, Star, Award, Filter, X } from 'lucide-react';
-import heroSchoolImg from '@assets/bal-vikas-public-school_1784611430239.jpg';
+import heroSchoolImg from '@assets/bal-vikas-public-school_1784611430239.webp';
 
 // ── Football photos ──────────────────────────────────────────────────
-import imgSweetAnishAryan    from '@assets/res-sweet-anish-aryan-u19-football.jpg';
-import imgDakshayAnuSachmit  from '@assets/res-dakshay-anu-sachmit-u17-football.jpg';
-import imgAryanDistrict      from '@/assets/result-football-tournament.png';
-import imgDakshayDistrict    from '@/assets/result-football-tournament.png';
-import imgAnishDistrict      from '@/assets/result-cricket-tournament.png';
+import imgSweetAnishAryan    from '@assets/res-sweet-anish-aryan-u19-football.webp';
+import imgDakshayAnuSachmit  from '@assets/res-dakshay-anu-sachmit-u17-football.webp';
+import imgAryanDistrict      from '@/assets/result-football-tournament.webp';
+import imgDakshayDistrict    from '@/assets/result-football-tournament.webp';
+import imgAnishDistrict      from '@/assets/result-cricket-tournament.webp';
 // ── Cricket / General ────────────────────────────────────────────────
-import imgVictory6           from '@assets/Victory_Earned,_Excellence_Achieved.Congratulations_District_C_1785563107940.jpg';
-import imgDistrictGold       from '@assets/res-district-champions-gold.jpg';
+import imgVictory6           from '@assets/Victory_Earned,_Excellence_Achieved.Congratulations_District_C_1785563107940.webp';
+import imgDistrictGold       from '@assets/res-district-champions-gold.webp';
 // ── Karate photos ────────────────────────────────────────────────────
-import imgKarate1            from '@assets/res-karate-district1.jpg';
-import imgKarate2            from '@assets/res-karate-district2.jpg';
-import imgKarate3            from '@assets/res-karate-district3.jpg';
-import imgKarate4            from '@assets/res-karate-district4.jpg';
+import imgKarate1            from '@assets/res-karate-district1.webp';
+import imgKarate2            from '@assets/res-karate-district2.webp';
+import imgKarate3            from '@assets/res-karate-district3.webp';
+import imgKarate4            from '@assets/res-karate-district4.webp';
 // ── Awards / Achievement photos ──────────────────────────────────────
-import imgProudAchieve1      from '@/assets/res-proud-achieve1.jpg';
-import imgProudAchieve2      from '@/assets/res-proud-achieve2.jpg';
-import imgProudAchieve3      from '@/assets/res-proud-achieve3.jpg';
+import imgProudAchieve1      from '@/assets/res-proud-achieve1.webp';
+import imgProudAchieve2      from '@/assets/res-proud-achieve2.webp';
+import imgProudAchieve3      from '@/assets/res-proud-achieve3.webp';
 // ── Karate – Krish ───────────────────────────────────────────────────
-import imgKrishKarateWinner  from '@/assets/res-krish-karate-winner.jpg';
+import imgKrishKarateWinner  from '@/assets/res-krish-karate-winner.webp';
 // ── Athletics photos ─────────────────────────────────────────────────
-import imgLavish100m         from '@/assets/result-group1.png';
-import imgAryanHighJump      from '@/assets/result-group2.png';
-import imgSachmitHurdle      from '@/assets/result-group3.png';
-import imgDeveshDakshay      from '@/assets/result-hanshul-wrestling.png';
-import imgPrinceAnu          from '@/assets/result-khushi-karate-gold.png';
-import imgAthletics6         from '@assets/Victory_Earned,_Excellence_Achieved.Congratulations_District_C_1785563110488.jpg';
-import imgAthletics7         from '@assets/Victory_Earned,_Excellence_Achieved.Congratulations_District_C_1785563118886.jpg';
-import imgAthletics8         from '@assets/Victory_Earned,_Excellence_Achieved.Congratulations_District_C_1785563121697.jpg';
-import imgAthletics9         from '@/assets/result-cricket-champion.png';
+import imgLavish100m         from '@/assets/result-group1.webp';
+import imgAryanHighJump      from '@/assets/result-group2.webp';
+import imgSachmitHurdle      from '@/assets/result-group3.webp';
+import imgDeveshDakshay      from '@/assets/result-hanshul-wrestling.webp';
+import imgPrinceAnu          from '@/assets/result-khushi-karate-gold.webp';
+import imgAthletics6         from '@assets/Victory_Earned,_Excellence_Achieved.Congratulations_District_C_1785563110488.webp';
+import imgAthletics7         from '@assets/Victory_Earned,_Excellence_Achieved.Congratulations_District_C_1785563118886.webp';
+import imgAthletics8         from '@assets/Victory_Earned,_Excellence_Achieved.Congratulations_District_C_1785563121697.webp';
+import imgAthletics9         from '@/assets/result-cricket-champion.webp';
 
 type SportFilter = 'All' | 'Football' | 'Cricket' | 'Karate' | 'Athletics' | 'Awards';
 type Level       = 'Block' | 'District' | 'State';
@@ -301,6 +302,19 @@ export default function Results() {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <Helmet>
+        <title>Results & Achievements — Bal Vikas Public School Kalayat</title>
+        <meta name="description" content="Celebrating the results and achievements of Bal Vikas Public School Kalayat — district & state champions in karate, football, athletics, wrestling, cricket and academic excellence." />
+        <meta name="keywords" content="Bal Vikas Public School results, school achievements Kalayat, karate champions Kalayat, football winners, district champion school Haryana, BVPS results" />
+        <link rel="canonical" href="https://bvps-school.vercel.app/results" />
+        <meta property="og:title" content="Results & Achievements — Bal Vikas Public School Kalayat" />
+        <meta property="og:description" content="District & state champions in sports and academic excellence at BVPS Kalayat." />
+        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school_1784611430239.webp" />
+        <meta property="og:url" content="https://bvps-school.vercel.app/results" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Results & Achievements — Bal Vikas Public School Kalayat" />
+        <meta name="twitter:description" content="Sports champions and academic excellence at BVPS Kalayat." />
+      </Helmet>
 
       {/* ── Hero ── */}
       <div className="bg-primary pt-24 pb-20 px-4 relative overflow-hidden">

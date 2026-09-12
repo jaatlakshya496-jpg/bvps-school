@@ -1,10 +1,25 @@
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Link } from 'wouter';
 import { Clock, MapPin, Phone, ArrowLeft, Building2, User, Info } from 'lucide-react';
-import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg';
+import { Helmet } from 'react-helmet-async';
+import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
 
 export default function SchoolTiming() {
   return (
+    <>
+    <Helmet>
+      <title>School Timings & Schedule — Bal Vikas Public School Kalayat | HBSE School</title>
+      <meta name="description" content="Bal Vikas Public School Kalayat school timings and schedule. Office hours, school schedule, and visit guidelines for HBSE-affiliated school in Kalayat, Kaithal, Haryana." />
+      <meta name="keywords" content="Bal Vikas Public School Kalayat, school timings Kalayat, HBSE school Kalayat, school schedule Kalayat Haryana, best school in Kalayat Haryana" />
+      <link rel="canonical" href="https://bvps-school.vercel.app/school-timing" />
+      <meta property="og:title" content="School Timings & Schedule — Bal Vikas Public School Kalayat | HBSE School" />
+      <meta property="og:description" content="Bal Vikas Public School Kalayat school timings and schedule. Office hours, school schedule, and visit guidelines." />
+      <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
+      <meta property="og:url" content="https://bvps-school.vercel.app/school-timing" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="School Timings & Schedule — Bal Vikas Public School Kalayat | HBSE School" />
+      <meta name="twitter:description" content="Bal Vikas Public School Kalayat school timings and schedule. Office hours, school schedule, and visit guidelines." />
+    </Helmet>
     <div className="flex flex-col">
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
         <img src={heroImg} alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
@@ -94,5 +109,6 @@ export default function SchoolTiming() {
         </div>
       </section>
     </div>
+    </>
   );
 }

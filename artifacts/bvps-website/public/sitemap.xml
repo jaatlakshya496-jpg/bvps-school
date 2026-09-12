@@ -18,7 +18,7 @@
   <url>
     <loc>https://bvps-school.vercel.app/gallery</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bvps-school.vercel.app/academics</loc>
@@ -26,19 +26,34 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://bvps-school.vercel.app/admission</loc>
+    <loc>https://bvps-school.vercel.app/admissions</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://bvps-school.vercel.app/application</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://bvps-school.vercel.app/enrollment</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bvps-school.vercel.app/fee-structure</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://bvps-school.vercel.app/fees</loc>
+    <loc>https://bvps-school.vercel.app/interview</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://bvps-school.vercel.app/principal-message</loc>
+    <loc>https://bvps-school.vercel.app/school-timing</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bvps-school.vercel.app/facilities</loc>
@@ -48,7 +63,7 @@
   <url>
     <loc>https://bvps-school.vercel.app/streams</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bvps-school.vercel.app/results</loc>
@@ -58,21 +73,11 @@
   <url>
     <loc>https://bvps-school.vercel.app/feedback</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://bvps-school.vercel.app/application</loc>
+    <loc>https://bvps-school.vercel.app/principal-message</loc>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://bvps-school.vercel.app/school-timing</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://bvps-school.vercel.app/interview</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
 </urlset>

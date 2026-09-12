@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Link } from 'wouter';
 import { 
@@ -6,7 +7,7 @@ import {
   CheckCircle2, MessageSquare, Mail, User, Sparkles, Clock, 
   Shield, BookOpen, Award, HeartHandshake, Compass, Star
 } from 'lucide-react';
-import principalImg from '@assets/principal-ramphal-sharma.png';
+import principalImg from '@assets/principal-ramphal-sharma.webp';
 import { savePrincipalMessage, type PrincipalDirectMessage } from '@/lib/principal-message-store';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/lib/language-context';
@@ -76,6 +77,19 @@ export default function PrincipalMessage() {
 
   return (
     <div className="flex flex-col">
+      <Helmet>
+        <title>Principal's Message — Bal Vikas Public School Kalayat</title>
+        <meta name="description" content="A message from Sh. Ramphal Sharma, Principal & Founder of Bal Vikas Public School Kalayat — our vision for disciplined, value-based quality education and student development." />
+        <meta name="keywords" content="principal message Bal Vikas Public School, principal Kalayat Haryana, Ramphal Sharma, school vision Kalayat, message principal Kalayat" />
+        <link rel="canonical" href="https://bvps-school.vercel.app/principal-message" />
+        <meta property="og:title" content="Principal's Message — Bal Vikas Public School Kalayat" />
+        <meta property="og:description" content="Vision of Sh. Ramphal Sharma, Principal & Founder — value-based quality education in Kalayat." />
+        <meta property="og:image" content="https://bvps-school.vercel.app/assets/principal-ramphal-sharma.webp" />
+        <meta property="og:url" content="https://bvps-school.vercel.app/principal-message" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Principal's Message — Bal Vikas Public School Kalayat" />
+        <meta name="twitter:description" content="Value-based quality education under the guidance of our principal." />
+      </Helmet>
       {/* ── HEADER BANNER ── */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#F59E0B_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />

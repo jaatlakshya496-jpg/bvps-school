@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Button } from '@/components/ui/button';
-import heroImg from '@assets/generated_images/about-classroom.jpg';
+import heroImg from '@assets/generated_images/about-classroom.webp';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -110,6 +111,19 @@ export default function Feedback() {
 
   return (
     <div className="flex flex-col">
+      <Helmet>
+        <title>Parent Feedback & Reviews — Bal Vikas Public School Kalayat</title>
+        <meta name="description" content="Share your feedback and read parent reviews about Bal Vikas Public School Kalayat, Kaithal. Your opinion helps us improve quality education and student experience." />
+        <meta name="keywords" content="Bal Vikas Public School feedback, school reviews Kalayat, parent feedback school, BVPS Kalayat reviews" />
+        <link rel="canonical" href="https://bvps-school.vercel.app/feedback" />
+        <meta property="og:title" content="Parent Feedback & Reviews — Bal Vikas Public School Kalayat" />
+        <meta property="og:description" content="Share feedback and read parent reviews about Bal Vikas Public School Kalayat." />
+        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
+        <meta property="og:url" content="https://bvps-school.vercel.app/feedback" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Parent Feedback & Reviews — Bal Vikas Public School Kalayat" />
+        <meta name="twitter:description" content="Share feedback about Bal Vikas Public School Kalayat." />
+      </Helmet>
       {/* Page Header */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
         <img src={heroImg} alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />

@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Link } from 'wouter';
 import { ClipboardList, CheckSquare, Square, CheckCircle2, IndianRupee, GraduationCap, Phone, ArrowLeft } from 'lucide-react';
-import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg';
+import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
 
 const enrollmentItems = [
   'Admission confirmation letter from school',
@@ -24,6 +25,19 @@ export default function Enrollment() {
 
   return (
     <div className="flex flex-col">
+      <Helmet>
+        <title>Enrollment Process — Bal Vikas Public School Kalayat</title>
+        <meta name="description" content="Complete the enrollment process at Bal Vikas Public School Kalayat. Documents required, admission fee payment, and final formalities checklist to officially join BVPS." />
+        <meta name="keywords" content="school enrollment Kalayat, enrollment process BVPS, admission checklist Kalayat, documents required school, join Bal Vikas Public School" />
+        <link rel="canonical" href="https://bvps-school.vercel.app/enrollment" />
+        <meta property="og:title" content="Enrollment Process — Bal Vikas Public School Kalayat" />
+        <meta property="og:description" content="Final step to join BVPS — documents, fee payment, and formalities checklist." />
+        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
+        <meta property="og:url" content="https://bvps-school.vercel.app/enrollment" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Enrollment Process — Bal Vikas Public School Kalayat" />
+        <meta name="twitter:description" content="Complete formalities and officially join the BVPS family." />
+      </Helmet>
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
         <img src={heroImg} alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/30 to-primary/55" />

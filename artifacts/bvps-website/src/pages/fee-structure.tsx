@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Link } from 'wouter';
 import { IndianRupee, CheckCircle2, Phone, ArrowLeft, Info, BookOpen, FlaskConical, TrendingUp, Palette, ChevronDown, Copy, Check, QrCode, Smartphone } from 'lucide-react';
 import QRCode from 'react-qr-code';
-import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg';
+import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
 
 // ── UPI Payment Config ────────────────────────────────────────────────────────
 const UPI_ID   = 'bvpskalayat@sbi';
@@ -170,6 +171,19 @@ export default function FeeStructure() {
 
   return (
     <div className="flex flex-col">
+      <Helmet>
+        <title>Fee Structure 2025–26 — Bal Vikas Public School Kalayat</title>
+        <meta name="description" content="Complete fee structure for Bal Vikas Public School Kalayat — class-wise admission fees, monthly tuition, and easy UPI payment options. Transparent and affordable education." />
+        <meta name="keywords" content="school fee structure Kalayat, Bal Vikas Public School fees, admission fee Kalayat, school fees 2025-26, pay school fee online" />
+        <link rel="canonical" href="https://bvps-school.vercel.app/fee-structure" />
+        <meta property="og:title" content="Fee Structure 2025–26 — Bal Vikas Public School Kalayat" />
+        <meta property="og:description" content="Class-wise fee structure with online UPI payment options. Affordable quality education." />
+        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
+        <meta property="og:url" content="https://bvps-school.vercel.app/fee-structure" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Fee Structure 2025–26 — Bal Vikas Public School Kalayat" />
+        <meta name="twitter:description" content="Transparent class-wise fee structure with UPI payment." />
+      </Helmet>
 
       {/* ── Hero ── */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">

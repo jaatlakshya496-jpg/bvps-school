@@ -23,3 +23,7 @@ services:
         fromDatabase:
           name: bvps-db
           property: connectionString
+      - key: GMAIL_USER
+        sync: false
+      - key: GMAIL_APP_PASSWORD
+        sync: false

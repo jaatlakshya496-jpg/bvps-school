@@ -4,7 +4,7 @@ import {
   Sparkles, Volume2, VolumeX, X, ArrowRight, 
   FileText, MessageSquare, Play, HelpCircle, PhoneCall
 } from 'lucide-react';
-import schoolLogo from '@/assets/school-logo.png';
+import schoolLogo from '@/assets/school-logo-kalayat.webp';
 import { RobotAvatar } from './RobotAvatar';
 
 interface EntranceWelcomeRobotProps {

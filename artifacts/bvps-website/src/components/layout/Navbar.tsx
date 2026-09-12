@@ -5,7 +5,7 @@ import {
   HelpCircle, UserCheck, BookOpen, User, Building2, 
   Trophy, Image as ImageIcon, MessageSquare, Home as HomeIcon, Info, Sparkles
 } from 'lucide-react';
-import schoolLogo from '@/assets/school-logo-kalayat.jpg';
+import schoolLogo from '@/assets/school-logo-kalayat.webp';
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher';
 import { useLanguage } from '@/lib/language-context';
 

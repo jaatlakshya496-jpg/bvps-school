@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Button } from '@/components/ui/button';
 import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
-import heroImg from '@assets/bal-vikas-public-school_1784611430239.jpg';
+import heroImg from '@assets/bal-vikas-public-school_1784611430239.webp';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -67,7 +67,7 @@ export default function Contact() {
         <link rel="canonical" href="https://bvps-school.vercel.app/contact" />
         <meta property="og:title" content="Contact Bal Vikas Public School Kalayat | Get in Touch" />
         <meta property="og:description" content="Contact Bal Vikas Public School Kalayat. Get address, phone number, and reach out for admissions, queries, or just to say hello." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.jpg" />
+        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
         <meta property="og:url" content="https://bvps-school.vercel.app/contact" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Contact Bal Vikas Public School Kalayat | Get in Touch" />
