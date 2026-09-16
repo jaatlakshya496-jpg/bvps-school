@@ -36,6 +36,7 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - Forms (`enquiry-store.ts`, `feedback-store.ts`) = `localStorage` me save hote hain.
   - Isliye chatbot/form Vercel pe bina backend ke kaam karte hain. Backend (Render) sirf health endpoints provide karta hai abhi.
 - **[2026-09-08]** Contact form email sending add ki — naya backend endpoint `POST /contact-email` (`contact-email.ts`) jo Gmail SMTP (nodemailer) se email bhejta hai. `GMAIL_USER` aur `GMAIL_APP_PASSWORD` env vars required hain (Render pe set karne hain). Frontend `contact.tsx` ab `/contact` nahi `/contact-email` call karta hai. ⚠️ Render pe GMAIL env vars set karna baaki hai — warna contact form 500 dega.
+- **[2026-09-14]** 🚨 GMAIL_APP_PASSWORD galti se `render.yaml` mein public repo mein commit ho gaya tha (commit 9631d76) aur GitHub par 2 din tak raha. **Fix (16-Sep):** commit drop kar ke force-push kiya (branch ab 92c6c1d par hai), local git objects purge kiye, aur `render.yaml` ki GMAIL env vars wapas `sync: false` karke manual dashboard setup ke liye restore ki. ⚠️ Naya Gmail app password banana zaroosi hai (purana compromised hai).
 
 ## To-Do Notes
-- ⚠️ Render pe `GMAIL_USER` aur `GMAIL_APP_PASSWORD` env vars set karne hain (contact email ke liye).
+- ⚠️ Render dashboard pe manually env vars set karne hain: `GMAIL_USER` (jaatlakshya496@gmail.com) aur `GMAIL_APP_PASSWORD` (naya app password — purana 14-Sep ko public repo mein leak ho gaya tha aur repo use commit 92c6c1d par force-push se purge kar diya hai). Cao: kabhi bhi GMAIL_APP_PASSWORD ko code/`render.yaml` mein commit mat karna (`sync: false` rakho aur dashboard pe dalo).
