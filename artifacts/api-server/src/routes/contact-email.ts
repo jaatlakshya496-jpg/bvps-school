@@ -30,6 +30,9 @@ async function ensureTransporter() {
 		 host: "smtp.gmail.com",
 		 port: 465,
 		 secure: true, // SSL
+		 connectionTimeout: 20000,
+		 greetingTimeout: 20000,
+		 socketTimeout: 30000,
 		 auth: {
 		  user,
 		  pass,
