@@ -1,11 +1,12 @@
 import { Router, type Request, type Response } from "express";
-// @ts-ignore
-import nodemailer from "nodemailer";
 import { z } from "zod";
 
-let transporter: nodemailer.Transporter | null = null;
-
 const router = Router();
+
+const ADMIN_EMAIL = "jaatlakshya496@gmail.com";
+const ADMIN_WHATSAPP = "919671772205";
+const SITE_ORIGIN = "https://bvps-school.vercel.app";
+const NTFY_TOPIC = process.env.NTFY_TOPIC || "bvps-contact-9671772205-a7f3k9x2q";
 
 const contactSchema = z.object({
 	name: z.string().min(2),
@@ -17,69 +18,79 @@ const contactSchema = z.object({
 
 type ContactValues = z.infer<typeof contactSchema>;
 
-async function ensureTransporter() {
-	if (!transporter) {
-		const user = process.env.GMAIL_USER;
-		const pass = process.env.GMAIL_APP_PASSWORD;
+async function sendEmail(values: ContactValues) {
+	const res = await fetch(`https://formsubmit.co/ajax/${ADMIN_EMAIL}`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			Accept: "application/json",
+			Origin: SITE_ORIGIN,
+			Referer: `${SITE_ORIGIN}/contact`,
+			"User-Agent": "Mozilla/5.0",
+		},
+		body: JSON.stringify({
+			name: values.name,
+			email: values.email,
+			phone: values.phone,
+			_subject: `BVPS Contact: ${values.subject}`,
+			_template: "table",
+			_replyto: values.email,
+			message: values.message,
+		}),
+	});
 
-		if (!user || !pass) {
-			throw new Error("GMAIL_USER and GMAIL_APP_PASSWORD must be set in environment");
-		}
-
-		transporter = nodemailer.createTransport({
-		 host: "smtp.gmail.com",
-		 port: 465,
-		 secure: true, // SSL
-		 connectionTimeout: 20000,
-		 greetingTimeout: 20000,
-		 socketTimeout: 30000,
-		 auth: {
-		  user,
-		  pass,
-		 },
-		});
-
-		await transporter.verify();
+	const data: any = await res.json().catch(() => ({}));
+	if (!res.ok || String(data.success) !== "true") {
+		throw new Error(data.message || "Email delivery failed");
 	}
-	return transporter;
+}
+
+async function sendPhonePush(values: ContactValues) {
+	const res = await fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+		method: "POST",
+		headers: {
+			Title: `BVPS enquiry: ${values.subject}`,
+			Priority: "high",
+			Tags: "school",
+			Click: SITE_ORIGIN,
+		},
+		body: `Name: ${values.name}\nPhone: ${values.phone}\nEmail: ${values.email}\n\n${values.message}`,
+	});
+	if (!res.ok) {
+		throw new Error("Phone notification failed");
+	}
 }
 
 router.post("/", async (req: Request, res: Response) => {
 	try {
-		const validated = contactSchema.parse(req.body);
+		const values = contactSchema.parse(req.body);
 
-		await ensureTransporter();
+		const results = await Promise.allSettled([sendEmail(values), sendPhonePush(values)]);
+		const emailOk = results[0].status === "fulfilled";
+		const pushOk = results[1].status === "fulfilled";
 
-		const mailOptions = {
-		 from: `"BVPS Contact Form" <${process.env.GMAIL_USER}>`,
-		 to: "jaatlakshya496@gmail.com",
-		 replyTo: validated.email,
-		 subject: `BVPS Contact: ${validated.subject}`,
-		 text: `
-From: ${validated.name} <${validated.email}>
-Phone: ${validated.phone}
+		if (!emailOk) {
+			console.error("Contact email error:", (results[0] as PromiseRejectedResult).reason);
+		}
+		if (!pushOk) {
+			console.error("Contact push error:", (results[1] as PromiseRejectedResult).reason);
+		}
 
-Message:
-${validated.message}
-`,
-		 html: `
-<h3>BVPS Contact Form Submission</h3>
-<p><strong>Name:</strong> ${validated.name}</p>
-<p><strong>Email:</strong> <a href="mailto:${validated.email}">${validated.email}</a></p>
-<p><strong>Phone:</strong> ${validated.phone}</p>
-<p><strong>Subject:</strong> ${validated.subject}</p>
-<p><strong>Message:</strong> ${validated.message.replace(/\n/g, "<br>")}</p>
-`,
-		};
+		const whatsappText = `New BVPS Contact Enquiry\n\nName: ${values.name}\nEmail: ${values.email}\nPhone: ${values.phone}\nSubject: ${values.subject}\n\nMessage:\n${values.message}`;
+		const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(whatsappText)}`;
 
-		const tr = await ensureTransporter();
-		await tr.sendMail(mailOptions);
+		if (!emailOk && !pushOk) {
+			res.status(500).json({ success: false, error: "Failed to deliver notification", whatsappUrl });
+			return;
+		}
 
-		const whatsappNumber = "919671772205";
-		const whatsappText = `New BVPS Contact Enquiry\n\nName: ${validated.name}\nEmail: ${validated.email}\nPhone: ${validated.phone}\nSubject: ${validated.subject}\n\nMessage:\n${validated.message}`;
-		const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`;
-
-		res.status(200).json({ success: true, message: "Email sent successfully", whatsappUrl });
+		res.status(200).json({
+			success: true,
+			message: "Enquiry received",
+			emailSent: emailOk,
+			pushSent: pushOk,
+			whatsappUrl,
+		});
 	} catch (err: any) {
 		console.error("Contact email error:", err);
 		if (err instanceof z.ZodError) {
