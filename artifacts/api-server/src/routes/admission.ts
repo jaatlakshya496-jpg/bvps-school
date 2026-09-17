@@ -2,6 +2,7 @@ import { Router, type Request, type Response } from "express";
 import { db } from "@workspace/db";
 import { admissionEnquiriesTable } from "@workspace/db";
 import { z } from "zod";
+import { notify, type Notification } from "../lib/notify";
 
 const router = Router();
 
@@ -38,7 +39,26 @@ router.post("/", async (req: Request, res: Response) => {
 			message: validated.message || null,
 			createdAt: new Date(),
 		});
-		res.status(201).json({ success: true, message: "Admission enquiry saved" });
+		const notification: Notification = {
+			subject: `BVPS Admission Application: ${validated.studentName} (Class ${validated.classApplying})`,
+			replyTo: validated.email || undefined,
+			lines: [
+				`Student: ${validated.studentName}`,
+				`Class applying: ${validated.classApplying}`,
+				validated.stream ? `Stream: ${validated.stream}` : "",
+				`DOB: ${validated.dob}`,
+				`Gender: ${validated.gender}`,
+				`Parent: ${validated.parentName}${validated.relation ? ` (${validated.relation})` : ""}`,
+				`Phone: ${validated.phone}`,
+				validated.email ? `Email: ${validated.email}` : "",
+				`Address: ${validated.address}`,
+				validated.previousSchool ? `Previous school: ${validated.previousSchool}` : "",
+				validated.message ? `Message: ${validated.message}` : "",
+			].filter(Boolean),
+		};
+
+		const { emailSent, whatsappSent } = await notify(notification);
+		res.status(201).json({ success: true, message: "Admission enquiry saved", emailSent, whatsappSent });
 	} catch (err: any) {
 		if (err instanceof z.ZodError) {
 			res.status(400).json({ success: false, error: err.errors });

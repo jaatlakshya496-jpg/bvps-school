@@ -2,6 +2,7 @@ import { Router, type Request, type Response } from "express";
 import { db } from "@workspace/db";
 import { feedbackSubmissionsTable } from "@workspace/db";
 import { z } from "zod";
+import { notify, type Notification } from "../lib/notify";
 
 const router = Router();
 
@@ -26,7 +27,22 @@ router.post("/", async (req: Request, res: Response) => {
 			rating: validated.rating,
 			createdAt: new Date(),
 		});
-		res.status(201).json({ success: true, message: "Feedback saved" });
+		const notification: Notification = {
+			subject: `BVPS Feedback (${validated.rating}/5) from ${validated.name}`,
+			replyTo: validated.email,
+			lines: [
+				`Name: ${validated.name}`,
+				`Email: ${validated.email}`,
+				`Role: ${validated.role}`,
+				`Category: ${validated.category}`,
+				`Rating: ${validated.rating}/5`,
+				"",
+				validated.message,
+			],
+		};
+
+		const { emailSent, whatsappSent } = await notify(notification);
+		res.status(201).json({ success: true, message: "Feedback saved", emailSent, whatsappSent });
 	} catch (err: any) {
 		if (err instanceof z.ZodError) {
 			res.status(400).json({ success: false, error: err.errors });
