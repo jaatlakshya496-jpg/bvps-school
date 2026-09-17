@@ -72,7 +72,11 @@ ${validated.message}
 		const tr = await ensureTransporter();
 		await tr.sendMail(mailOptions);
 
-		res.status(200).json({ success: true, message: "Email sent successfully" });
+		const whatsappNumber = "919671772205";
+		const whatsappText = `New BVPS Contact Enquiry\n\nName: ${validated.name}\nEmail: ${validated.email}\nPhone: ${validated.phone}\nSubject: ${validated.subject}\n\nMessage:\n${validated.message}`;
+		const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`;
+
+		res.status(200).json({ success: true, message: "Email sent successfully", whatsappUrl });
 	} catch (err: any) {
 		console.error("Contact email error:", err);
 		if (err instanceof z.ZodError) {

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Button } from '@/components/ui/button';
-import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Send, MessageCircle } from 'lucide-react';
 import heroImg from '@assets/bal-vikas-public-school_1784611430239.webp';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
@@ -31,6 +31,7 @@ export default function Contact() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -47,7 +48,8 @@ export default function Contact() {
     setIsLoading(true);
     setError(null);
     apiPost("/contact-email", values)
-      .then(() => {
+      .then((res: any) => {
+        setWhatsappUrl(res?.whatsappUrl || null);
         setIsSubmitted(true);
         setIsLoading(false);
         form.reset();
@@ -187,6 +189,17 @@ export default function Contact() {
                     <p className="text-green-700/80">
                       Your enquiry has been received. Our administration office will contact you shortly.
                     </p>
+                    {whatsappUrl && (
+                      <a
+                        href={whatsappUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-6 inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1fb959] text-white font-bold py-3 px-6 rounded-full transition-colors"
+                      >
+                        <MessageCircle className="w-5 h-5" />
+                        Send same message on WhatsApp
+                      </a>
+                    )}
                     <Button 
                       className="mt-8 bg-green-600 hover:bg-green-700 text-white rounded-full px-6"
                       onClick={() => setIsSubmitted(false)}
