@@ -4,9 +4,8 @@ import { z } from "zod";
 const router = Router();
 
 const ADMIN_EMAIL = "jaatlakshya496@gmail.com";
-const ADMIN_WHATSAPP = "919671772205";
+const ADMIN_WHATSAPP = "+919671772205";
 const SITE_ORIGIN = "https://bvps-school.vercel.app";
-const NTFY_TOPIC = process.env.NTFY_TOPIC || "bvps-contact-9671772205-a7f3k9x2q";
 
 const contactSchema = z.object({
 	name: z.string().min(2),
@@ -17,6 +16,10 @@ const contactSchema = z.object({
 });
 
 type ContactValues = z.infer<typeof contactSchema>;
+
+function formatText(values: ContactValues) {
+	return `New BVPS Contact Enquiry\n\nName: ${values.name}\nPhone: ${values.phone}\nEmail: ${values.email}\nSubject: ${values.subject}\n\n${values.message}`;
+}
 
 async function sendEmail(values: ContactValues) {
 	const res = await fetch(`https://formsubmit.co/ajax/${ADMIN_EMAIL}`, {
@@ -45,19 +48,17 @@ async function sendEmail(values: ContactValues) {
 	}
 }
 
-async function sendPhonePush(values: ContactValues) {
-	const res = await fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
-		method: "POST",
-		headers: {
-			Title: `BVPS enquiry: ${values.subject}`,
-			Priority: "high",
-			Tags: "school",
-			Click: SITE_ORIGIN,
-		},
-		body: `Name: ${values.name}\nPhone: ${values.phone}\nEmail: ${values.email}\n\n${values.message}`,
-	});
-	if (!res.ok) {
-		throw new Error("Phone notification failed");
+async function sendWhatsApp(values: ContactValues) {
+	const apikey = process.env.CALLMEBOT_APIKEY;
+	if (!apikey) {
+		throw new Error("CALLMEBOT_APIKEY not set");
+	}
+
+	const url = `https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(ADMIN_WHATSAPP)}&apikey=${encodeURIComponent(apikey)}&text=${encodeURIComponent(formatText(values))}`;
+	const res = await fetch(url);
+	const text = await res.text();
+	if (!res.ok || /error|not allowed|invalid/i.test(text)) {
+		throw new Error(`WhatsApp delivery failed: ${text.slice(0, 120)}`);
 	}
 }
 
@@ -65,21 +66,20 @@ router.post("/", async (req: Request, res: Response) => {
 	try {
 		const values = contactSchema.parse(req.body);
 
-		const results = await Promise.allSettled([sendEmail(values), sendPhonePush(values)]);
+		const results = await Promise.allSettled([sendEmail(values), sendWhatsApp(values)]);
 		const emailOk = results[0].status === "fulfilled";
-		const pushOk = results[1].status === "fulfilled";
+		const whatsappOk = results[1].status === "fulfilled";
 
 		if (!emailOk) {
 			console.error("Contact email error:", (results[0] as PromiseRejectedResult).reason);
 		}
-		if (!pushOk) {
-			console.error("Contact push error:", (results[1] as PromiseRejectedResult).reason);
+		if (!whatsappOk) {
+			console.error("Contact whatsapp error:", (results[1] as PromiseRejectedResult).reason);
 		}
 
-		const whatsappText = `New BVPS Contact Enquiry\n\nName: ${values.name}\nEmail: ${values.email}\nPhone: ${values.phone}\nSubject: ${values.subject}\n\nMessage:\n${values.message}`;
-		const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(whatsappText)}`;
+		const whatsappUrl = `https://wa.me/919671772205?text=${encodeURIComponent(formatText(values))}`;
 
-		if (!emailOk && !pushOk) {
+		if (!emailOk && !whatsappOk) {
 			res.status(500).json({ success: false, error: "Failed to deliver notification", whatsappUrl });
 			return;
 		}
@@ -88,7 +88,7 @@ router.post("/", async (req: Request, res: Response) => {
 			success: true,
 			message: "Enquiry received",
 			emailSent: emailOk,
-			pushSent: pushOk,
+			whatsappSent: whatsappOk,
 			whatsappUrl,
 		});
 	} catch (err: any) {
@@ -96,7 +96,7 @@ router.post("/", async (req: Request, res: Response) => {
 		if (err instanceof z.ZodError) {
 			res.status(400).json({ success: false, error: err.errors });
 		} else {
-			res.status(500).json({ success: false, error: err.message || "Failed to send email" });
+			res.status(500).json({ success: false, error: err.message || "Failed to send message" });
 		}
 	}
 });

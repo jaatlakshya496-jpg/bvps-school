@@ -41,12 +41,13 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
 - **[2026-09-17]** Contact form WhatsApp link add — `contact-email.ts` ab success response mein `whatsappUrl` deta hai (`https://wa.me/919671772205?text=...`, admin number 9671772205). Frontend `contact.tsx` success card mein "Send same message on WhatsApp" button dikhata hai. ✅ Commit + push ho gaya (85f3192).
 - **[2026-09-17]** 🚨 **Bada finding:** Render **free** web services outbound SMTP ports (25/465/587) block karte hain (Sept 2025 se) — isliye Gmail SMTP (nodemailer) se email kabhi nahi jayega. Local par SMTP OK tha, Render par 20s timeout. Fix: `contact-email.ts` ko HTTP-based banaya:
   - **Email** → FormSubmit.co AJAX (`https://formsubmit.co/ajax/<admin email>`) — koi API key nahi, sirf ek baar Gmail par activation link click karna hai.
-  - **Phone** → ntfy.sh push (`https://ntfy.sh/<topic>`) — admin ko ntfy app/web par topic subscribe karna hai. Topic env var `NTFY_TOPIC` (default `bvps-contact-9671772205-a7f3k9x2q`).
-  - Endpoint ab resilient hai: email fail ho par push success ho toh bhi 200 + WhatsApp link milta hai. Response mein `emailSent`/`pushSent` flags hain.
-  - ⚠️ GMAIL_USER/GMAIL_APP_PASSWORD ab use nahi hote (Render free par block) — lekin env vars pade rehne dete hain (agar kabhi paid instance ho).
+  - **WhatsApp** → CallMeBot API (`https://api.callmebot.com/whatsapp.php?phone=+919671772205&apikey=<CALLMEBOT_APIKEY>`) — admin ke WhatsApp par direct automatic message. Env var `CALLMEBOT_APIKEY` chahiye (ek baar bot ko "I allow callmebot to send me messages" bhej kar milta hai).
+  - Endpoint resilient hai: ek channel fail ho par doosra success ho toh bhi 200 + WhatsApp link milta hai. Response mein `emailSent`/`whatsappSent` flags hain.
+  - ⚠️ ntfy.sh push wala tarika (17-Sep) hataya gaya kyunki user WhatsApp chahta tha.
+  - ⚠️ GMAIL_USER/GMAIL_APP_PASSWORD ab use nahi hote (Render free par block) — env vars pade rehne dete hain.
 
 ## To-Do Notes
+- ⚠️ **CallMeBot activation** — admin (9671772205) ko WhatsApp par bot number (e.g. +34 644 95 42 75) ko save kar ke "I allow callmebot to send me messages" bhejna hai; phir mila APIKEY `CALLMEBOT_APIKEY` env var mein Render par set karna hai. Iske bina WhatsApp automatic message nahi jayega.
 - ⚠️ **FormSubmit activation** — jaatlakshya496@gmail.com par FormSubmit ka "Activate Form" email aaya hai; uska link click karna baaki hai. Iske bina email nahi jayega (`emailSent: false` rahega).
-- ⚠️ **Phone push subscribe** — admin ko ntfy app (Android/iOS) install kar ke topic `bvps-contact-9671772205-a7f3k9x2q` subscribe karna hai, tabhi phone par notification aayegi. Web: https://ntfy.sh/bvps-contact-9671772205-a7f3k9x2q
 - ⚠️ **naya Gmail app password** abhi bhi rotate karna hai (purana compromised tha; Render free par SMTP block hai isliye abhi zaroorat nahi, par rotate kar lo).
 - ⚠️ Render API key (`rnd_fj9gv5IMZwG2RhiuCnS2w3pzBZuJ`) user ne chat mein share ki thi — kaam khatam hone ke baad revoke kar dena (Render → Account Settings → API Keys → Revoke).
