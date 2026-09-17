@@ -32,11 +32,6 @@ router.post("/", async (req: Request, res: Response) => {
 		const { emailSent, whatsappSent } = await notify(notification);
 		const whatsappUrl = whatsAppClickLink(notification);
 
-		if (!emailSent && !whatsappSent) {
-			res.status(500).json({ success: false, error: "Failed to deliver notification", whatsappUrl });
-			return;
-		}
-
 		res.status(200).json({
 			success: true,
 			message: "Enquiry received",

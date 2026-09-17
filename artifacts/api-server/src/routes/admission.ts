@@ -2,7 +2,7 @@ import { Router, type Request, type Response } from "express";
 import { db } from "@workspace/db";
 import { admissionEnquiriesTable } from "@workspace/db";
 import { z } from "zod";
-import { notify, type Notification } from "../lib/notify";
+import { notify, whatsAppClickLink, type Notification } from "../lib/notify";
 
 const router = Router();
 
@@ -24,21 +24,29 @@ const insertSchema = z.object({
 router.post("/", async (req: Request, res: Response) => {
 	try {
 		const validated = insertSchema.parse(req.body);
-		await db.insert(admissionEnquiriesTable).values({
-			studentName: validated.studentName,
-			dob: validated.dob,
-			gender: validated.gender,
-			classApplying: validated.classApplying,
-			stream: validated.stream || null,
-			parentName: validated.parentName,
-			relation: validated.relation || null,
-			phone: validated.phone,
-			email: validated.email || null,
-			address: validated.address,
-			previousSchool: validated.previousSchool || null,
-			message: validated.message || null,
-			createdAt: new Date(),
-		});
+
+		let savedToDb = false;
+		try {
+			await db.insert(admissionEnquiriesTable).values({
+				studentName: validated.studentName,
+				dob: validated.dob,
+				gender: validated.gender,
+				classApplying: validated.classApplying,
+				stream: validated.stream || null,
+				parentName: validated.parentName,
+				relation: validated.relation || null,
+				phone: validated.phone,
+				email: validated.email || null,
+				address: validated.address,
+				previousSchool: validated.previousSchool || null,
+				message: validated.message || null,
+				createdAt: new Date(),
+			});
+			savedToDb = true;
+		} catch (dbErr) {
+			console.error("Admission DB save error:", dbErr);
+		}
+
 		const notification: Notification = {
 			subject: `BVPS Admission Application: ${validated.studentName} (Class ${validated.classApplying})`,
 			replyTo: validated.email || undefined,
@@ -58,7 +66,14 @@ router.post("/", async (req: Request, res: Response) => {
 		};
 
 		const { emailSent, whatsappSent } = await notify(notification);
-		res.status(201).json({ success: true, message: "Admission enquiry saved", emailSent, whatsappSent });
+		const whatsappUrl = whatsAppClickLink(notification);
+
+		if (!savedToDb && !emailSent && !whatsappSent) {
+			res.status(500).json({ success: false, error: "Failed to save application", whatsappUrl });
+			return;
+		}
+
+		res.status(201).json({ success: true, message: "Application received", savedToDb, emailSent, whatsappSent, whatsappUrl });
 	} catch (err: any) {
 		if (err instanceof z.ZodError) {
 			res.status(400).json({ success: false, error: err.errors });

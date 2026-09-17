@@ -18,15 +18,23 @@ const insertSchema = z.object({
 router.post("/", async (req: Request, res: Response) => {
 	try {
 		const validated = insertSchema.parse(req.body);
-		await db.insert(feedbackSubmissionsTable).values({
-			name: validated.name,
-			email: validated.email,
-			role: validated.role,
-			category: validated.category,
-			message: validated.message,
-			rating: validated.rating,
-			createdAt: new Date(),
-		});
+
+		let savedToDb = false;
+		try {
+			await db.insert(feedbackSubmissionsTable).values({
+				name: validated.name,
+				email: validated.email,
+				role: validated.role,
+				category: validated.category,
+				message: validated.message,
+				rating: validated.rating,
+				createdAt: new Date(),
+			});
+			savedToDb = true;
+		} catch (dbErr) {
+			console.error("Feedback DB save error:", dbErr);
+		}
+
 		const notification: Notification = {
 			subject: `BVPS Feedback (${validated.rating}/5) from ${validated.name}`,
 			replyTo: validated.email,
@@ -42,7 +50,13 @@ router.post("/", async (req: Request, res: Response) => {
 		};
 
 		const { emailSent, whatsappSent } = await notify(notification);
-		res.status(201).json({ success: true, message: "Feedback saved", emailSent, whatsappSent });
+
+		if (!savedToDb && !emailSent && !whatsappSent) {
+			res.status(500).json({ success: false, error: "Failed to save feedback" });
+			return;
+		}
+
+		res.status(201).json({ success: true, message: "Feedback saved", savedToDb, emailSent, whatsappSent });
 	} catch (err: any) {
 		if (err instanceof z.ZodError) {
 			res.status(400).json({ success: false, error: err.errors });
