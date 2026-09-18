@@ -50,7 +50,7 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - **DB:** nayi table `fee_structure` (`lib/db/src/schema/index.ts` + migration `0003_fee_structure.sql`). Classes + 3 streams ke admission/monthly/annualFund numeric store hote hain. Total/year auto = monthly×12 + annualFund.
   - **API:** `GET /api/fees` (public, empty ho toh built-in defaults), `GET /api/fees/admin` (verify passcode), `PUT /api/fees/admin` (save; `x-admin-key` header). Naya `lib/admin-auth.ts` shared `requireAdmin`, `admin.ts` usi ko use karta hai.
   - **Fallback:** API/DB down ho toh page built-in default fees dikhata hai (site kabhi na toote).
-  - ⚠️ Deploy ke baad Render par `preDeployCommand` migration chalega (`0003`). Ensure `ADMIN_SECRET` Render env mein set ho — wahi passcode website par daalna hai.
+  - ⚠️ **Live (18-Sep):** Render pe `ADMIN_SECRET='BVPS@2026'` set kiya + migration startup par chalti hai (`index.ts` mein `migrate()` se `lib/db/drizzle` — Render ke `preDeployCommand` se reliable nahi tha). Deploy trigger hua, `PUT /api/fees/admin` verified OK. Frontend Vercel live. 🔑 Site pe passcode: **BVPS@2026** (badalna ho toh Render → service → Env Vars → `ADMIN_SECRET`).
 
 ## To-Do Notes
 - ⚠️ **CallMeBot activation** — admin (9671772205) ko WhatsApp par bot number (e.g. +34 644 95 42 75) ko save kar ke "I allow callmebot to send me messages" bhejna hai; phir mila APIKEY `CALLMEBOT_APIKEY` env var mein Render par set karna hai. Iske bina WhatsApp automatic message nahi jayega.
