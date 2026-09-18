@@ -22,6 +22,13 @@
       "when": 1788763798530,
       "tag": "0002_light_wallop",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1789000000000,
+      "tag": "0003_fee_structure",
+      "breakpoints": true
     }
   ]
 }

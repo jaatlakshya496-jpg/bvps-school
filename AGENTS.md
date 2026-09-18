@@ -46,6 +46,12 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - ⚠️ ntfy.sh push wala tarika (17-Sep) hataya gaya kyunki user WhatsApp chahta tha.
   - ⚠️ GMAIL_USER/GMAIL_APP_PASSWORD ab use nahi hote (Render free par block) — env vars pade rehne dete hain.
 
+- **[2026-09-18]** ✅ **Manual fee editing add ki** — Fee page (`fee-structure.tsx`) par "Manage Fees" button (mobile par bhi) → admin passcode (`ADMIN_SECRET`) daal kar fees manually change ho sakti hain; website par live update.
+  - **DB:** nayi table `fee_structure` (`lib/db/src/schema/index.ts` + migration `0003_fee_structure.sql`). Classes + 3 streams ke admission/monthly/annualFund numeric store hote hain. Total/year auto = monthly×12 + annualFund.
+  - **API:** `GET /api/fees` (public, empty ho toh built-in defaults), `GET /api/fees/admin` (verify passcode), `PUT /api/fees/admin` (save; `x-admin-key` header). Naya `lib/admin-auth.ts` shared `requireAdmin`, `admin.ts` usi ko use karta hai.
+  - **Fallback:** API/DB down ho toh page built-in default fees dikhata hai (site kabhi na toote).
+  - ⚠️ Deploy ke baad Render par `preDeployCommand` migration chalega (`0003`). Ensure `ADMIN_SECRET` Render env mein set ho — wahi passcode website par daalna hai.
+
 ## To-Do Notes
 - ⚠️ **CallMeBot activation** — admin (9671772205) ko WhatsApp par bot number (e.g. +34 644 95 42 75) ko save kar ke "I allow callmebot to send me messages" bhejna hai; phir mila APIKEY `CALLMEBOT_APIKEY` env var mein Render par set karna hai. Iske bina WhatsApp automatic message nahi jayega.
 - ⚠️ **FormSubmit activation** — jaatlakshya496@gmail.com par FormSubmit ka "Activate Form" email aaya hai; uska link click karna baaki hai. Iske bina email nahi jayega (`emailSent: false` rahega).

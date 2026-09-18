@@ -51,3 +51,17 @@ export const feedbackSubmissionsTable = pgTable("feedback_submissions", {
 export const feedbackSubmissionsInsertSchema = createInsertSchema(feedbackSubmissionsTable).omit({ id: true, createdAt: true });
 export type FeedbackSubmissionsInsert = z.infer<typeof feedbackSubmissionsInsertSchema>;
 export type FeedbackSubmission = z.infer<typeof feedbackSubmissionsTable>;
+
+export const feeStructureTable = pgTable("fee_structure", {
+	id: serial("id").primaryKey(),
+	kind: text("kind").notNull(),
+	name: text("name").notNull(),
+	subtitle: text("subtitle"),
+	admission: integer("admission").notNull().default(0),
+	monthly: integer("monthly").notNull().default(0),
+	annualFund: integer("annual_fund").notNull().default(0),
+	sortOrder: integer("sort_order").notNull().default(0),
+	updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type FeeStructureRow = z.infer<typeof feeStructureTable>;

@@ -412,7 +412,7 @@ export default function Home() {
                 src={heroSlides[currentSlide].src}
                 alt=""
                 aria-hidden
-                className="w-full h-full object-cover scale-110 blur-2xl brightness-75"
+                className="w-full h-full object-contain blur-2xl brightness-75"
               />
               {/* Sharp full photo — never cropped */}
               <img
