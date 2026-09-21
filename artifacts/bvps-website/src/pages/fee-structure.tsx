@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Link } from 'wouter';
-import { IndianRupee, CheckCircle2, Phone, ArrowLeft, Info, BookOpen, FlaskConical, TrendingUp, Palette, ChevronDown, Copy, Check, QrCode, Smartphone, Lock, X, Save, RotateCcw, Loader2 } from 'lucide-react';
+import { IndianRupee, CheckCircle2, Phone, ArrowLeft, Info, BookOpen, FlaskConical, TrendingUp, Palette, ChevronDown, Copy, Check, QrCode, Smartphone, Lock, X, Save, RotateCcw, Loader2, Pencil } from 'lucide-react';
 import QRCode from 'react-qr-code';
 import { apiGet, apiGetAdmin, apiSend } from '@/lib/api';
 import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
@@ -172,7 +172,7 @@ export default function FeeStructure() {
 
   // ── Admin edit state ──
   const [adminOpen, setAdminOpen]   = useState(false);
-  const [adminKey, setAdminKey]     = useState<string>(() => sessionStorage.getItem(ADMIN_KEY_STORAGE) ?? '');
+  const [adminKey, setAdminKey]     = useState<string>(() => localStorage.getItem(ADMIN_KEY_STORAGE) ?? '');
   const [passInput, setPassInput]   = useState('');
   const [authError, setAuthError]   = useState('');
   const [checking, setChecking]     = useState(false);
@@ -180,6 +180,10 @@ export default function FeeStructure() {
   const [saving, setSaving]         = useState(false);
   const [saveMsg, setSaveMsg]       = useState('');
   const unlocked = Boolean(adminKey);
+  const isOwner = unlocked;
+
+  const tapTimer = useRef<number | null>(null);
+  const tapCount = useRef(0);
 
   useEffect(() => {
     let active = true;
@@ -188,6 +192,26 @@ export default function FeeStructure() {
       .catch(() => { /* API down → keep built-in defaults */ });
     return () => { active = false; };
   }, []);
+
+  // Owner-only access: secret URL (?admin=1 or #admin) or 5 quick taps on the title
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('admin') || window.location.hash === '#admin') {
+      openAdmin();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function handleSecretTap() {
+    tapCount.current += 1;
+    if (tapTimer.current) window.clearTimeout(tapTimer.current);
+    if (tapCount.current >= 5) {
+      tapCount.current = 0;
+      openAdmin();
+      return;
+    }
+    tapTimer.current = window.setTimeout(() => { tapCount.current = 0; }, 1500);
+  }
 
   const admissionAmounts: Record<string, number> = {};
   fees.classes.forEach(c => { admissionAmounts[c.name] = c.admission; });
@@ -208,11 +232,21 @@ export default function FeeStructure() {
   }
 
   // ── Admin handlers ──
-  function openAdmin() {
+  async function openAdmin() {
     setSaveMsg('');
     setAuthError('');
     setDraft(fees);
     setAdminOpen(true);
+    if (adminKey) {
+      try {
+        const res = await apiGetAdmin<{ success: boolean; data: FeeConfig }>('/fees/admin', adminKey);
+        if (res?.data) {
+          const normalized = normalize(res.data);
+          setDraft(normalized);
+          setFees(normalized);
+        }
+      } catch { /* keep current values */ }
+    }
   }
 
   async function tryUnlock() {
@@ -225,7 +259,7 @@ export default function FeeStructure() {
       if (res?.data) {
         const normalized = normalize(res.data);
         setAdminKey(key);
-        sessionStorage.setItem(ADMIN_KEY_STORAGE, key);
+        localStorage.setItem(ADMIN_KEY_STORAGE, key);
         setDraft(normalized);
         setFees(normalized);
         setPassInput('');
@@ -255,7 +289,7 @@ export default function FeeStructure() {
       const msg = String(err?.error ?? '').toLowerCase();
       if (msg.includes('forbidden')) {
         setAdminKey('');
-        sessionStorage.removeItem(ADMIN_KEY_STORAGE);
+        localStorage.removeItem(ADMIN_KEY_STORAGE);
         setSaveMsg('Session expire ho gaya — dobara passcode daalein.');
       } else {
         setSaveMsg(err?.error ?? 'Fees save nahi ho payi. Dobara koshish karein.');
@@ -298,7 +332,7 @@ export default function FeeStructure() {
         <div className="container mx-auto text-center relative z-10">
           <ScrollReveal>
             <span className="text-secondary font-semibold uppercase tracking-widest text-sm">Admissions</span>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4 mt-2">Fee Structure</h1>
+            <h1 onClick={handleSecretTap} className="text-4xl md:text-5xl font-serif font-bold text-white mb-4 mt-2 select-none">Fee Structure</h1>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full" />
             <p className="mt-6 text-primary-foreground/80 text-lg max-w-2xl mx-auto">
               Complete, transparent fee details for Class 1 to 12 — Session 2025–26.
@@ -328,13 +362,15 @@ export default function FeeStructure() {
                     <p className="text-primary-foreground/70 text-sm">Session 2025–26</p>
                   </div>
                 </div>
-                <button
-                  onClick={openAdmin}
-                  className="hidden sm:inline-flex items-center gap-2 shrink-0 rounded-full border border-white/30 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold px-4 py-2 transition-colors"
-                  title="Fees ko manually change karein"
-                >
-                  <Lock className="w-3.5 h-3.5" /> Manage Fees
-                </button>
+                {isOwner && (
+                  <button
+                    onClick={openAdmin}
+                    className="hidden sm:inline-flex items-center gap-2 shrink-0 rounded-full border border-white/30 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold px-4 py-2 transition-colors"
+                    title="Fees ko manually change karein"
+                  >
+                    <Lock className="w-3.5 h-3.5" /> Manage Fees
+                  </button>
+                )}
               </div>
 
               <div className="overflow-x-auto">
@@ -449,15 +485,17 @@ export default function FeeStructure() {
             </div>
           </ScrollReveal>
 
-          {/* Mobile manage-fees button */}
-          <div className="sm:hidden -mt-8">
-            <button
-              onClick={openAdmin}
-              className="w-full inline-flex items-center justify-center gap-2 rounded-full border-2 border-primary/30 text-primary hover:bg-primary/5 text-sm font-semibold px-4 py-3 transition-colors"
-            >
-              <Lock className="w-4 h-4" /> Manage Fees
-            </button>
-          </div>
+          {/* Mobile manage-fees button (owner only) */}
+          {isOwner && (
+            <div className="sm:hidden -mt-8">
+              <button
+                onClick={openAdmin}
+                className="w-full inline-flex items-center justify-center gap-2 rounded-full border-2 border-primary/30 text-primary hover:bg-primary/5 text-sm font-semibold px-4 py-3 transition-colors"
+              >
+                <Lock className="w-4 h-4" /> Manage Fees
+              </button>
+            </div>
+          )}
 
           {/* ── Documents Required ── */}
           <ScrollReveal>
@@ -644,6 +682,17 @@ export default function FeeStructure() {
 
         </div>
       </section>
+
+      {/* Owner-only floating edit button */}
+      {isOwner && (
+        <button
+          onClick={openAdmin}
+          className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full bg-primary text-white shadow-xl px-4 py-3 text-sm font-semibold hover:bg-primary/90 transition-colors"
+          title="Fees edit karein"
+        >
+          <Pencil className="w-4 h-4" /> Edit Fees
+        </button>
+      )}
 
       {/* ── Admin Fee Manager Modal ── */}
       {adminOpen && (

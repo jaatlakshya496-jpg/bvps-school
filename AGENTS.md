@@ -51,6 +51,12 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - **API:** `GET /api/fees` (public, empty ho toh built-in defaults), `GET /api/fees/admin` (verify passcode), `PUT /api/fees/admin` (save; `x-admin-key` header). Naya `lib/admin-auth.ts` shared `requireAdmin`, `admin.ts` usi ko use karta hai.
   - **Fallback:** API/DB down ho toh page built-in default fees dikhata hai (site kabhi na toote).
   - ⚠️ **Live (18-Sep):** Render pe `ADMIN_SECRET='BVPS@2026'` set kiya + migration startup par chalti hai (`index.ts` mein `migrate()` se `lib/db/drizzle` — Render ke `preDeployCommand` se reliable nahi tha). Deploy trigger hua, `PUT /api/fees/admin` verified OK. Frontend Vercel live. 🔑 Site pe passcode: **BVPS@2026** (badalna ho toh Render → service → Env Vars → `ADMIN_SECRET`).
+- **[2026-09-21]** 🕶️ **Owner-only fee editor (hidden access)** — fee-structure page par "Manage Fees" button public ke liye **hidden** kar diya. Ab admin access 3 tarikon se milta hai:
+  - **Secret URL:** site pe `?admin=1` ya `#admin` lagao (e.g. `https://bvps-school.vercel.app/fee-structure?admin=1`) — page khulte hi admin modal khul jayega.
+  - **5 tap trick:** hero heading "Fee Structure" par mobile pe 5 quick taps — admin modal khulta hai.
+  - **Persistent session:** passcode unlock hone ke baad key `localStorage` (`bvps_admin_key`) mein save hoti hai, isliye browser + refresh ke baad bhi "Edit Fees"/"Manage Fees" buttons + floating edit button dikhte hain. (Pehle `sessionStorage` tha → tab band hote hi gayab ho jaata tha.)
+  - Owner logged-in hone par 3 controls: hero table ke paas "Manage Fees", mobile par "Manage Fees", aur bottom-right floating "Edit Fees" pencil button.
+  - Admin modal khulte waqt `GET /api/fees/admin` se latest DB fees auto-load hoti hain (agar key pehle se hai).
 
 ## To-Do Notes
 - ⚠️ **CallMeBot activation** — admin (9671772205) ko WhatsApp par bot number (e.g. +34 644 95 42 75) ko save kar ke "I allow callmebot to send me messages" bhejna hai; phir mila APIKEY `CALLMEBOT_APIKEY` env var mein Render par set karna hai. Iske bina WhatsApp automatic message nahi jayega.
