@@ -349,6 +349,21 @@ export default function FeeStructure() {
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4 md:px-6 max-w-5xl space-y-14">
 
+          {/* ── Top manage-fees button (owner only) ── */}
+          {isOwner && (
+            <ScrollReveal>
+              <div className="flex justify-center -mb-4 mt-0">
+                <button
+                  onClick={openAdmin}
+                  className="inline-flex items-center gap-2 rounded-full border-2 border-primary/40 bg-primary/5 text-primary hover:bg-primary/10 text-sm font-semibold px-6 py-3 transition-colors"
+                  title="Fees ko manually change karein"
+                >
+                  <Lock className="w-4 h-4" /> Manage Fees
+                </button>
+              </div>
+            </ScrollReveal>
+          )}
+
           {/* ── Class 1–10 Table ── */}
           <ScrollReveal>
             <div className="bg-white rounded-3xl border border-border shadow-md overflow-hidden">

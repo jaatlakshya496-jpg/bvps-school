@@ -55,7 +55,7 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - **Secret URL:** site pe `?admin=1` ya `#admin` lagao (e.g. `https://bvps-school.vercel.app/fee-structure?admin=1`) — page khulte hi admin modal khul jayega.
   - **5 tap trick:** hero heading "Fee Structure" par mobile pe 5 quick taps — admin modal khulta hai.
   - **Persistent session:** passcode unlock hone ke baad key `localStorage` (`bvps_admin_key`) mein save hoti hai, isliye browser + refresh ke baad bhi "Edit Fees"/"Manage Fees" buttons + floating edit button dikhte hain. (Pehle `sessionStorage` tha → tab band hote hi gayab ho jaata tha.)
-  - Owner logged-in hone par 3 controls: hero table ke paas "Manage Fees", mobile par "Manage Fees", aur bottom-right floating "Edit Fees" pencil button.
+  - Owner logged-in hone par 4 controls: page ke top par "Manage Fees", hero table ke paas "Manage Fees", mobile par "Manage Fees", aur bottom-right floating "Edit Fees" pencil button.
   - Admin modal khulte waqt `GET /api/fees/admin` se latest DB fees auto-load hoti hain (agar key pehle se hai).
 
 ## To-Do Notes
