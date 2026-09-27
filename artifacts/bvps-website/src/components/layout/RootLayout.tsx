@@ -3,7 +3,7 @@ import { FloatingContact } from './FloatingContact';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { WhatsAppButton } from './WhatsAppButton';
-import { UnifiedAiAgent } from '@/components/voice-bot/UnifiedAiAgent';
+import { ChatbotWidget } from '@/components/chatbot/ChatbotWidget';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
 
@@ -35,7 +35,7 @@ export function RootLayout({ children }: { children: ReactNode }) {
         </AnimatePresence>
       </main>
       <Footer />
-      <UnifiedAiAgent />
+      <ChatbotWidget />
       <WhatsAppButton />
     </div>
   );

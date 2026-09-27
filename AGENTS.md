@@ -58,6 +58,9 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - Owner logged-in hone par 4 controls: page ke top par "Manage Fees", hero table ke paas "Manage Fees", mobile par "Manage Fees", aur bottom-right floating "Edit Fees" pencil button.
   - Admin modal khulte waqt `GET /api/fees/admin` se latest DB fees auto-load hoti hain (agar key pehle se hai).
 
+- **[2026-09-27]** 💬 **Groq-backed receptionist chatbot add kiya** — purane hardcoded voice assistant ko replace karke `ChatbotWidget.tsx` global floating chat widget add kiya. Widget recent history ke saath existing Render API ke `POST /api/chat` route ko call karta hai; browser kabhi Groq ko direct call nahi karta. Backend `openai/gpt-oss-20b` use karta hai, `GROQ_API_KEY` environment variable se read hota hai, aur verified BVPS site facts ke saath short multilingual receptionist prompt use karta hai. `render.yaml` mein key `sync: false` hai. `.gitignore` mein `.ENV` bhi add kiya gaya hai.
+- **[2026-09-27]** 🖼️ **Image-on-request behavior add kiya** — normal chatbot answers text-only rahenge. Visitor jab photo, picture, image ya gallery explicitly maangega tab API image IDs return karegi aur frontend relevant BVPS campus/student/facility photos dikhayega.
+
 ## To-Do Notes
 - ⚠️ **CallMeBot activation** — admin (9671772205) ko WhatsApp par bot number (e.g. +34 644 95 42 75) ko save kar ke "I allow callmebot to send me messages" bhejna hai; phir mila APIKEY `CALLMEBOT_APIKEY` env var mein Render par set karna hai. Iske bina WhatsApp automatic message nahi jayega.
 - ⚠️ **FormSubmit activation** — jaatlakshya496@gmail.com par FormSubmit ka "Activate Form" email aaya hai; uska link click karna baaki hai. Iske bina email nahi jayega (`emailSent: false` rahega).

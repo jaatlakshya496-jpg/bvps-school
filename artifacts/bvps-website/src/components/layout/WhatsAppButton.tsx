@@ -5,7 +5,7 @@ export function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
-      className="fixed bottom-6 right-5 z-50 flex items-center gap-2 bg-[#25D366] text-white rounded-full shadow-lg hover:shadow-xl hover:bg-[#20b859] transition-all duration-200 group"
+      className="fixed bottom-6 right-20 z-50 flex items-center gap-2 bg-[#25D366] text-white rounded-full shadow-lg hover:shadow-xl hover:bg-[#20b859] transition-all duration-200 group sm:right-24"
     >
       {/* Label — visible on hover */}
       <span className="max-w-0 overflow-hidden whitespace-nowrap group-hover:max-w-[160px] transition-all duration-300 ease-in-out pl-0 group-hover:pl-4 text-sm font-semibold">

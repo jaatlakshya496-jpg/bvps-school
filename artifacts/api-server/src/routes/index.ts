@@ -6,6 +6,7 @@ import admissionRouter from "./admission";
 import feedbackRouter from "./feedback";
 import feesRouter from "./fees";
 import adminRouter from "./admin";
+import chatRouter from "./chat";
 
 const router: IRouter = Router();
 
@@ -16,5 +17,6 @@ router.use("/admissions", admissionRouter);
 router.use("/feedback", feedbackRouter);
 router.use("/fees", feesRouter);
 router.use("/admin", adminRouter);
+router.use(chatRouter);
 
 export default router;
