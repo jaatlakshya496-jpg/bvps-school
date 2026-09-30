@@ -135,14 +135,23 @@ export function Footer() {
           <p className="text-primary-foreground/60 text-sm text-center md:text-left">
             © {new Date().getFullYear()} Bal Vikas Public School, Kalayat. All rights reserved.
           </p>
-          <div className="flex items-center gap-4 text-primary-foreground/60 text-sm">
-            <span className="text-center md:text-right hidden sm:inline">
-              Affiliated to BSEH | Est. 2004 | School Code: 06050300920
-            </span>
-            <Link href="/admin" className="inline-flex items-center gap-1 text-xs font-semibold text-primary-foreground/50 hover:text-secondary transition-colors" title="School Admin Login">
-              <Lock className="w-3 h-3" /> Admin Login
-            </Link>
-          </div>
+          <p className="text-primary-foreground/60 text-sm text-center md:text-right">
+            Affiliated to BSEH | Est. 2004 | School Code: 06050300920
+          </p>
+        </div>
+
+        {/* ── Administration (website ke sabse neeche) ── */}
+        <div className="mt-6 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-primary-foreground/70 text-sm font-semibold tracking-wide">
+            Administration &amp; Management
+          </p>
+          <Link
+            href="/admin"
+            className="inline-flex items-center gap-2 rounded-full border-2 border-secondary/70 bg-secondary/10 px-5 py-2.5 text-sm font-bold text-secondary hover:bg-secondary hover:text-primary transition-colors"
+            title="School administration login (bvps-school.vercel.app/admin)"
+          >
+            <Lock className="w-4 h-4" /> Admin Login
+          </Link>
         </div>
       </div>
     </footer>
