@@ -77,6 +77,11 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - Render par `ADMIN_PASSWORD=LAXYAMALIK` set kiya + deploy. `POST /api/admin/login` (jaatlakshya496@gmail.com / LAXYAMALIK) → 200 verified.
   - Site ka admin portal: **https://bvps-school.vercel.app/admin** — footer ke **sabse neeche** "Administration & Management → Admin Login" (pehle bahut chhota/dim link tha, isliye dikhta nahi tha; ab full-width visible bar me hai).
   - Fee editor ka passcode bhi yahi `LAXYAMALIK` hai ( dono ek hi value).
+- **[2026-09-30]** 🐛 **Admin portal ka 404 fix + footer me Admin link**:
+  - **Root cause:** wouter me wildcard `:rest*` kaam nahi karta — `regexparam` usay literal param naam samajhta hai. `parse('/admin/:rest*')` sirf `/admin/blog` (ek segment) match karta tha; `/admin/blog/new` aur `/admin/blog/:id/edit` match **hi nahi** hote the → wahan se `PublicRouter` ka `NotFound` page ("404 Page Not Found") aa raha tha. Fix: `path="/admin/*"` (regexparam v3 ka sahi wildcard).
+  - **NotFound page ab user-friendly:** dev message hata ke "Page Not Found" + Home/Contact buttons.
+  - **Footer:** Quick Links list me "🔒 Admin Login" **"Write to Principal" ke bilkul neeche** add kiya (same style), + footer ke sabse neeche full-width amber ADMIN LOGIN bar.
+  - ⚠️ wouter me nested route ke liye hamesha `/admin/*` likho, `:param*` kabhi nahi.
 
 - **[2026-09-27]** 💬 **Groq-backed receptionist chatbot add kiya** — purane hardcoded voice assistant ko replace karke `ChatbotWidget.tsx` global floating chat widget add kiya. Widget recent history ke saath existing Render API ke `POST /api/chat` route ko call karta hai; browser kabhi Groq ko direct call nahi karta. Backend `openai/gpt-oss-20b` use karta hai, `GROQ_API_KEY` environment variable se read hota hai, aur verified BVPS site facts ke saath short multilingual receptionist prompt use karta hai. `render.yaml` mein key `sync: false` hai. `.gitignore` mein `.ENV` bhi add kiya gaya hai.
 - **[2026-09-27]** 🖼️ **Image-on-request behavior add kiya** — normal chatbot answers text-only rahenge. Visitor jab photo, picture, image ya gallery explicitly maangega tab API image IDs return karegi aur frontend relevant BVPS campus/student/facility photos dikhayega.

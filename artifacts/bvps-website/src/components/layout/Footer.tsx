@@ -46,6 +46,7 @@ export function Footer() {
                 { name: "Principal's Desk & Message", path: '/principal-message' },
                 { name: 'Write to Principal', path: '/principal-message#message-form' },
                 { name: 'Admission Form', path: '/application' },
+                { name: '🔒 Admin Login', path: '/admin' },
               ].map((link) => (
                 <li key={link.path}>
                   <Link 

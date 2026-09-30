@@ -69,9 +69,11 @@ function PublicRouter() {
 function Router() {
   return (
     <Switch>
-      {/* Admin portal website se alag page hai — iska apna layout/login hai */}
+      {/* Admin portal website se alag page hai — iska apna layout/login hai.
+          NOTE: wouter me wildcard "/admin/*" hota hai (":rest*" nahi) — ":rest*" se
+          /admin/blog/new jaise nested pages match hi nahi hote the aur 404 page aa raha tha. */}
       <Route path="/admin" component={AdminPortal} />
-      <Route path="/admin/:rest*" component={AdminPortal} />
+      <Route path="/admin/*" component={AdminPortal} />
       {/* Baaki sab public website */}
       <Route component={PublicRouter} />
     </Switch>
