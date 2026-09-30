@@ -57,11 +57,18 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - **Persistent session:** passcode unlock hone ke baad key `localStorage` (`bvps_admin_key`) mein save hoti hai, isliye browser + refresh ke baad bhi "Edit Fees"/"Manage Fees" buttons + floating edit button dikhte hain. (Pehle `sessionStorage` tha → tab band hote hi gayab ho jaata tha.)
   - Owner logged-in hone par 4 controls: page ke top par "Manage Fees", hero table ke paas "Manage Fees", mobile par "Manage Fees", aur bottom-right floating "Edit Fees" pencil button.
   - Admin modal khulte waqt `GET /api/fees/admin` se latest DB fees auto-load hoti hain (agar key pehle se hai).
+- **[2026-09-24]** 🗂️ **Admin Portal + Blog system** (code push ho gaya, deploy baaki):
+  - **`/admin` portal** (website layout se alag, apna login): Dashboard (counts + recent), Blog (list + editor), Fee Structure (wahi fee editor admin view mein), Messages (contact / admission / feedback + delete). Footer me "🔒 Admin Login" link.
+  - **Auth:** `POST /api/admin/login` email+password (`ADMIN_EMAIL`, `ADMIN_PASSWORD` env) → wahi `ADMIN_SECRET` token return karta hai jo baaki admin endpoints ke `x-admin-key` header me use hota hai. `GET /api/admin/status` se token verify. Token browser me `localStorage` (`bvps_admin_key` / `bvps_admin_email`).
+  - **Blog:** nayi table `blog_posts` (`lib/db/src/schema/index.ts` + migration `0004_blog_posts.sql`). Public `GET /api/blog` + `GET /api/blog/:slug` (sirf `published`), admin CRUD `GET/POST /api/blog/admin`, `PUT/DELETE /api/blog/admin/:id`. Public pages `/blog` (list) + `/blog/:slug` (post), Navbar + Footer + 3 languages (EN/HI/Punjabi) me link.
+  - **Fee page fix:** "Manage Fees" button ab owner-only nahi — hero ke **top-right hamesha visible** (`top-24 right-4`), passcode hi asli gate hai.
+  - ⚠️ **Deploy baaki hai:** Render par `ADMIN_EMAIL` + `ADMIN_PASSWORD` env vars set karne hain (warna login 500 dega) + deploy (migration `0004` startup par chalti hai), phir Vercel frontend deploy.
 
 - **[2026-09-27]** 💬 **Groq-backed receptionist chatbot add kiya** — purane hardcoded voice assistant ko replace karke `ChatbotWidget.tsx` global floating chat widget add kiya. Widget recent history ke saath existing Render API ke `POST /api/chat` route ko call karta hai; browser kabhi Groq ko direct call nahi karta. Backend `openai/gpt-oss-20b` use karta hai, `GROQ_API_KEY` environment variable se read hota hai, aur verified BVPS site facts ke saath short multilingual receptionist prompt use karta hai. `render.yaml` mein key `sync: false` hai. `.gitignore` mein `.ENV` bhi add kiya gaya hai.
 - **[2026-09-27]** 🖼️ **Image-on-request behavior add kiya** — normal chatbot answers text-only rahenge. Visitor jab photo, picture, image ya gallery explicitly maangega tab API image IDs return karegi aur frontend relevant BVPS campus/student/facility photos dikhayega.
 
 ## To-Do Notes
+- ⚠️ **Admin portal deploy** — Render par `ADMIN_EMAIL` (jaatlakshya496@gmail.com) aur `ADMIN_PASSWORD` set karo, phir `POST /api/admin/login` verify karo. Tabhi `/admin` login kaam karega.
 - ⚠️ **CallMeBot activation** — admin (9671772205) ko WhatsApp par bot number (e.g. +34 644 95 42 75) ko save kar ke "I allow callmebot to send me messages" bhejna hai; phir mila APIKEY `CALLMEBOT_APIKEY` env var mein Render par set karna hai. Iske bina WhatsApp automatic message nahi jayega.
 - ⚠️ **FormSubmit activation** — jaatlakshya496@gmail.com par FormSubmit ka "Activate Form" email aaya hai; uska link click karna baaki hai. Iske bina email nahi jayega (`emailSent: false` rahega).
 - ⚠️ **naya Gmail app password** abhi bhi rotate karna hai (purana compromised tha; Render free par SMTP block hai isliye abhi zaroorat nahi, par rotate kar lo).

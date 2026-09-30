@@ -70,3 +70,6 @@ vite*.log
 .root/
 
 .vercel
+
+# Local session transcripts (may contain secrets - never commit)
+session-*.md
