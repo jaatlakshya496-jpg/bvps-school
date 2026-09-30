@@ -1,22 +1,24 @@
 import { useEffect, useState } from 'react';
-import { Mail, UserRound, Star, Trash2, Loader2, Inbox } from 'lucide-react';
+import { Mail, UserRound, Star, Trash2, Loader2, Inbox, Crown } from 'lucide-react';
 import { apiGetAdmin, apiSend, extractApiError } from '@/lib/api';
-import type { ContactRow, AdmissionRow, FeedbackRow } from '../types';
+import type { ContactRow, AdmissionRow, FeedbackRow, PrincipalRow } from '../types';
 import { formatDate } from '../types';
 
-type Tab = 'contact' | 'admissions' | 'feedback';
+type Tab = 'admissions' | 'principal' | 'contact' | 'feedback';
 
 const TABS: { key: Tab; label: string; icon: typeof Mail }[] = [
+  { key: 'admissions', label: 'Admission Contact', icon: UserRound },
+  { key: 'principal', label: 'Principal Message', icon: Crown },
   { key: 'contact', label: 'Contact Messages', icon: Mail },
-  { key: 'admissions', label: 'Admission Enquiries', icon: UserRound },
   { key: 'feedback', label: 'Feedback', icon: Star },
 ];
 
 export function AdminMessages({ token, onExpired }: { token: string; onExpired: () => void }) {
-  const [tab, setTab] = useState<Tab>('contact');
+  const [tab, setTab] = useState<Tab>('admissions');
   const [contact, setContact] = useState<ContactRow[]>([]);
   const [admissions, setAdmissions] = useState<AdmissionRow[]>([]);
   const [feedback, setFeedback] = useState<FeedbackRow[]>([]);
+  const [principal, setPrincipal] = useState<PrincipalRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [deleting, setDeleting] = useState<number | null>(null);
@@ -26,16 +28,18 @@ export function AdminMessages({ token, onExpired }: { token: string; onExpired: 
     setLoading(true);
     setError('');
     const paths: Record<Tab, string> = {
-      contact: '/admin/contact',
       admissions: '/admin/admissions',
+      principal: '/admin/principal',
+      contact: '/admin/contact',
       feedback: '/admin/feedback',
     };
-    apiGetAdmin<{ success: boolean; data: ContactRow[] | AdmissionRow[] | FeedbackRow[] }>(paths[tab], token)
+    apiGetAdmin<{ success: boolean; data: ContactRow[] | AdmissionRow[] | FeedbackRow[] | PrincipalRow[] }>(paths[tab], token)
       .then(res => {
         if (!active) return;
         const data = res?.data ?? [];
         if (tab === 'contact') setContact(data as ContactRow[]);
         else if (tab === 'admissions') setAdmissions(data as AdmissionRow[]);
+        else if (tab === 'principal') setPrincipal(data as PrincipalRow[]);
         else setFeedback(data as FeedbackRow[]);
       })
       .catch((err: any) => {
@@ -55,6 +59,7 @@ export function AdminMessages({ token, onExpired }: { token: string; onExpired: 
       await apiSend<{ success: boolean }>('DELETE', `/admin/${kind}/${id}`, null, token);
       if (kind === 'contact') setContact(prev => prev.filter(r => r.id !== id));
       else if (kind === 'admissions') setAdmissions(prev => prev.filter(r => r.id !== id));
+      else if (kind === 'principal') setPrincipal(prev => prev.filter(r => r.id !== id));
       else setFeedback(prev => prev.filter(r => r.id !== id));
     } catch (err: any) {
       const m = String(err?.error ?? '').toLowerCase();
@@ -69,6 +74,7 @@ export function AdminMessages({ token, onExpired }: { token: string; onExpired: 
     contact: contact.length,
     admissions: admissions.length,
     feedback: feedback.length,
+    principal: principal.length,
   };
 
   const renderEmpty = () => (
@@ -85,7 +91,7 @@ export function AdminMessages({ token, onExpired }: { token: string; onExpired: 
     <div className="max-w-5xl mx-auto space-y-5">
       <div>
         <h2 className="text-xl font-serif font-bold text-black">Messages & Submissions</h2>
-        <p className="text-sm text-muted-foreground">Website se aayi saari entries yahan dekhein.</p>
+        <p className="text-sm text-muted-foreground">Admission Contact, Principal Message, Contact aur Feedback — website se aayi saari entries yahan.</p>
       </div>
 
       <div className="flex flex-wrap gap-2">
@@ -185,6 +191,35 @@ export function AdminMessages({ token, onExpired }: { token: string; onExpired: 
                 ))}
               </tbody>
             </table>
+          </div>
+        )
+      ) : tab === 'principal' ? (
+        principal.length === 0 ? renderEmpty() : (
+          <div className="space-y-3">
+            {principal.map(row => (
+              <div key={row.id} className="bg-white rounded-2xl border border-border shadow-sm p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-bold text-black">{row.senderName} <span className="text-xs font-normal text-muted-foreground">· {formatDate(row.createdAt)}</span></p>
+                    <p className="text-xs text-muted-foreground">{row.phone}{row.email ? ` · ${row.email}` : ''}</p>
+                    <div className="flex flex-wrap items-center gap-2 mt-2">
+                      <span className="text-xs font-bold uppercase px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">{row.senderRole || 'Parent'}</span>
+                      {row.category && <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-primary/10 text-primary">{row.category}</span>}
+                    </div>
+                    <p className="text-sm font-semibold text-primary mt-2">{row.subject}</p>
+                    <p className="text-sm text-muted-foreground mt-1 whitespace-pre-line">{row.message}</p>
+                  </div>
+                  <button
+                    onClick={() => { if (window.confirm('Yeh Principal message delete karein?')) handleDelete('principal', row.id); }}
+                    disabled={deleting === row.id}
+                    className="p-2 rounded-lg text-muted-foreground hover:bg-red-50 hover:text-red-600 shrink-0"
+                    title="Delete"
+                  >
+                    {deleting === row.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         )
       ) : (

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
+import { Helmet } from 'react-helmet-async';
 import {
   LayoutDashboard, Newspaper, IndianRupee, MessageSquare, LogOut, ExternalLink,
   GraduationCap, Mail,
@@ -109,6 +110,10 @@ export default function AdminPortal() {
 
   return (
     <div className="min-h-screen bg-slate-100 flex flex-col lg:flex-row">
+      <Helmet>
+        <title>Admin — BVPS</title>
+        <meta name="robots" content="noindex, nofollow, noarchive" />
+      </Helmet>
       {/* ── Sidebar ── */}
       <aside className="w-full lg:w-64 shrink-0 bg-slate-900 text-white flex flex-col">
         <div className="px-5 py-5 border-b border-white/10 flex items-center gap-3">

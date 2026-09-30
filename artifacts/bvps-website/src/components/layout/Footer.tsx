@@ -1,5 +1,5 @@
 import { Link } from 'wouter';
-import { MapPin, Phone, Mail, Clock, GraduationCap, Info, Lock } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, GraduationCap, Info } from 'lucide-react';
 import schoolLogo from '@/assets/school-logo-kalayat.webp';
 
 export function Footer() {
@@ -46,7 +46,6 @@ export function Footer() {
                 { name: "Principal's Desk & Message", path: '/principal-message' },
                 { name: 'Write to Principal', path: '/principal-message#message-form' },
                 { name: 'Admission Form', path: '/application' },
-                { name: '🔒 Admin Login', path: '/admin' },
               ].map((link) => (
                 <li key={link.path}>
                   <Link 
@@ -140,37 +139,6 @@ export function Footer() {
             Affiliated to BSEH | Est. 2004 | School Code: 06050300920
           </p>
         </div>
-
-        {/* ── Administration (website ke sabse neeche) ── */}
-        <div className="mt-6 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
-          <Link
-            href="/admin"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 rounded-2xl border-2 border-secondary bg-secondary px-8 py-4 text-base sm:text-lg font-extrabold tracking-wide text-primary shadow-lg hover:bg-white hover:border-white transition-colors"
-            title="School administration login (bvps-school.vercel.app/admin)"
-          >
-            <Lock className="w-5 h-5" /> ADMIN LOGIN
-          </Link>
-          <p className="text-primary-foreground/80 text-sm font-semibold tracking-wide">
-            Administration &amp; Management
-          </p>
-        </div>
-      </div>
-
-      {/* ── Admin bar: website ka sabse neeche, full width ── */}
-      <div className="mt-8 bg-secondary">
-        <Link
-          href="/admin"
-          className="container mx-auto px-4 md:px-6 py-4 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 text-primary"
-          title="School administration login"
-        >
-          <span className="inline-flex items-center gap-2 text-sm sm:text-base font-extrabold uppercase tracking-widest">
-            <Lock className="w-4 h-4" /> Administration &amp; Management
-          </span>
-          <span className="hidden sm:inline text-primary/40 text-sm font-bold">|</span>
-          <span className="text-sm sm:text-base font-extrabold uppercase tracking-widest underline underline-offset-4">
-            Admin Login
-          </span>
-        </Link>
       </div>
     </footer>
   );

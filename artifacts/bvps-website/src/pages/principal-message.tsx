@@ -8,7 +8,8 @@ import {
   Shield, BookOpen, Award, HeartHandshake, Compass, Star
 } from 'lucide-react';
 import principalImg from '@assets/principal-ramphal-sharma.webp';
-import { savePrincipalMessage, type PrincipalDirectMessage } from '@/lib/principal-message-store';
+import { apiPost, extractApiError } from '@/lib/api';
+import type { PrincipalDirectMessage } from '@/lib/principal-message-store';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/lib/language-context';
 
@@ -27,7 +28,7 @@ export default function PrincipalMessage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedReceipt, setSubmittedReceipt] = useState<PrincipalDirectMessage | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!senderName.trim() || !phone.trim() || !message.trim()) {
       toast({
@@ -38,25 +39,48 @@ export default function PrincipalMessage() {
       return;
     }
 
+    const finalSubject = subject.trim() || `${category} - Query for Principal`;
+
     setIsSubmitting(true);
-    setTimeout(() => {
-      const receipt = savePrincipalMessage({
+    try {
+      // Asli server call — message ab database + admin portal (Principal Messages) tak pahunchta hai.
+      const saved = await apiPost<{ success: boolean; id: number | null }>('/principal-messages', {
+        senderName: senderName.trim(),
+        senderRole,
+        phone: phone.trim(),
+        email: email.trim(),
+        category,
+        subject: finalSubject,
+        message: message.trim(),
+      });
+
+      const receipt: PrincipalDirectMessage = {
+        id: saved?.id ? `PRIN-${saved.id}` : `PRIN-${Date.now().toString().slice(-6)}`,
         senderName: senderName.trim(),
         senderRole,
         phone: phone.trim(),
         email: email.trim() || undefined,
         category,
-        subject: subject.trim() || `${category} - Query for Principal`,
+        subject: finalSubject,
         message: message.trim(),
-      });
+        submittedAt: new Date().toISOString(),
+        status: 'sent',
+      };
 
       setSubmittedReceipt(receipt);
-      setIsSubmitting(false);
       toast({
         title: 'Message Sent Successfully!',
         description: `Your message has been delivered to Principal Sh. Ramphal Sharma's desk (Ref: ${receipt.id}).`,
       });
-    }, 400);
+    } catch (err) {
+      toast({
+        title: 'Message Send Failed',
+        description: extractApiError(err),
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleWhatsAppSend = () => {

@@ -1,7 +1,7 @@
 import { Router, type Request, type Response } from "express";
 import { eq } from "drizzle-orm";
 import { db } from "@workspace/db";
-import { contactSubmissionsTable, admissionEnquiriesTable, feedbackSubmissionsTable } from "@workspace/db";
+import { contactSubmissionsTable, admissionEnquiriesTable, feedbackSubmissionsTable, principalMessagesTable } from "@workspace/db";
 import { requireAdmin } from "../lib/admin-auth";
 
 const router = Router();
@@ -47,17 +47,24 @@ router.get("/feedback", requireAdmin, async (req: Request, res: Response) => {
 	res.json({ success: true, data: rows });
 });
 
+// "Write to Principal" form ke messages
+router.get("/principal", requireAdmin, async (_req: Request, res: Response) => {
+	const rows = await db.select().from(principalMessagesTable).orderBy(principalMessagesTable.createdAt);
+	res.json({ success: true, data: rows });
+});
+
 // Submission delete (garbage/spam cleaning)
 router.delete("/:kind/:id", requireAdmin, async (req: Request, res: Response) => {
 	const kind = String(req.params.kind ?? "");
 	const id = Number(req.params.id);
-	if (!["contact", "admissions", "feedback"].includes(kind) || !Number.isInteger(id) || id <= 0) {
+	if (!["contact", "admissions", "feedback", "principal"].includes(kind) || !Number.isInteger(id) || id <= 0) {
 		res.status(400).json({ success: false, error: "Invalid request" });
 		return;
 	}
 	try {
 		if (kind === "contact") await db.delete(contactSubmissionsTable).where(eq(contactSubmissionsTable.id, id));
 		else if (kind === "admissions") await db.delete(admissionEnquiriesTable).where(eq(admissionEnquiriesTable.id, id));
+		else if (kind === "principal") await db.delete(principalMessagesTable).where(eq(principalMessagesTable.id, id));
 		else await db.delete(feedbackSubmissionsTable).where(eq(feedbackSubmissionsTable.id, id));
 		res.json({ success: true, message: "Deleted" });
 	} catch (err: any) {

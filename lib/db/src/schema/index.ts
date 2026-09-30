@@ -52,6 +52,25 @@ export const feedbackSubmissionsInsertSchema = createInsertSchema(feedbackSubmis
 export type FeedbackSubmissionsInsert = z.infer<typeof feedbackSubmissionsInsertSchema>;
 export type FeedbackSubmission = z.infer<typeof feedbackSubmissionsTable>;
 
+// "Write to Principal" form (/principal-message#message-form) — pehle sirf
+// visitor ke localStorage me save hota tha, admin tak pahunchta hi nahi tha.
+export const principalMessagesTable = pgTable("principal_messages", {
+	id: serial("id").primaryKey(),
+	senderName: text("sender_name").notNull(),
+	senderRole: text("sender_role").notNull().default("Parent"),
+	phone: text("phone").notNull(),
+	email: text("email"),
+	category: text("category").notNull().default("General Query"),
+	subject: text("subject").notNull(),
+	message: text("message").notNull(),
+	status: text("status").notNull().default("new"),
+	createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const principalMessagesInsertSchema = createInsertSchema(principalMessagesTable).omit({ id: true, createdAt: true });
+export type PrincipalMessagesInsert = z.infer<typeof principalMessagesInsertSchema>;
+export type PrincipalMessageRow = z.infer<typeof principalMessagesTable>;
+
 export const feeStructureTable = pgTable("fee_structure", {
 	id: serial("id").primaryKey(),
 	kind: text("kind").notNull(),

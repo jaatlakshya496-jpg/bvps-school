@@ -72,6 +72,19 @@ export interface FeedbackRow {
   createdAt: string;
 }
 
+export interface PrincipalRow {
+  id: number;
+  senderName: string;
+  senderRole: string;
+  phone: string;
+  email: string | null;
+  category: string;
+  subject: string;
+  message: string;
+  status: string;
+  createdAt: string;
+}
+
 export const DEFAULT_FEES: FeeConfig = {
   classes: [
     { name: 'Class 1', group: 'Primary', admission: 3000, monthly: 900, annualFund: 1500 },
