@@ -141,18 +141,35 @@ export function Footer() {
         </div>
 
         {/* ── Administration (website ke sabse neeche) ── */}
-        <div className="mt-6 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-primary-foreground/70 text-sm font-semibold tracking-wide">
-            Administration &amp; Management
-          </p>
+        <div className="mt-6 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
           <Link
             href="/admin"
-            className="inline-flex items-center gap-2 rounded-full border-2 border-secondary/70 bg-secondary/10 px-5 py-2.5 text-sm font-bold text-secondary hover:bg-secondary hover:text-primary transition-colors"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-3 rounded-2xl border-2 border-secondary bg-secondary px-8 py-4 text-base sm:text-lg font-extrabold tracking-wide text-primary shadow-lg hover:bg-white hover:border-white transition-colors"
             title="School administration login (bvps-school.vercel.app/admin)"
           >
-            <Lock className="w-4 h-4" /> Admin Login
+            <Lock className="w-5 h-5" /> ADMIN LOGIN
           </Link>
+          <p className="text-primary-foreground/80 text-sm font-semibold tracking-wide">
+            Administration &amp; Management
+          </p>
         </div>
+      </div>
+
+      {/* ── Admin bar: website ka sabse neeche, full width ── */}
+      <div className="mt-8 bg-secondary">
+        <Link
+          href="/admin"
+          className="container mx-auto px-4 md:px-6 py-4 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 text-primary"
+          title="School administration login"
+        >
+          <span className="inline-flex items-center gap-2 text-sm sm:text-base font-extrabold uppercase tracking-widest">
+            <Lock className="w-4 h-4" /> Administration &amp; Management
+          </span>
+          <span className="hidden sm:inline text-primary/40 text-sm font-bold">|</span>
+          <span className="text-sm sm:text-base font-extrabold uppercase tracking-widest underline underline-offset-4">
+            Admin Login
+          </span>
+        </Link>
       </div>
     </footer>
   );
