@@ -327,6 +327,14 @@ export default function FeeStructure() {
 
       {/* ── Hero ── */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
+        {/* Upper-right Manage Fees — hamesha visible, edit ke liye passcode chahiye */}
+        <button
+          onClick={openAdmin}
+          className="absolute top-24 right-4 sm:top-24 sm:right-6 z-20 inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-white/30 bg-white/10 text-white hover:bg-white/20 text-xs sm:text-sm font-semibold px-3 py-2 sm:px-5 sm:py-2.5 transition-colors shadow-lg"
+          title="Manage Fees (admin passcode chahiye)"
+        >
+          <Lock className="w-3.5 h-3.5" /> Manage Fees
+        </button>
         <img src={heroImg} alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/30 to-primary/55" />
         <div className="container mx-auto text-center relative z-10">
@@ -348,21 +356,6 @@ export default function FeeStructure() {
 
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4 md:px-6 max-w-5xl space-y-14">
-
-          {/* ── Top manage-fees button (owner only) ── */}
-          {isOwner && (
-            <ScrollReveal>
-              <div className="flex justify-center -mb-4 mt-0">
-                <button
-                  onClick={openAdmin}
-                  className="inline-flex items-center gap-2 rounded-full border-2 border-primary/40 bg-primary/5 text-primary hover:bg-primary/10 text-sm font-semibold px-6 py-3 transition-colors"
-                  title="Fees ko manually change karein"
-                >
-                  <Lock className="w-4 h-4" /> Manage Fees
-                </button>
-              </div>
-            </ScrollReveal>
-          )}
 
           {/* ── Class 1–10 Table ── */}
           <ScrollReveal>
