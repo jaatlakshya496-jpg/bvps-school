@@ -5,6 +5,7 @@ import contactEmailRouter from "./contact-email";
 import admissionRouter from "./admission";
 import feedbackRouter from "./feedback";
 import feesRouter from "./fees";
+import blogRouter from "./blog";
 import adminRouter from "./admin";
 import chatRouter from "./chat";
 
@@ -16,6 +17,7 @@ router.use("/contact-email", contactEmailRouter);
 router.use("/admissions", admissionRouter);
 router.use("/feedback", feedbackRouter);
 router.use("/fees", feesRouter);
+router.use("/blog", blogRouter);
 router.use("/admin", adminRouter);
 router.use(chatRouter);
 

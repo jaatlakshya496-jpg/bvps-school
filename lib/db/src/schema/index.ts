@@ -65,3 +65,22 @@ export const feeStructureTable = pgTable("fee_structure", {
 });
 
 export type FeeStructureRow = z.infer<typeof feeStructureTable>;
+
+export const blogPostsTable = pgTable("blog_posts", {
+	id: serial("id").primaryKey(),
+	title: text("title").notNull(),
+	slug: text("slug").notNull().unique(),
+	excerpt: text("excerpt"),
+	content: text("content").notNull(),
+	coverImage: text("cover_image"),
+	category: text("category").notNull().default("General"),
+	status: text("status").notNull().default("published"),
+	author: text("author").notNull().default("BVPS"),
+	publishedAt: timestamp("published_at").defaultNow().notNull(),
+	createdAt: timestamp("created_at").defaultNow().notNull(),
+	updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const blogPostInsertSchema = createInsertSchema(blogPostsTable).omit({ id: true, createdAt: true, updatedAt: true });
+export type BlogPostInsert = z.infer<typeof blogPostInsertSchema>;
+export type BlogPost = z.infer<typeof blogPostsTable>;

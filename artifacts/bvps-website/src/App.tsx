@@ -28,9 +28,16 @@ import Streams from '@/pages/streams';
 import PrincipalMessage from '@/pages/principal-message';
 import Academics from '@/pages/academics';
 
+// Blog (public)
+import Blog from '@/pages/blog';
+import BlogPostPage from '@/pages/blog-post';
+
+// Admin portal (website ki layout se alag, apna alag page)
+import AdminPortal from '@/pages/admin/AdminPortal';
+
 const queryClient = new QueryClient();
 
-function Router() {
+function PublicRouter() {
   return (
     <RootLayout>
       <Switch>
@@ -42,6 +49,8 @@ function Router() {
         <Route path="/contact" component={Contact} />
         <Route path="/gallery" component={Gallery} />
         <Route path="/feedback" component={Feedback} />
+        <Route path="/blog" component={Blog} />
+        <Route path="/blog/:slug" component={BlogPostPage} />
         {/* Admissions sub-pages */}
         <Route path="/fee-structure" component={FeeStructure} />
         <Route path="/application" component={Application} />
@@ -54,6 +63,18 @@ function Router() {
         <Route component={NotFound} />
       </Switch>
     </RootLayout>
+  );
+}
+
+function Router() {
+  return (
+    <Switch>
+      {/* Admin portal website se alag page hai — iska apna layout/login hai */}
+      <Route path="/admin" component={AdminPortal} />
+      <Route path="/admin/:rest*" component={AdminPortal} />
+      {/* Baaki sab public website */}
+      <Route component={PublicRouter} />
+    </Switch>
   );
 }
 

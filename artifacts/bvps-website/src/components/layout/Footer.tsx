@@ -1,5 +1,5 @@
 import { Link } from 'wouter';
-import { MapPin, Phone, Mail, Clock, GraduationCap, Info } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, GraduationCap, Info, Lock } from 'lucide-react';
 import schoolLogo from '@/assets/school-logo-kalayat.webp';
 
 export function Footer() {
@@ -33,6 +33,7 @@ export function Footer() {
               {[
                 { name: 'Home', path: '/' },
                 { name: 'About Us', path: '/about' },
+                { name: 'Blog & News', path: '/blog' },
                 { name: 'Results & Achievements', path: '/results' },
                 { name: 'Photo Gallery', path: '/gallery' },
                 { name: 'School Facilities', path: '/facilities' },
@@ -134,8 +135,13 @@ export function Footer() {
           <p className="text-primary-foreground/60 text-sm text-center md:text-left">
             © {new Date().getFullYear()} Bal Vikas Public School, Kalayat. All rights reserved.
           </p>
-          <div className="text-primary-foreground/60 text-sm text-center md:text-right">
-            Affiliated to BSEH | Est. 2004 | School Code: 06050300920
+          <div className="flex items-center gap-4 text-primary-foreground/60 text-sm">
+            <span className="text-center md:text-right hidden sm:inline">
+              Affiliated to BSEH | Est. 2004 | School Code: 06050300920
+            </span>
+            <Link href="/admin" className="inline-flex items-center gap-1 text-xs font-semibold text-primary-foreground/50 hover:text-secondary transition-colors" title="School Admin Login">
+              <Lock className="w-3 h-3" /> Admin Login
+            </Link>
           </div>
         </div>
       </div>

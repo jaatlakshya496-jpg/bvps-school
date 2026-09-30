@@ -3,7 +3,7 @@ import { Link, useLocation } from 'wouter';
 import { 
   Menu, X, Phone, FileText, IndianRupee, Clock, 
   HelpCircle, UserCheck, BookOpen, User, Building2, 
-  Trophy, Image as ImageIcon, MessageSquare, Home as HomeIcon, Info, Sparkles
+  Trophy, Image as ImageIcon, MessageSquare, Home as HomeIcon, Info, Sparkles, Newspaper
 } from 'lucide-react';
 import schoolLogo from '@/assets/school-logo-kalayat.webp';
 import { LanguageSwitcher } from '@/components/layout/LanguageSwitcher';
@@ -12,6 +12,7 @@ import { useLanguage } from '@/lib/language-context';
 export const navLinksConfig = [
   { key: 'nav.home', name: 'Home', path: '/', icon: HomeIcon },
   { key: 'nav.about', name: 'About Us', path: '/about', icon: Info },
+  { key: 'nav.blog', name: 'Blog & News', path: '/blog', icon: Newspaper },
   { key: 'nav.results', name: 'Results', path: '/results', icon: Trophy },
   { key: 'nav.gallery', name: 'Gallery', path: '/gallery', icon: ImageIcon },
   { key: 'nav.facilities', name: 'Facilities', path: '/facilities', icon: Building2 },

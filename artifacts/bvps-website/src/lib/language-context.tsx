@@ -19,6 +19,7 @@ export const translations: Record<Language, Record<string, string>> = {
     // Top Bar & Navigation
     'nav.home': 'Home',
     'nav.about': 'About Us',
+    'nav.blog': 'Blog & News',
     'nav.results': 'Results',
     'nav.gallery': 'Gallery',
     'nav.facilities': 'Facilities',
@@ -114,6 +115,7 @@ export const translations: Record<Language, Record<string, string>> = {
     // Top Bar & Navigation
     'nav.home': 'होम',
     'nav.about': 'हमारे बारे में',
+    'nav.blog': 'ब्लॉग व समाचार',
     'nav.results': 'परीक्षा परिणाम',
     'nav.gallery': 'गैलरी',
     'nav.facilities': 'सुविधाएं',
@@ -209,6 +211,7 @@ export const translations: Record<Language, Record<string, string>> = {
     // Top Bar & Navigation
     'nav.home': 'ਮੁੱਖ ਪੰਨਾ',
     'nav.about': 'ਸਾਡੇ ਬਾਰੇ',
+    'nav.blog': 'ਬਲੌਗ ਅਤੇ ਖ਼ਬਰਾਂ',
     'nav.results': 'ਨਤੀਜੇ',
     'nav.gallery': 'ਗੈਲਰੀ',
     'nav.facilities': 'ਸਹੂਲਤਾਂ',
