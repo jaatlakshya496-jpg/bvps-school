@@ -45,7 +45,7 @@ export async function sendEmail(n: Notification): Promise<boolean> {
 export async function sendWhatsApp(n: Notification): Promise<boolean> {
 	const apikey = process.env.CALLMEBOT_APIKEY;
 	if (!apikey) {
-		console.error("notify: CALLMEBOT_APIKEY not set");
+		// CallMeBot activate nahi hai - chup chap skip (WhatsApp link UI me already milta hai)
 		return false;
 	}
 

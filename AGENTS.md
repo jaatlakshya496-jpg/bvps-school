@@ -68,13 +68,18 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - ⚠️ **`ADMIN_SECRET` Render par `LAXYAMALIK` hai** (AGENTS.md me likha `BVPS@2026` galat tha) — yahi fee editor ka passcode hai.
   - **Blog route-order bug fix:** `GET /:slug` route `/admin` se pehle declare tha → `GET /api/blog/admin` 404 de raha tha. Ab admin routes pehle, wildcard `/:slug` sabse last.
   - ⚠️ **`GROQ_API_KEY` Render par set NAHI hai** → `POST /api/chat` 503 de raha hai (chatbot kaam nahi kar raha). Key console.groq.com se lekar Render dashboard me daalni hogi.
+- **[2026-09-30]** 🤖 **Chatbot fix + contact form me DB save** (dono deploy ho gaye):
+  - `GROQ_API_KEY` Render par set kar diya (user ne diya) → `POST /api/chat` ab 200, Groq `openai/gpt-oss-20b` se jawab de raha hai.
+  - **Contact form ka bada bug fix:** `POST /contact-email` sirf email/WhatsApp bhejta tha, **DB me save hi nahi karta tha** — to email fail hone par enquiry puri tarah gum ho jati thi (admin portal me dikhti bhi nahi). Ab `contact-email.ts` pehle `contact_submissions` me insert karta hai (admission/feedback jaisa resilient pattern), phir notify karta hai. Response me `savedToDb` flag bhi aa gaya.
+  - **Message channel decision (user ne 30-Sep ko chuna): email (FormSubmit) primary rahega** — WhatsApp ka CallMeBot path deactivate (key nahi mili). `sendWhatsApp` ab key na hone par chup chap skip karta hai. Form me "Send on WhatsApp" manual link phir bhi kaam karta hai.
+  - ⚠️ **Email abhi bhi nahi chal rahi:** FormSubmit activation pending (`formsubmit.co/ajax/...` → 500). Tab tak **sabhi enquiries DB me safe hain** aur admin portal → Messages me dikhengi — koi data loss nahi.
 
 - **[2026-09-27]** 💬 **Groq-backed receptionist chatbot add kiya** — purane hardcoded voice assistant ko replace karke `ChatbotWidget.tsx` global floating chat widget add kiya. Widget recent history ke saath existing Render API ke `POST /api/chat` route ko call karta hai; browser kabhi Groq ko direct call nahi karta. Backend `openai/gpt-oss-20b` use karta hai, `GROQ_API_KEY` environment variable se read hota hai, aur verified BVPS site facts ke saath short multilingual receptionist prompt use karta hai. `render.yaml` mein key `sync: false` hai. `.gitignore` mein `.ENV` bhi add kiya gaya hai.
 - **[2026-09-27]** 🖼️ **Image-on-request behavior add kiya** — normal chatbot answers text-only rahenge. Visitor jab photo, picture, image ya gallery explicitly maangega tab API image IDs return karegi aur frontend relevant BVPS campus/student/facility photos dikhayega.
 
 ## To-Do Notes
-- ⚠️ **`GROQ_API_KEY`** — console.groq.com se free key bana ke Render → `bvps-school-1` → Environment me daalo. Iske bina chatbot (503) kaam nahi karega.
-- ⚠️ **CallMeBot activation** — admin (9671772205) ko WhatsApp par bot number (e.g. +34 644 95 42 75) ko save kar ke "I allow callmebot to send me messages" bhejna hai; phir mila APIKEY `CALLMEBOT_APIKEY` env var mein Render par set karna hai. Iske bina WhatsApp automatic message nahi jayega.
+- ⚠️ **`GROQ_API_KEY`** — set ho chuka hai ✅ (chatbot live).
+- ⚠️ **CallMeBot activation** — abhi zaroorat nahi (email primary channel hai); WhatsApp chahiye to activate karna hoga.
 - ⚠️ **FormSubmit activation** — jaatlakshya496@gmail.com par FormSubmit ka "Activate Form" email aaya hai; uska link click karna baaki hai. Iske bina email nahi jayega (`emailSent: false` rahega).
 - ⚠️ **naya Gmail app password** abhi bhi rotate karna hai (purana compromised tha; Render free par SMTP block hai isliye abhi zaroorat nahi, par rotate kar lo).
 - ⚠️ Render API key (`rnd_fj9gv5IMZwG2RhiuCnS2w3pzBZuJ`) user ne chat mein share ki thi — kaam khatam hone ke baad revoke kar dena (Render → Account Settings → API Keys → Revoke).

@@ -1,4 +1,6 @@
 import { Router, type Request, type Response } from "express";
+import { db } from "@workspace/db";
+import { contactSubmissionsTable } from "@workspace/db";
 import { z } from "zod";
 import { notify, whatsAppClickLink, type Notification } from "../lib/notify";
 
@@ -16,6 +18,23 @@ router.post("/", async (req: Request, res: Response) => {
 	try {
 		const values = contactSchema.parse(req.body);
 
+		// Pehle DB me save karo - taaki email/WhatsApp fail hone par bhi enquiry safe rahe
+		// (admin portal ke Messages section me dikhegi).
+		let savedToDb = false;
+		try {
+			await db.insert(contactSubmissionsTable).values({
+				name: values.name,
+				email: values.email,
+				phone: values.phone,
+				subject: values.subject,
+				message: values.message,
+				createdAt: new Date(),
+			});
+			savedToDb = true;
+		} catch (dbErr) {
+			console.error("Contact DB save error:", dbErr);
+		}
+
 		const notification: Notification = {
 			subject: `BVPS Contact: ${values.subject}`,
 			replyTo: values.email,
@@ -32,9 +51,15 @@ router.post("/", async (req: Request, res: Response) => {
 		const { emailSent, whatsappSent } = await notify(notification);
 		const whatsappUrl = whatsAppClickLink(notification);
 
+		if (!savedToDb && !emailSent && !whatsappSent) {
+			res.status(500).json({ success: false, error: "Failed to save enquiry", whatsappUrl });
+			return;
+		}
+
 		res.status(200).json({
 			success: true,
 			message: "Enquiry received",
+			savedToDb,
 			emailSent,
 			whatsappSent,
 			whatsappUrl,
