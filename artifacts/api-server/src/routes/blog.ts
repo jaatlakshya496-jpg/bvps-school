@@ -39,24 +39,8 @@ router.get("/", async (_req: Request, res: Response) => {
 	}
 });
 
-// ── Public: single published post by slug ──
-router.get("/:slug", async (req: Request, res: Response) => {
-	try {
-		const slug = String(req.params.slug ?? "");
-		const [row] = await db
-			.select()
-			.from(blogPostsTable)
-			.where(eq(blogPostsTable.slug, slug))
-			.limit(1);
-		if (!row || row.status !== "published") {
-			res.status(404).json({ success: false, error: "Post not found" });
-			return;
-		}
-		res.json({ success: true, data: row });
-	} catch (err: any) {
-		res.status(500).json({ success: false, error: err?.message ?? "Blog load failed" });
-	}
-});
+// NOTE: "/admin" route ko "/:slug" se PEHLE declare karna zaroori hai,
+// warna express "/admin" ko slug samajh kar 404 de deta hai.
 
 // ── Admin: all posts (including drafts) ──
 router.get("/admin", requireAdmin, async (_req: Request, res: Response) => {
@@ -153,6 +137,25 @@ router.delete("/admin/:id", requireAdmin, async (req: Request, res: Response) =>
 		res.json({ success: true, message: "Post deleted" });
 	} catch (err: any) {
 		res.status(500).json({ success: false, error: err?.message ?? "Delete failed" });
+	}
+});
+
+// ── Public: single published post by slug (sabse last - wildcard) ──
+router.get("/:slug", async (req: Request, res: Response) => {
+	try {
+		const slug = String(req.params.slug ?? "");
+		const [row] = await db
+			.select()
+			.from(blogPostsTable)
+			.where(eq(blogPostsTable.slug, slug))
+			.limit(1);
+		if (!row || row.status !== "published") {
+			res.status(404).json({ success: false, error: "Post not found" });
+			return;
+		}
+		res.json({ success: true, data: row });
+	} catch (err: any) {
+		res.status(500).json({ success: false, error: err?.message ?? "Blog load failed" });
 	}
 });
 
