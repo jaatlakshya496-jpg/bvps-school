@@ -5,27 +5,27 @@ import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Trophy, Medal, Star, Award, Filter, X } from 'lucide-react';
 import heroSchoolImg from '@assets/bal-vikas-public-school_1784611430239.webp';
 
-// ── Football photos ──────────────────────────────────────────────────
+// â”€â”€ Football photos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 import imgSweetAnishAryan    from '@assets/res-sweet-anish-aryan-u19-football.webp';
 import imgDakshayAnuSachmit  from '@assets/res-dakshay-anu-sachmit-u17-football.webp';
 import imgAryanDistrict      from '@/assets/result-football-tournament.webp';
 import imgDakshayDistrict    from '@/assets/result-football-tournament.webp';
 import imgAnishDistrict      from '@/assets/result-cricket-tournament.webp';
-// ── Cricket / General ────────────────────────────────────────────────
+// â”€â”€ Cricket / General â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 import imgVictory6           from '@assets/Victory_Earned,_Excellence_Achieved.Congratulations_District_C_1785563107940.webp';
 import imgDistrictGold       from '@assets/res-district-champions-gold.webp';
-// ── Karate photos ────────────────────────────────────────────────────
+// â”€â”€ Karate photos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 import imgKarate1            from '@assets/res-karate-district1.webp';
 import imgKarate2            from '@assets/res-karate-district2.webp';
 import imgKarate3            from '@assets/res-karate-district3.webp';
 import imgKarate4            from '@assets/res-karate-district4.webp';
-// ── Awards / Achievement photos ──────────────────────────────────────
+// â”€â”€ Awards / Achievement photos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 import imgProudAchieve1      from '@/assets/res-proud-achieve1.webp';
 import imgProudAchieve2      from '@/assets/res-proud-achieve2.webp';
 import imgProudAchieve3      from '@/assets/res-proud-achieve3.webp';
-// ── Karate – Krish ───────────────────────────────────────────────────
+// â”€â”€ Karate â€“ Krish â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 import imgKrishKarateWinner  from '@/assets/res-krish-karate-winner.webp';
-// ── Athletics photos ─────────────────────────────────────────────────
+// â”€â”€ Athletics photos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 import imgLavish100m         from '@/assets/result-group1.webp';
 import imgAryanHighJump      from '@/assets/result-group2.webp';
 import imgSachmitHurdle      from '@/assets/result-group3.webp';
@@ -54,11 +54,11 @@ interface Achievement {
   detail: string;
 }
 
-/* ── Position colour helpers ─────────────────────────────────────────
-   Football  → green tones
-   Cricket   → blue tones
-   Karate    → yellow/amber (gold)
-   Athletics → orange tones                                           */
+/* â”€â”€ Position colour helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   Football  â†’ green tones
+   Cricket   â†’ blue tones
+   Karate    â†’ yellow/amber (gold)
+   Athletics â†’ orange tones                                           */
 
 const SPORT_COLORS: Record<SportFilter, { banner: string; text: string; stripe: string }> = {
   All:       { banner: 'bg-gray-700',      text: 'text-white',          stripe: 'bg-gray-800' },
@@ -69,7 +69,7 @@ const SPORT_COLORS: Record<SportFilter, { banner: string; text: string; stripe: 
   Awards:    { banner: 'bg-purple-700',    text: 'text-white',          stripe: 'bg-purple-800' },
 };
 
-/* position badge: 1st→gold, 2nd→silver, 3rd→bronze, selected→indigo, winner→yellow */
+/* position badge: 1stâ†’gold, 2ndâ†’silver, 3rdâ†’bronze, selectedâ†’indigo, winnerâ†’yellow */
 const posBadge = (pos: string) => {
   if (pos === '1st' || pos === 'Champions' || pos === 'Winners')
     return { bg: 'bg-yellow-400', text: 'text-yellow-900' };
@@ -79,203 +79,203 @@ const posBadge = (pos: string) => {
 };
 
 const achievements: Achievement[] = [
-  // ── FOOTBALL ────────────────────────────────────────────────────────
+  // â”€â”€ FOOTBALL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
-    id: 1,  name: 'Sweet, Anish & Aryan', sport: 'Football', sportLabel: '⚽ Football',
+    id: 1,  name: 'Sweet, Anish & Aryan', sport: 'Football', sportLabel: 'âš½ Football',
     title: 'Block Level U-19 Football Tournament',
-    score: '🏆 Winners — Block Level', position: 'Winners',
+    score: 'ðŸ† Winners â€” Block Level', position: 'Winners',
     positionBg: 'bg-yellow-400', positionText: 'text-yellow-900',
     level: 'Block', img: imgSweetAnishAryan,
-    detail: 'Won the Block Level U-19 Football Tournament — BVPS Kalayat',
+    detail: 'Won the Block Level U-19 Football Tournament â€” BVPS Kalayat',
   },
   {
-    id: 2,  name: 'Dakshay, Anu & Sachmit', sport: 'Football', sportLabel: '⚽ Football',
+    id: 2,  name: 'Dakshay, Anu & Sachmit', sport: 'Football', sportLabel: 'âš½ Football',
     title: 'Block Level U-17 Football Tournament',
-    score: '🏆 Winners — Block Level', position: 'Winners',
+    score: 'ðŸ† Winners â€” Block Level', position: 'Winners',
     positionBg: 'bg-yellow-400', positionText: 'text-yellow-900',
     level: 'Block', img: imgDakshayAnuSachmit,
-    detail: 'Won the Block Level U-17 Football Tournament — BVPS Kalayat',
+    detail: 'Won the Block Level U-17 Football Tournament â€” BVPS Kalayat',
   },
   {
-    id: 3,  name: 'Aryan', sport: 'Football', sportLabel: '⚽ Football',
-    title: 'Football — District Level',
-    score: '🥉 3rd Position — District', position: '3rd',
+    id: 3,  name: 'Aryan', sport: 'Football', sportLabel: 'âš½ Football',
+    title: 'Football â€” District Level',
+    score: 'ðŸ¥‰ 3rd Position â€” District', position: '3rd',
     positionBg: 'bg-orange-400', positionText: 'text-white',
     level: 'District', img: imgAryanDistrict,
-    detail: 'Football 3rd Position at District Level — Bal Vikas Public School, Kalayat',
+    detail: 'Football 3rd Position at District Level â€” Bal Vikas Public School, Kalayat',
   },
   {
-    id: 4,  name: 'Dakshay', sport: 'Football', sportLabel: '⚽ Football',
-    title: 'Football — District Level',
-    score: '🥉 3rd Position — District', position: '3rd',
+    id: 4,  name: 'Dakshay', sport: 'Football', sportLabel: 'âš½ Football',
+    title: 'Football â€” District Level',
+    score: 'ðŸ¥‰ 3rd Position â€” District', position: '3rd',
     positionBg: 'bg-orange-400', positionText: 'text-white',
     level: 'District', img: imgDakshayDistrict,
-    detail: 'Football 3rd Position at District Level — Bal Vikas Public School, Kalayat',
+    detail: 'Football 3rd Position at District Level â€” Bal Vikas Public School, Kalayat',
   },
-  // ── CRICKET ─────────────────────────────────────────────────────────
+  // â”€â”€ CRICKET â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
-    id: 5,  name: 'Anish', sport: 'Cricket', sportLabel: '🏏 Cricket & ⚽ Football',
+    id: 5,  name: 'Anish', sport: 'Cricket', sportLabel: 'ðŸ Cricket & âš½ Football',
     title: 'Double District Achievement',
-    score: '🥉 3rd — Cricket + Football', position: '3rd',
+    score: 'ðŸ¥‰ 3rd â€” Cricket + Football', position: '3rd',
     positionBg: 'bg-orange-400', positionText: 'text-white',
     level: 'District', img: imgAnishDistrict,
     detail: 'Cricket 3rd Position + Football 3rd Position at District Level',
   },
   {
-    id: 6,  name: 'BVPS Champions', sport: 'Cricket', sportLabel: '🏆 Championship',
+    id: 6,  name: 'BVPS Champions', sport: 'Cricket', sportLabel: 'ðŸ† Championship',
     title: 'District Level Achievement',
-    score: '🥇 District Champions', position: 'Champions',
+    score: 'ðŸ¥‡ District Champions', position: 'Champions',
     positionBg: 'bg-yellow-400', positionText: 'text-yellow-900',
     level: 'District', img: imgVictory6,
-    detail: 'Outstanding achievement at District Level — BVPS Kalayat',
+    detail: 'Outstanding achievement at District Level â€” BVPS Kalayat',
   },
   {
-    id: 7,  name: 'BVPS District Champions', sport: 'Cricket', sportLabel: '🏆 Championship',
+    id: 7,  name: 'BVPS District Champions', sport: 'Cricket', sportLabel: 'ðŸ† Championship',
     title: 'Congratulations District Champions',
-    score: '🥇 District Champions', position: 'Champions',
+    score: 'ðŸ¥‡ District Champions', position: 'Champions',
     positionBg: 'bg-yellow-400', positionText: 'text-yellow-900',
     level: 'District', img: imgDistrictGold,
-    detail: 'Best wishes for the State Level — BVPS Kalayat champions!',
+    detail: 'Best wishes for the State Level â€” BVPS Kalayat champions!',
   },
-  // ── KARATE ──────────────────────────────────────────────────────────
+  // â”€â”€ KARATE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
-    id: 8,  name: 'BVPS Karate Team', sport: 'Karate', sportLabel: '🥋 Karate',
+    id: 8,  name: 'BVPS Karate Team', sport: 'Karate', sportLabel: 'ðŸ¥‹ Karate',
     title: 'District Champions & State Bound',
-    score: '🥇 District Champions', position: 'Champions',
+    score: 'ðŸ¥‡ District Champions', position: 'Champions',
     positionBg: 'bg-yellow-400', positionText: 'text-yellow-900',
     level: 'State', img: imgKarate1,
-    detail: 'Karate District Champions — Selected for State Level Competition',
+    detail: 'Karate District Champions â€” Selected for State Level Competition',
   },
   {
-    id: 9,  name: 'BVPS Karate Champions', sport: 'Karate', sportLabel: '🥋 Karate',
+    id: 9,  name: 'BVPS Karate Champions', sport: 'Karate', sportLabel: 'ðŸ¥‹ Karate',
     title: 'District Champions & State Bound',
-    score: '⭐ State Bound', position: 'Selected',
+    score: 'â­ State Bound', position: 'Selected',
     positionBg: 'bg-indigo-500', positionText: 'text-white',
     level: 'State', img: imgKarate2,
-    detail: 'Selected for State Level after winning District — Karate',
+    detail: 'Selected for State Level after winning District â€” Karate',
   },
   {
-    id: 10, name: 'BVPS Karate Team', sport: 'Karate', sportLabel: '🥋 Karate',
+    id: 10, name: 'BVPS Karate Team', sport: 'Karate', sportLabel: 'ðŸ¥‹ Karate',
     title: 'District Karate Championship',
-    score: '🥇 District Champions', position: 'Champions',
+    score: 'ðŸ¥‡ District Champions', position: 'Champions',
     positionBg: 'bg-yellow-400', positionText: 'text-yellow-900',
     level: 'State', img: imgKarate3,
-    detail: 'Karate District Champions — Representing BVPS Kalayat at State Level',
+    detail: 'Karate District Champions â€” Representing BVPS Kalayat at State Level',
   },
   {
-    id: 11, name: 'BVPS Karate Achievers', sport: 'Karate', sportLabel: '🥋 Karate',
+    id: 11, name: 'BVPS Karate Achievers', sport: 'Karate', sportLabel: 'ðŸ¥‹ Karate',
     title: 'State Level Karate Selection',
-    score: '⭐ State Selected', position: 'Selected',
+    score: 'â­ State Selected', position: 'Selected',
     positionBg: 'bg-indigo-500', positionText: 'text-white',
     level: 'State', img: imgKarate4,
-    detail: 'Selected for State Level Karate competition — BVPS Kalayat proud!',
+    detail: 'Selected for State Level Karate competition â€” BVPS Kalayat proud!',
   },
-  // ── AWARDS / ACHIEVEMENTS ────────────────────────────────────────────
+  // â”€â”€ AWARDS / ACHIEVEMENTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
-    id: 21, name: 'BVPS Student', sport: 'Awards', sportLabel: '🏅 Awards',
-    title: 'School Achievement — Trophy & Shield',
-    score: '🏆 Winners', position: 'Winners',
+    id: 21, name: 'BVPS Student', sport: 'Awards', sportLabel: 'ðŸ… Awards',
+    title: 'School Achievement â€” Trophy & Shield',
+    score: 'ðŸ† Winners', position: 'Winners',
     positionBg: 'bg-yellow-400', positionText: 'text-yellow-900',
     level: 'District', img: imgProudAchieve1,
-    detail: 'Feeling extremely proud — BVPS Kalayat student honoured with trophy & shield for outstanding achievement.',
+    detail: 'Feeling extremely proud â€” BVPS Kalayat student honoured with trophy & shield for outstanding achievement.',
   },
   {
-    id: 22, name: 'BVPS Student', sport: 'Awards', sportLabel: '🏅 Awards',
-    title: 'School Achievement — Trophy & Shield',
-    score: '🏆 Winners', position: 'Winners',
+    id: 22, name: 'BVPS Student', sport: 'Awards', sportLabel: 'ðŸ… Awards',
+    title: 'School Achievement â€” Trophy & Shield',
+    score: 'ðŸ† Winners', position: 'Winners',
     positionBg: 'bg-yellow-400', positionText: 'text-yellow-900',
     level: 'District', img: imgProudAchieve2,
-    detail: 'Feeling extremely proud — BVPS Kalayat student honoured with trophy & shield for outstanding achievement.',
+    detail: 'Feeling extremely proud â€” BVPS Kalayat student honoured with trophy & shield for outstanding achievement.',
   },
   {
-    id: 23, name: 'BVPS Achievers', sport: 'Awards', sportLabel: '🏅 Awards',
+    id: 23, name: 'BVPS Achievers', sport: 'Awards', sportLabel: 'ðŸ… Awards',
     title: 'School Achievement Ceremony',
-    score: '🏆 District Champions', position: 'Champions',
+    score: 'ðŸ† District Champions', position: 'Champions',
     positionBg: 'bg-yellow-400', positionText: 'text-yellow-900',
     level: 'District', img: imgProudAchieve3,
-    detail: 'Feeling extremely proud — BVPS Kalayat team honoured at school achievement ceremony.',
+    detail: 'Feeling extremely proud â€” BVPS Kalayat team honoured at school achievement ceremony.',
   },
-  // ── KARATE – Krish ───────────────────────────────────────────────────
+  // â”€â”€ KARATE â€“ Krish â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
-    id: 24, name: 'Krish s/o Sh. Sandeep Kumar', sport: 'Karate', sportLabel: '🥋 Karate',
+    id: 24, name: 'Krish s/o Sh. Sandeep Kumar', sport: 'Karate', sportLabel: 'ðŸ¥‹ Karate',
     title: '2nd Open Karate Cash Prize Championship 2026-27',
-    score: '🥇 1st — Boys Kumite Winner', position: '1st',
+    score: 'ðŸ¥‡ 1st â€” Boys Kumite Winner', position: '1st',
     positionBg: 'bg-yellow-400', positionText: 'text-yellow-900',
     level: 'District', img: imgKrishKarateWinner,
-    detail: 'Many congratulations to Krish s/o Sh. Sandeep Kumar from Julan — Boys Kumite Winner at the 2nd Open Karate Cash Prize Championship 2026-27. Prize: ₹3,000.',
+    detail: 'Many congratulations to Krish s/o Sh. Sandeep Kumar from Julan â€” Boys Kumite Winner at the 2nd Open Karate Cash Prize Championship 2026-27. Prize: â‚¹3,000.',
   },
-  // ── ATHLETICS ───────────────────────────────────────────────────────
+  // â”€â”€ ATHLETICS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   {
-    id: 12, name: 'Lavish', sport: 'Athletics', sportLabel: '🏃 Athletics',
-    title: 'U-14 100M Race — Block Level',
-    score: '🥉 3rd Position — Block', position: '3rd',
+    id: 12, name: 'Lavish', sport: 'Athletics', sportLabel: 'ðŸƒ Athletics',
+    title: 'U-14 100M Race â€” Block Level',
+    score: 'ðŸ¥‰ 3rd Position â€” Block', position: '3rd',
     positionBg: 'bg-orange-400', positionText: 'text-white',
     level: 'Block', img: imgLavish100m,
     detail: 'Lavish got 3rd Position in U-14 100M Race at Block Level',
   },
   {
-    id: 13, name: 'Aryan', sport: 'Athletics', sportLabel: '🏃 Athletics',
-    title: 'U-14 High Jump — District Level',
-    score: '⭐ Selected — District', position: 'Selected',
+    id: 13, name: 'Aryan', sport: 'Athletics', sportLabel: 'ðŸƒ Athletics',
+    title: 'U-14 High Jump â€” District Level',
+    score: 'â­ Selected â€” District', position: 'Selected',
     positionBg: 'bg-indigo-500', positionText: 'text-white',
     level: 'District', img: imgAryanHighJump,
     detail: 'Aryan selected for U-14 District Level High Jump',
   },
   {
-    id: 14, name: 'Sachmit', sport: 'Athletics', sportLabel: '🏃 Athletics',
-    title: 'U-19 100M Hurdle Race — District Level',
-    score: '⭐ Selected — District', position: 'Selected',
+    id: 14, name: 'Sachmit', sport: 'Athletics', sportLabel: 'ðŸƒ Athletics',
+    title: 'U-19 100M Hurdle Race â€” District Level',
+    score: 'â­ Selected â€” District', position: 'Selected',
     positionBg: 'bg-indigo-500', positionText: 'text-white',
     level: 'District', img: imgSachmitHurdle,
     detail: 'Sachmit selected for U-19 100M Hurdle Race at District Level',
   },
   {
-    id: 15, name: 'Devesh & Dakshay', sport: 'Athletics', sportLabel: '🏃 Athletics',
-    title: 'U-17 100M Hurdle Race — District Level',
-    score: '⭐ Selected — District', position: 'Selected',
+    id: 15, name: 'Devesh & Dakshay', sport: 'Athletics', sportLabel: 'ðŸƒ Athletics',
+    title: 'U-17 100M Hurdle Race â€” District Level',
+    score: 'â­ Selected â€” District', position: 'Selected',
     positionBg: 'bg-indigo-500', positionText: 'text-white',
     level: 'District', img: imgDeveshDakshay,
     detail: 'Devesh & Dakshay selected for U-17 100M Hurdle Race at District Level',
   },
   {
-    id: 16, name: 'Prince & Anu', sport: 'Athletics', sportLabel: '🏃 Athletics',
-    title: '100M Race — Block Level',
-    score: '🥉 3rd Position — Block', position: '3rd',
+    id: 16, name: 'Prince & Anu', sport: 'Athletics', sportLabel: 'ðŸƒ Athletics',
+    title: '100M Race â€” Block Level',
+    score: 'ðŸ¥‰ 3rd Position â€” Block', position: '3rd',
     positionBg: 'bg-orange-400', positionText: 'text-white',
     level: 'Block', img: imgPrinceAnu,
     detail: 'Prince & Anu got 3rd Position in 100M Race at Block Level',
   },
   {
-    id: 17, name: 'BVPS Athletes', sport: 'Athletics', sportLabel: '🏃 Athletics',
+    id: 17, name: 'BVPS Athletes', sport: 'Athletics', sportLabel: 'ðŸƒ Athletics',
     title: 'Athletics Achievement',
-    score: '🏆 Block Level Achievement', position: 'Winners',
+    score: 'ðŸ† Block Level Achievement', position: 'Winners',
     positionBg: 'bg-yellow-400', positionText: 'text-yellow-900',
     level: 'Block', img: imgAthletics6,
-    detail: 'BVPS students shine at Block Level Athletics — proud achievers!',
+    detail: 'BVPS students shine at Block Level Athletics â€” proud achievers!',
   },
   {
-    id: 18, name: 'BVPS Athletes', sport: 'Athletics', sportLabel: '🏃 Athletics',
+    id: 18, name: 'BVPS Athletes', sport: 'Athletics', sportLabel: 'ðŸƒ Athletics',
     title: 'Athletics Achievement',
-    score: '🏆 Block Level Achievement', position: 'Winners',
+    score: 'ðŸ† Block Level Achievement', position: 'Winners',
     positionBg: 'bg-yellow-400', positionText: 'text-yellow-900',
     level: 'Block', img: imgAthletics7,
-    detail: 'BVPS students shine at Block Level Athletics — proud achievers!',
+    detail: 'BVPS students shine at Block Level Athletics â€” proud achievers!',
   },
   {
-    id: 19, name: 'BVPS Athletes', sport: 'Athletics', sportLabel: '🏃 Athletics',
+    id: 19, name: 'BVPS Athletes', sport: 'Athletics', sportLabel: 'ðŸƒ Athletics',
     title: 'Athletics Achievement',
-    score: '🏆 Block Level Achievement', position: 'Winners',
+    score: 'ðŸ† Block Level Achievement', position: 'Winners',
     positionBg: 'bg-yellow-400', positionText: 'text-yellow-900',
     level: 'Block', img: imgAthletics8,
-    detail: 'BVPS students shine at Block Level Athletics — proud achievers!',
+    detail: 'BVPS students shine at Block Level Athletics â€” proud achievers!',
   },
   {
-    id: 20, name: 'BVPS Athletes', sport: 'Athletics', sportLabel: '🏃 Athletics',
+    id: 20, name: 'BVPS Athletes', sport: 'Athletics', sportLabel: 'ðŸƒ Athletics',
     title: 'Athletics Achievement',
-    score: '🏆 Block Level Achievement', position: 'Winners',
+    score: 'ðŸ† Block Level Achievement', position: 'Winners',
     positionBg: 'bg-yellow-400', positionText: 'text-yellow-900',
     level: 'Block', img: imgAthletics9,
-    detail: 'BVPS students shine at Block Level Athletics — proud achievers!',
+    detail: 'BVPS students shine at Block Level Athletics â€” proud achievers!',
   },
 ];
 
@@ -303,22 +303,22 @@ export default function Results() {
   return (
     <div className="flex flex-col min-h-screen">
       <Helmet>
-        <title>Results & Achievements — Bal Vikas Public School Kalayat</title>
-        <meta name="description" content="Celebrating the results and achievements of Bal Vikas Public School Kalayat — district & state champions in karate, football, athletics, wrestling, cricket and academic excellence." />
+        <title>Results & Achievements â€” Bal Vikas Public School Kalayat</title>
+        <meta name="description" content="Celebrating the results and achievements of Bal Vikas Public School Kalayat â€” district & state champions in karate, football, athletics, wrestling, cricket and academic excellence." />
         <meta name="keywords" content="Bal Vikas Public School results, school achievements Kalayat, karate champions Kalayat, football winners, district champion school Haryana, BVPS results" />
         <link rel="canonical" href="https://bvps-school.vercel.app/results" />
-        <meta property="og:title" content="Results & Achievements — Bal Vikas Public School Kalayat" />
+        <meta property="og:title" content="Results & Achievements â€” Bal Vikas Public School Kalayat" />
         <meta property="og:description" content="District & state champions in sports and academic excellence at BVPS Kalayat." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school_1784611430239.webp" />
+        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
         <meta property="og:url" content="https://bvps-school.vercel.app/results" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Results & Achievements — Bal Vikas Public School Kalayat" />
+        <meta name="twitter:title" content="Results & Achievements â€” Bal Vikas Public School Kalayat" />
         <meta name="twitter:description" content="Sports champions and academic excellence at BVPS Kalayat." />
       </Helmet>
 
-      {/* ── Hero ── */}
+      {/* â”€â”€ Hero â”€â”€ */}
       <div className="bg-primary pt-24 pb-20 px-4 relative overflow-hidden">
-        <img src={heroSchoolImg} alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
+        <img src={heroSchoolImg} alt="Bal Vikas Public School school building, Kalayat, Haryana" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/30 to-primary/55" />
         <div className="absolute inset-0 pointer-events-none select-none">
           {[...Array(10)].map((_, i) => (
@@ -340,7 +340,7 @@ export default function Results() {
             </h1>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full" />
             <p className="mt-6 text-primary-foreground/80 text-lg max-w-2xl mx-auto">
-              Celebrating every champion of Bal Vikas Public School — Football, Cricket, Karate & Athletics.
+              Celebrating every champion of Bal Vikas Public School â€” Football, Cricket, Karate & Athletics.
             </p>
           </ScrollReveal>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 max-w-2xl mx-auto">
@@ -357,7 +357,7 @@ export default function Results() {
         </div>
       </div>
 
-      {/* ── Filters ── */}
+      {/* â”€â”€ Filters â”€â”€ */}
       <div className="sticky top-[68px] z-30 bg-background/95 backdrop-blur border-b border-border shadow-sm">
         <div className="container mx-auto px-4 py-3 flex flex-col sm:flex-row gap-2">
           {/* Sport */}
@@ -389,7 +389,7 @@ export default function Results() {
         </div>
       </div>
 
-      {/* ── Grid ── */}
+      {/* â”€â”€ Grid â”€â”€ */}
       <section className="py-16 flex-1"
         style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #1a1a2e 50%, #16213e 100%)' }}>
         <div className="container mx-auto px-4 md:px-6 max-w-7xl">
@@ -404,11 +404,11 @@ export default function Results() {
                 const sc   = SPORT_COLORS[item.sport];
                 const pb   = posBadge(item.position);
                 const medal =
-                  item.position === 'Winners' || item.position === 'Champions' ? '🏆'
-                  : item.position === '1st'   ? '🥇'
-                  : item.position === '2nd'   ? '🥈'
-                  : item.position === '3rd'   ? '🥉'
-                  : '⭐';
+                  item.position === 'Winners' || item.position === 'Champions' ? 'ðŸ†'
+                  : item.position === '1st'   ? 'ðŸ¥‡'
+                  : item.position === '2nd'   ? 'ðŸ¥ˆ'
+                  : item.position === '3rd'   ? 'ðŸ¥‰'
+                  : 'â­';
                 return (
                   <motion.div key={item.id}
                     initial={{ opacity:0, y:40 }} animate={{ opacity:1, y:0 }}
@@ -473,7 +473,7 @@ export default function Results() {
                       style={{ pointerEvents: 'none' }}
                     >
                       <div className="bg-white/15 backdrop-blur-sm border border-white/30 text-white text-xs font-bold px-5 py-2.5 rounded-full shadow-xl tracking-wide">
-                        ✨ View Details
+                        âœ¨ View Details
                       </div>
                     </motion.div>
                   </motion.div>
@@ -491,7 +491,7 @@ export default function Results() {
         </div>
       </section>
 
-      {/* ── Lightbox ── */}
+      {/* â”€â”€ Lightbox â”€â”€ */}
       <AnimatePresence>
         {selected && (
           <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}
@@ -510,11 +510,11 @@ export default function Results() {
                 const sc = SPORT_COLORS[selected.sport];
                 const pb = posBadge(selected.position);
                 const medal =
-                  selected.position === 'Winners' || selected.position === 'Champions' ? '🏆'
-                  : selected.position === '1st'   ? '🥇'
-                  : selected.position === '2nd'   ? '🥈'
-                  : selected.position === '3rd'   ? '🥉'
-                  : '⭐';
+                  selected.position === 'Winners' || selected.position === 'Champions' ? 'ðŸ†'
+                  : selected.position === '1st'   ? 'ðŸ¥‡'
+                  : selected.position === '2nd'   ? 'ðŸ¥ˆ'
+                  : selected.position === '3rd'   ? 'ðŸ¥‰'
+                  : 'â­';
                 return (
                   <div className="flex flex-col md:flex-row">
                     {/* Left: image */}
@@ -562,7 +562,7 @@ export default function Results() {
                         {/* Score badge */}
                         <div className="mt-6">
                           <div className={`inline-flex items-center gap-2 px-5 py-3 rounded-2xl font-extrabold text-sm ${pb.bg} ${pb.text} shadow-xl`}>
-                            {selected.score} 🎉
+                            {selected.score} ðŸŽ‰
                           </div>
                         </div>
                       </div>
@@ -575,7 +575,7 @@ export default function Results() {
         )}
       </AnimatePresence>
 
-      {/* ── CTA ── */}
+      {/* â”€â”€ CTA â”€â”€ */}
       <section className="py-14 bg-primary text-center">
         <div className="container mx-auto px-4">
           <ScrollReveal>

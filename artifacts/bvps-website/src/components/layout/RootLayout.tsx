@@ -4,6 +4,7 @@ import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { WhatsAppButton } from './WhatsAppButton';
 import { ChatbotWidget } from '@/components/chatbot/ChatbotWidget';
+import { SeoBase, SchoolStructuredData } from '@/lib/seo';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
 
@@ -16,12 +17,26 @@ export function RootLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-[100dvh] flex flex-col font-sans text-foreground">
+      {/* Site-wide fallback social/meta tags + School JSON-LD — har page par
+          `twitter:*`/`og:site_name` yahin se guaranteed milte hain, aur page
+          apna `og:title`/`og:description` inke upar override kar deta hai. */}
+      <SeoBase />
+      <SchoolStructuredData />
+
+      {/* Keyboard users ke liye skip link — pehle kahin nahi tha */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
+      >
+        Skip to main content
+      </a>
+
       {/* Sticky header: top info bar + navbar together */}
       <div className="sticky top-0 z-50">
         <FloatingContact />
         <Navbar />
       </div>
-      <main className="flex-1">
+      <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
         <AnimatePresence mode="wait">
           <motion.div
             key={location}

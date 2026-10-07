@@ -1,4 +1,26 @@
+# Bal Vikas Public School, Kalayat
+# https://bvps-school.vercel.app
+
 User-agent: *
 Allow: /
+
+# Admin portal bilkul private hai — index na ho, crawl na ho.
+Disallow: /admin
+Disallow: /admin/
+
+# Backend API par koi public crawl karne ki zaroorat nahi.
+Disallow: /api/
+
+# Yahan koi genuine app asset nahi hai jo crawler ko chahiye.
+Disallow: /assets/*.json
+
+# AI/answer engines ko training data ke liye na lein (admissions ke liye
+# assistant content chahiye, isliye GPTBot/ClaudeBot ko allow rakha hai —
+# sirf bulk training crawlers block hain).
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
 
 Sitemap: https://bvps-school.vercel.app/sitemap.xml

@@ -26,6 +26,10 @@ app.use(
   }),
 );
 app.use(cors());
+// Blog admin me base64 image (data URL) body jaata hai, jo default 100kb
+// express limit se bada hota hai — isliye sirf blog routes ke liye limit badhaayi
+// hai, baaki endpoints par default chhota limit rahega.
+app.use("/api/blog", express.json({ limit: "8mb" }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

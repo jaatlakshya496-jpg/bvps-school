@@ -108,7 +108,7 @@ export default function PrincipalMessage() {
         <link rel="canonical" href="https://bvps-school.vercel.app/principal-message" />
         <meta property="og:title" content="Principal's Message — Bal Vikas Public School Kalayat" />
         <meta property="og:description" content="Vision of Sh. Ramphal Sharma, Principal & Founder — value-based quality education in Kalayat." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/assets/principal-ramphal-sharma.webp" />
+        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
         <meta property="og:url" content="https://bvps-school.vercel.app/principal-message" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Principal's Message — Bal Vikas Public School Kalayat" />

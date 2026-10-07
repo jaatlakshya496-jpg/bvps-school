@@ -117,7 +117,7 @@ export function Navbar() {
       {/* Main Top Navigation Links (Desktop Bar) */}
       <div className="hidden lg:block bg-background py-1.5 px-4 md:px-6 overflow-x-auto scrollbar-thin">
         <div className="container mx-auto">
-          <nav className="flex items-center justify-between gap-1 xl:gap-2 whitespace-nowrap min-w-max">
+          <nav aria-label="Main" className="flex items-center justify-between gap-1 xl:gap-2 whitespace-nowrap min-w-max">
             {navLinks.map((link) => {
               const isActive = location === link.path;
               return (

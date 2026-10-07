@@ -1,34 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
+import { buildBreadcrumbSchema } from '@/lib/seo';
 
-const EducationalOrganizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "EducationalOrganization",
-  "name": "Bal Vikas Public School",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Railway Road",
-    "addressLocality": "Kalayat",
-    "addressRegion": "Haryana",
-    "postalCode": "136117",
-    "addressCountry": "India"
-  },
-  "telephone": "+91 98125 50200",
-  "email": "admissions@bvpskalayat.edu.in",
-  "website": "https://bvps-school.vercel.app",
-  "sameAs": [
-    "https://facebook.com/BalVikasPublicSchool",
-    "https://instagram.com/BalVikasPublicSchool",
-    "https://twitter.com/BalVikasSchool"
-  ],
-  "logo": "https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp",
-  "founded": "2004",
-  "curriculum": "HBSE",
-  "director": "Sh. Ramphal Sharma",
-  "founder": "Sh. Ramphal Sharma"
-};
+// School + WebSite JSON-LD ab RootLayout me mount hai (har page par rehta hai,
+// SPA navigation par bhi survive karta hai). Pehle ye sirf homepage par tha aur
+// usme 3 aise `sameAs` social links the jo site par kahin link nahi the —
+// unverifiable sameAs Google ke liye spam signal hai.
+// Homepage ka apna breadcrumb graph yahan rehta hai.
+const breadcrumbSchema = buildBreadcrumbSchema([{ label: 'Home', path: '/' }]);
 import { 
   Users, GraduationCap, Building2, Calendar, ArrowRight, 
   ChevronLeft, ChevronRight, BookOpen, Dumbbell, Monitor, 
@@ -61,7 +42,7 @@ const schoolHighlights = [
     icon: BookOpen,
     emoji: '📚',
     title: 'Quality Education',
-    subtitle: 'Nursery to 12th Senior Secondary',
+    subtitle: 'Classes 1 to 12 Senior Secondary',
     desc: 'Complete NCERT & HBSE aligned curriculum with deep conceptual understanding.',
     accent: 'from-amber-500 to-orange-500',
     border: 'border-amber-200 hover:border-amber-400',
@@ -174,7 +155,7 @@ const stats = [
   { 
     icon: Users, 
     label: 'Enrolled Students', 
-    sublabel: 'Classes Nursery to 12th',
+    sublabel: 'Classes 1 to 12',
     value: 945, 
     suffix: '+',
     colorKey: 'cyan',
@@ -352,17 +333,41 @@ type Facility = typeof facilities[number];
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  // Hero ka blurred backfill + sharp photo dono ek hi image use karte hain. Pehle
+  // dono hamesha render hote the (browser cache ki wajah se ek hi download, par
+  // do `<img>` nodes). Ab blurred backfill tabhi render hota hai jab current ya
+  // outgoing slide use kar raha ho — do slider image change par 4 requests nahi.
+  const [exitingSlide, setExitingSlide] = useState<number | null>(null);
   const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null);
   const [lightboxImg, setLightboxImg] = useState<{ src: string; title: string } | null>(null);
   const { t } = useLanguage();
 
+  const changeSlide = useCallback(
+    (pick: (prev: number) => number) => {
+      setCurrentSlide((prev) => {
+        const next = pick(prev);
+        if (next !== prev) setExitingSlide(prev);
+        return next;
+      });
+    },
+    [],
+  );
+
   // Auto-advance hero slides
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+      changeSlide((prev) => (prev + 1) % heroSlides.length);
     }, 4500);
     return () => clearInterval(timer);
-  }, []);
+  }, [changeSlide]);
+
+  // Blur backfill ke transition ke dauran rakhne ke baad hata dete hain, taaki
+  // purani slides ka extra `<img>` DOM me na rahe.
+  useEffect(() => {
+    if (exitingSlide === null) return;
+    const timer = setTimeout(() => setExitingSlide(null), 750);
+    return () => clearTimeout(timer);
+  }, [exitingSlide]);
 
   // Close modal on Escape key
   useEffect(() => {
@@ -376,25 +381,25 @@ export default function Home() {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
-  const prev = () => setCurrentSlide((s) => (s - 1 + heroSlides.length) % heroSlides.length);
-  const next = () => setCurrentSlide((s) => (s + 1) % heroSlides.length);
+  const prev = () => changeSlide((s) => (s - 1 + heroSlides.length) % heroSlides.length);
+  const next = () => changeSlide((s) => (s + 1) % heroSlides.length);
 
   return (
     <div className="flex flex-col">
 
       <Helmet>
         <title>Bal Vikas Public School Kalayat | Best School in Kalayat Haryana</title>
-        <meta name="description" content="Bal Vikas Public School in Kalayat, Kaithal, Haryana. Providing quality education from Nursery to 12th with excellent faculty, smart classrooms, and comprehensive facilities." />
+        <meta name="description" content="Bal Vikas Public School in Kalayat, Kaithal, Haryana. Co-educational HBSE (BSEH) school for Classes 1 to 12 since 2004, with smart classrooms, 31 classrooms, library, computer lab and a spacious playground. Call +91 98125 50200 for admissions." />
         <meta name="keywords" content="Bal Vikas Public School Kalayat, Bal Vikas Public School, school in Kalayat, best school in Kalayat Haryana, admission Bal Vikas Public School Kalayat, HBSE school Kalayat" />
         <link rel="canonical" href="https://bvps-school.vercel.app/" />
         <meta property="og:title" content="Bal Vikas Public School Kalayat | Best School in Kalayat Haryana" />
-        <meta property="og:description" content="Bal Vikas Public School in Kalayat, Kaithal, Haryana. Providing quality education from Nursery to 12th with excellent faculty, smart classrooms, and comprehensive facilities." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
+        <meta property="og:description" content="Bal Vikas Public School in Kalayat, Kaithal, Haryana. Co-educational HBSE (BSEH) school for Classes 1 to 12 since 2004, with smart classrooms, 31 classrooms, library, computer lab and a spacious playground. Call +91 98125 50200 for admissions." />
+        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
         <meta property="og:url" content="https://bvps-school.vercel.app/" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Bal Vikas Public School Kalayat | Best School in Kalayat Haryana" />
-        <meta name="twitter:description" content="Bal Vikas Public School in Kalayat, Kaithal, Haryana. Providing quality education from Nursery to 12th with excellent faculty, smart classrooms, and comprehensive facilities." />
-        <script type="application/ld+json">{JSON.stringify(EducationalOrganizationSchema)}</script>
+        <meta name="twitter:description" content="Bal Vikas Public School in Kalayat, Kaithal, Haryana. Co-educational HBSE (BSEH) school for Classes 1 to 12 since 2004, with smart classrooms, 31 classrooms, library, computer lab and a spacious playground. Call +91 98125 50200 for admissions." />
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
       </Helmet>
       <section className="relative min-h-[600px] overflow-hidden bg-black">
         <AnimatePresence mode="sync">
@@ -407,17 +412,28 @@ export default function Home() {
             className="absolute inset-0"
           >
             <div className="absolute inset-0 bg-black">
-              {/* Blurred photo backfill for sides — full screen colour, no solid band */}
-              <img
-                src={heroSlides[currentSlide].src}
-                alt=""
-                aria-hidden
-                className="w-full h-full object-contain blur-2xl brightness-75"
-              />
-              {/* Sharp full photo — never cropped */}
+              {/* Blurred photo backfill for sides — full screen colour, no solid band.
+                  Ye sirf pehli slide par render hota hai; baaki slides tabhi add hoti
+                  hain jab background blur-transition poori ho jaaye, jisse do slider
+                  slide ke ek saath 4 image requests nahi jaati (1.2MB+ per change). */}
+              {(currentSlide === 0 || exitingSlide === currentSlide) && (
+                <img
+                  src={heroSlides[currentSlide].src}
+                  alt=""
+                  aria-hidden
+                  className="w-full h-full object-contain blur-2xl brightness-75"
+                />
+              )}
+              {/* Sharp full photo — never cropped. Ye page ka LCP element hai, isliye
+                  pehli slide par `fetchpriority="high"` + eager (baaki slides lazy). */}
               <img
                 src={heroSlides[currentSlide].src}
                 alt={heroSlides[currentSlide].label}
+                loading={currentSlide === 0 ? 'eager' : 'lazy'}
+                fetchPriority={currentSlide === 0 ? 'high' : 'auto'}
+                decoding="async"
+                width={2000}
+                height={1305}
                 className="absolute inset-0 w-full h-full object-contain object-center drop-shadow-lg"
               />
             </div>

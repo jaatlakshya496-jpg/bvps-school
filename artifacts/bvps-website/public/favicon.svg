@@ -1,3 +1,8 @@
-<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="180" height="180" rx="36" fill="#FF3C00"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="BVPS">
+  <title>Bal Vikas Public School, Kalayat</title>
+  <rect width="64" height="64" rx="14" fill="#111C2E"/>
+  <path d="M32 11 8 25v4h48v-4L32 11Z" fill="#FF5A1F"/>
+  <path d="M15 32v16M25 32v16M39 32v16M49 32v16" stroke="#FF5A1F" stroke-width="3.4" stroke-linecap="round"/>
+  <rect x="12" y="51" width="40" height="3.6" rx="1.8" fill="#FF5A1F"/>
+  <circle cx="32" cy="42.5" r="3.6" fill="#111C2E"/>
 </svg>

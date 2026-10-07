@@ -43,18 +43,38 @@ export default function BlogPostPage() {
 
   if (loading) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center text-muted-foreground gap-2">
-        <Loader2 className="w-5 h-5 animate-spin" /> Loading post…
+      <div className="min-h-[60vh] flex flex-col items-center justify-center gap-2">
+        <Helmet>
+          <title>Loading… — BVPS Blog</title>
+          <meta name="robots" content="noindex, follow" />
+        </Helmet>
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <Loader2 className="w-5 h-5 animate-spin" /> Loading post…
+        </div>
       </div>
     );
   }
 
   if (notFound || !post) {
+    // Pehle ye branch <Helmet> se pehle return ho jata tha, jiski wajah se
+    // delete/galti se likha koi URL homepage ka default title + `index, follow`
+    // inherit kar leta tha. Ab is state par noindex + apna title set hota hai.
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center px-4 text-center">
+        <Helmet>
+          <title>Page not found — Bal Vikas Public School Kalayat</title>
+          <meta
+            name="description"
+            content="This BVPS blog post is unavailable. Browse the latest news and announcements from Bal Vikas Public School, Kalayat."
+          />
+          <meta name="robots" content="noindex, follow" />
+          <link rel="canonical" href="https://bvps-school.vercel.app/blog" />
+        </Helmet>
         <Newspaper className="w-12 h-12 text-muted-foreground mb-4" />
-        <h1 className="text-2xl font-serif font-bold text-black">Post nahi mila</h1>
-        <p className="text-muted-foreground text-sm mt-2 mb-6">Yeh post delete ho gayi ho sakti hai, ya URL galat hai.</p>
+        <h1 className="text-2xl font-serif font-bold text-black">Post not found</h1>
+        <p className="text-muted-foreground text-sm mt-2 mb-6">
+          This post may have been removed, or the link is incorrect.
+        </p>
         <Link href="/blog" className="inline-flex items-center gap-2 bg-primary text-white font-bold rounded-full px-6 h-11 text-sm">
           <ArrowLeft className="w-4 h-4" /> Back to Blog
         </Link>
@@ -62,11 +82,53 @@ export default function BlogPostPage() {
     );
   }
 
+  const postUrl = `https://bvps-school.vercel.app/blog/${slug}`;
+  const postDescription =
+    post.excerpt?.trim() ||
+    `${post.title} — news and updates from Bal Vikas Public School, Kalayat.`;
+  const blogPostSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: postDescription,
+    url: postUrl,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl },
+    image: [post.coverImage || 'https://bvps-school.vercel.app/og-bvps.jpg'],
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt || post.publishedAt,
+    inLanguage: 'en-IN',
+    author: { '@type': 'Organization', name: 'Bal Vikas Public School, Kalayat' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Bal Vikas Public School, Kalayat',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://bvps-school.vercel.app/school-logo.png',
+      },
+    },
+  };
+
   return (
     <div className="flex flex-col">
       <Helmet>
         <title>{post.title} — BVPS Blog</title>
-        {post.excerpt && <meta name="description" content={post.excerpt} />}
+        <meta name="description" content={postDescription} />
+        <link rel="canonical" href={postUrl} />
+        <meta property="og:title" content={post.title} />
+        <meta property="og:description" content={postDescription} />
+        <meta property="og:url" content={postUrl} />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content={post.coverImage || 'https://bvps-school.vercel.app/og-bvps.jpg'} />
+        <meta property="article:published_time" content={post.publishedAt} />
+        <meta property="article:author" content="Bal Vikas Public School, Kalayat" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={postDescription} />
+        <meta
+          name="twitter:image"
+          content={post.coverImage || 'https://bvps-school.vercel.app/og-bvps.jpg'}
+        />
+        <script type="application/ld+json">{JSON.stringify(blogPostSchema)}</script>
       </Helmet>
 
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">

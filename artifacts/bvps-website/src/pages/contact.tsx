@@ -69,7 +69,7 @@ export default function Contact() {
         <link rel="canonical" href="https://bvps-school.vercel.app/contact" />
         <meta property="og:title" content="Contact Bal Vikas Public School Kalayat | Get in Touch" />
         <meta property="og:description" content="Contact Bal Vikas Public School Kalayat. Get address, phone number, and reach out for admissions, queries, or just to say hello." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
+        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
         <meta property="og:url" content="https://bvps-school.vercel.app/contact" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Contact Bal Vikas Public School Kalayat | Get in Touch" />
@@ -78,7 +78,7 @@ export default function Contact() {
 
       {/* Page Header */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
-        <img src={heroImg} alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
+        <img src={heroImg} alt="Bal Vikas Public School campus building, Railway Road, Kalayat, Haryana" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/30 to-primary/55" />
         <div className="container mx-auto text-center relative z-10">
           <ScrollReveal>

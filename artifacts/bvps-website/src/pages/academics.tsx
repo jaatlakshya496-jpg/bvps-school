@@ -90,7 +90,7 @@ function cellClass(subject: string) {
 }
 
 const highlights = [
-  { icon: BookOpen,    label: 'Core Academics',   desc: 'Structured curriculum from Class 1 through 12 aligned with CBSE guidelines.' },
+  { icon: BookOpen,    label: 'Core Academics',   desc: 'Structured curriculum from Class 1 through 12 aligned with the HBSE (BSEH) syllabus.' },
   { icon: FlaskConical,label: 'Science & Lab',    desc: 'Dedicated science labs for Physics, Chemistry, and Biology practical sessions.' },
   { icon: Calculator,  label: 'Mathematics',      desc: 'Strong focus on analytical thinking, problem solving, and board exam preparation.' },
   { icon: Monitor,     label: 'Computer Science', desc: 'Regular computer periods with internet access and hands-on coding basics.' },
@@ -107,17 +107,17 @@ export default function Academics() {
   return (
     <div className="flex flex-col">
       <Helmet>
-        <title>Academics — Bal Vikas Public School Kalayat | CBSE School</title>
-        <meta name="description" content="Academics at Bal Vikas Public School Kalayat — curriculum, subjects, and timetable for Classes 1 to 12 aligned with CBSE guidelines." />
-        <meta name="keywords" content="Academics Bal Vikas Public School Kalayat, CBSE school Kalayat, curriculum subjects, school in Kalayat Haryana" />
+        <title>Academics — Bal Vikas Public School Kalayat | HBSE School (BSEH)</title>
+        <meta name="description" content="Academics at Bal Vikas Public School Kalayat — curriculum, subjects, and timetable for Classes 1 to 12 aligned with the HBSE (BSEH) syllabus." />
+        <meta name="keywords" content="Academics Bal Vikas Public School Kalayat, HBSE school Kalayat, curriculum subjects, school in Kalayat Haryana" />
         <link rel="canonical" href="https://bvps-school.vercel.app/academics" />
-        <meta property="og:title" content="Academics — Bal Vikas Public School Kalayat | CBSE School" />
-        <meta property="og:description" content="Academics at Bal Vikas Public School Kalayat — curriculum, subjects, and timetable for Classes 1 to 12 aligned with CBSE guidelines." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
+        <meta property="og:title" content="Academics — Bal Vikas Public School Kalayat | HBSE School (BSEH)" />
+        <meta property="og:description" content="Academics at Bal Vikas Public School Kalayat — curriculum, subjects, and timetable for Classes 1 to 12 aligned with the HBSE (BSEH) syllabus." />
+        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
         <meta property="og:url" content="https://bvps-school.vercel.app/academics" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Academics — Bal Vikas Public School Kalayat | CBSE School" />
-        <meta name="twitter:description" content="Academics at Bal Vikas Public School Kalayat — curriculum, subjects, and timetable for Classes 1 to 12 aligned with CBSE guidelines." />
+        <meta name="twitter:title" content="Academics — Bal Vikas Public School Kalayat | HBSE School (BSEH)" />
+        <meta name="twitter:description" content="Academics at Bal Vikas Public School Kalayat — curriculum, subjects, and timetable for Classes 1 to 12 aligned with the HBSE (BSEH) syllabus." />
       </Helmet>
 
       {/* Page Header */}

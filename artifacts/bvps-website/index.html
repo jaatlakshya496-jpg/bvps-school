@@ -1,37 +1,140 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-IN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>Bal Vikas Public School, Kalayat (BVPS)</title>
-    <meta name="description" content="Bal Vikas Public School (BVPS) Kalayat, Kaithal, Haryana — Quality Education from Classes 1 to 12 since 2004." />
-    <meta name="robots" content="index, follow" />
-    <meta name="keywords" content="Bal Vikas Public School Kalayat, BVPS, school in Kalayat, best school Kalayat Haryana, HBSE school Kalayat, admission Kalayat" />
-    <meta name="geo.region" content="IN-HR" />
-    <meta name="geo.placename" content="Kalayat, Kaithal, Haryana" />
-    <meta name="geo.position" content="29.9275;76.2983" />
-    <meta name="ICBM" content="29.9275,76.2983" />
-    <meta property="og:title" content="Bal Vikas Public School, Kalayat (BVPS)" />
-    <meta property="og:description" content="Official website of Bal Vikas Public School, Kalayat, Kaithal. Admissions open for Classes 1 to 12." />
+    <!-- `maximum-scale=1` hata diya: isse mobile par pinch-to-zoom block ho
+         jata hai (WCAG 1.4.4) aur Google mobile-usability signal kharab hota hai. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Bal Vikas Public School, Kalayat | Best HBSE School in Kaithal, Haryana</title>
+    <meta
+      name="description"
+      content="Bal Vikas Public School (BVPS), Railway Road, Kalayat, Kaithal, Haryana — a co-educational HBSE/BSEH school offering Classes 1 to 12 since 2004. Smart classrooms, 31 classrooms, library, computer lab, playground and sports champions. Call +91 98125 50200 for admissions."
+    />
+    <meta
+      name="keywords"
+      content="Bal Vikas Public School Kalayat, BVPS, school in Kalayat, best school Kalayat Haryana, HBSE school Kalayat, BSEH school Kaithal, admission Kalayat, school admission 2026 Kalayat"
+    />
+    <meta name="author" content="Bal Vikas Public School, Kalayat" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="theme-color" content="#111C2E" />
+
+    <link rel="canonical" href="https://bvps-school.vercel.app/" />
+
+    <meta property="og:site_name" content="Bal Vikas Public School, Kalayat" />
+    <meta property="og:locale" content="en_IN" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://bvps-school.vercel.app/" />
-    <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
+    <meta
+      property="og:title"
+      content="Bal Vikas Public School, Kalayat | Best HBSE School in Kaithal, Haryana"
+    />
+    <meta
+      property="og:description"
+      content="Admissions open for Classes 1 to 12 at Bal Vikas Public School, Kalayat — a co-educational school affiliated to BSEH (HBSE), established 2004. Railway Road, Kalayat, Kaithal. Call +91 98125 50200."
+    />
+    <!-- Ye file public/og-bvps.jpg hai (1200x630 JPEG). Pehle yahan ek hashed
+         asset ka URL tha jo exist hi nahi karta tha, aur SPA rewrite use
+         HTML bana deta tha — isliye WhatsApp/Facebook preview blank aata tha. -->
+    <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:locale" content="en_IN" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta
+      property="og:image:alt"
+      content="Bal Vikas Public School campus, Railway Road, Kalayat, District Kaithal, Haryana"
+    />
+
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Bal Vikas Public School, Kalayat (BVPS)" />
-    <meta name="twitter:description" content="Official website of Bal Vikas Public School, Kalayat, Kaithal. Admissions open for Classes 1 to 12." />
-    <meta name="twitter:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
+    <meta
+      name="twitter:title"
+      content="Bal Vikas Public School, Kalayat | Best HBSE School in Kaithal, Haryana"
+    />
+    <meta
+      name="twitter:description"
+      content="Admissions open for Classes 1 to 12. Co-educational HBSE/BSEH school in Kalayat, Kaithal, Haryana, established 2004. Call +91 98125 50200."
+    />
+    <meta name="twitter:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
+    <meta
+      name="twitter:image:alt"
+      content="Bal Vikas Public School campus, Railway Road, Kalayat, District Kaithal, Haryana"
+    />
+
+    <!-- Map embed (contact.tsx) ke exact coordinates; pehle 29.9275;76.2983 the
+         jo Kalayat mein kahin nahi hai. -->
+    <meta name="geo.region" content="IN-HR" />
+    <meta name="geo.placename" content="Railway Road, Kalayat, Kaithal, Haryana" />
+    <meta name="geo.position" content="29.6807;76.2354" />
+    <meta name="ICBM" content="29.6807, 76.2354" />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/school-logo.jpg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Asli fonts yahi hain jo app use karta hai (Outfit + Playfair Display).
+         Pehle index.html me "Inter" load hota tha jo app me use hi nahi hota,
+         aur asli families CSS @import se aati thi — do extra blocking round-trip. -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+    />
   </head>
   <body>
     <div id="root"></div>
-    <div id="google_translate_element" style="display: none;"></div>
+
+    <!-- Google Translate (EN / हिंदी / ਪੰਜਾਬੀ). isse pahle har page par
+         language-context ka apna switcher bhi hai. -->
+    <div id="google_translate_element" style="display: none"></div>
+
+    <!-- Ye site ek React SPA hai. Jo crawler JavaScript nahi chalata (Bing bot,
+         kai AI/answer-engine fetchers, kuch social preview bots) use poora page
+         empty `<div id="root">` hi dekhte hain. Is block se unhe school ki asli
+         jaankari mil jaati hai, aur Google Translate bhi ise padh leta hai. -->
+    <noscript>
+      <div style="max-width: 46rem; margin: 3rem auto; padding: 0 1.25rem; font-family: system-ui, sans-serif; color: #111c2e">
+        <h1 style="font-size: 1.75rem">Bal Vikas Public School, Kalayat</h1>
+        <p>
+          Railway Road, Kalayat, District Kaithal, Haryana – 136117. Co-educational
+          school affiliated to Haryana Board of School Education (BSEH / HBSE),
+          established in 2004, offering Classes 1 to 12.
+        </p>
+        <p>
+          <strong>Phone:</strong>
+          <a href="tel:+919812550200">+91 98125 50200</a> ·
+          <a href="tel:+919812550202">+91 98125 50202</a><br />
+          <strong>Email:</strong>
+          <a href="mailto:admissions@bvpskalayat.edu.in">admissions@bvpskalayat.edu.in</a> ·
+          <a href="mailto:info@bvpskalayat.edu.in">info@bvpskalayat.edu.in</a>
+        </p>
+        <p>
+          <strong>School hours:</strong> Monday to Saturday, 8:00 AM – 3:00 PM
+          (Sunday closed). Admission office: 9:00 AM – 2:00 PM.
+        </p>
+        <h2 style="font-size: 1.25rem">Main pages</h2>
+        <ul>
+          <li><a href="/about">About the school</a></li>
+          <li><a href="/admissions">Admissions</a></li>
+          <li><a href="/application">Online application</a></li>
+          <li><a href="/fee-structure">Fee structure</a></li>
+          <li><a href="/academics">Academics</a></li>
+          <li><a href="/streams">Streams (Medical, Non-Medical, Commerce, Arts)</a></li>
+          <li><a href="/facilities">Facilities</a></li>
+          <li><a href="/gallery">Photo gallery</a></li>
+          <li><a href="/results">Results &amp; achievements</a></li>
+          <li><a href="/blog">Blog &amp; news</a></li>
+          <li><a href="/school-timing">School timing</a></li>
+          <li><a href="/principal-message">Write to the Principal</a></li>
+          <li><a href="/contact">Contact us</a></li>
+        </ul>
+        <p>
+          Principal &amp; Founder: Sh. Ramphal Sharma. School code 06050300920.
+        </p>
+      </div>
+    </noscript>
+
     <script type="text/javascript">
       window.googleTranslateElementInit = function() {
         if (window.google && window.google.translate) {

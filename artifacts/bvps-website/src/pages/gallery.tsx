@@ -7,11 +7,11 @@ import { Helmet } from 'react-helmet-async';
 // All uploaded school photos
 const galleryImages = [
   { src: new URL('@assets/Screenshot_20260721_095641_1784611430135.webp', import.meta.url).href, caption: 'Lush Green Playground', category: 'Campus' },
-  { src: new URL('@assets/Screenshot_20260721_095657_1784611430157.webp', import.meta.url).href, caption: 'School Building — Multiple Views', category: 'Campus' },
+  { src: new URL('@assets/Screenshot_20260721_095657_1784611430157.webp', import.meta.url).href, caption: 'School Building â€” Multiple Views', category: 'Campus' },
   { src: new URL('@assets/Screenshot_20260721_095716_1784611430174.webp', import.meta.url).href, caption: 'Teachers Celebrating Student Achievement', category: 'Staff & Faculty' },
   { src: new URL('@assets/Screenshot_20260721_095726_1784611430190.webp', import.meta.url).href, caption: 'Students in School Uniform', category: 'Students' },
   { src: new URL('@assets/Screenshot_20260721_095741_1784611430208.webp', import.meta.url).href, caption: 'Trophy Presentation Ceremony', category: 'Events & Achievements' },
-  { src: new URL('@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp', import.meta.url).href, caption: 'Bal Vikas Public School — Kalayat', category: 'Campus' },
+  { src: new URL('@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp', import.meta.url).href, caption: 'Bal Vikas Public School â€” Kalayat', category: 'Campus' },
   { src: new URL('@assets/bal-vikas-public-school_1784611430239.webp', import.meta.url).href, caption: 'School Front View', category: 'Campus' },
   { src: new URL('@assets/Screenshot_20260721_095810_1784611430254.webp', import.meta.url).href, caption: 'School Activity', category: 'Events & Achievements' },
   { src: new URL('@assets/hqdefault_1784611430271.webp', import.meta.url).href, caption: 'School Highlights', category: 'Campus' },
@@ -49,8 +49,8 @@ const galleryImages = [
   { src: new URL('@assets/Screenshot_20260721_100727_1784611828992.webp', import.meta.url).href, caption: 'Teacher with Students on School Grounds', category: 'Staff & Faculty' },
   { src: new URL('@assets/Screenshot_20260721_100735_1784611829011.webp', import.meta.url).href, caption: 'Students Celebrating at School Event', category: 'Students' },
   { src: new URL('@assets/Screenshot_20260721_100744_1784611829028.webp', import.meta.url).href, caption: 'Principal Addressing Students at Ceremony', category: 'Events & Achievements' },
-  { src: new URL('@assets/Screenshot_20260721_100807_1784611829045.webp', import.meta.url).href, caption: 'BVPS — We Are Hiring!', category: 'Events & Achievements' },
-  { src: new URL('@assets/Screenshot_20260721_100828_1784611829062.webp', import.meta.url).href, caption: 'Certificate Distribution — NCC Cadets', category: 'Events & Achievements' },
+  { src: new URL('@assets/Screenshot_20260721_100807_1784611829045.webp', import.meta.url).href, caption: 'BVPS â€” We Are Hiring!', category: 'Events & Achievements' },
+  { src: new URL('@assets/Screenshot_20260721_100828_1784611829062.webp', import.meta.url).href, caption: 'Certificate Distribution â€” NCC Cadets', category: 'Events & Achievements' },
   { src: new URL('@assets/Screenshot_20260721_100838_1784611829075.webp', import.meta.url).href, caption: 'School Annual Celebration', category: 'Events & Achievements' },
   { src: new URL('@assets/Screenshot_20260721_100848_1784611829087.webp', import.meta.url).href, caption: 'Students at School Function', category: 'Students' },
   { src: new URL('@assets/Screenshot_20260721_100817_1784611829104.webp', import.meta.url).href, caption: 'School Event Highlights', category: 'Events & Achievements' },
@@ -62,11 +62,11 @@ const galleryImages = [
   { src: new URL('@assets/Screenshot_20260721_101003_1784611829193.webp', import.meta.url).href, caption: 'School Program', category: 'Events & Achievements' },
   { src: new URL('@assets/Screenshot_20260721_101011_1784611829211.webp', import.meta.url).href, caption: 'Students and Faculty Together', category: 'Staff & Faculty' },
   { src: new URL('@assets/Screenshot_20260721_101018_1784611829229.webp', import.meta.url).href, caption: 'School Pride', category: 'Students' },
-  { src: new URL('@assets/Screenshot_20260721_101030_1784611875027.webp', import.meta.url).href, caption: 'Govt. of Haryana — Winter Vacation Notice', category: 'Events & Achievements' },
+  { src: new URL('@assets/Screenshot_20260721_101030_1784611875027.webp', import.meta.url).href, caption: 'Govt. of Haryana â€” Winter Vacation Notice', category: 'Events & Achievements' },
   { src: new URL('@assets/Screenshot_20260721_101040_1784611875129.webp', import.meta.url).href, caption: 'Staff Meeting at School Campus', category: 'Staff & Faculty' },
   { src: new URL('@assets/Screenshot_20260721_101102_1784611875141.webp', import.meta.url).href, caption: 'Principal at TERI School of Advanced Studies', category: 'Staff & Faculty' },
-  { src: new URL('@assets/Screenshot_20260721_101123_1784611875157.webp', import.meta.url).href, caption: 'New Year Celebration — BVPS Kalayat', category: 'Events & Achievements' },
-  { src: new URL('@assets/Screenshot_20260721_101136_1784611875176.webp', import.meta.url).href, caption: 'Happy New Year Event — Students Performing', category: 'Events & Achievements' },
+  { src: new URL('@assets/Screenshot_20260721_101123_1784611875157.webp', import.meta.url).href, caption: 'New Year Celebration â€” BVPS Kalayat', category: 'Events & Achievements' },
+  { src: new URL('@assets/Screenshot_20260721_101136_1784611875176.webp', import.meta.url).href, caption: 'Happy New Year Event â€” Students Performing', category: 'Events & Achievements' },
   { src: new URL('@assets/Screenshot_20260721_101148_1784611875198.webp', import.meta.url).href, caption: 'School Cultural Activity', category: 'Events & Achievements' },
   { src: new URL('@assets/Screenshot_20260721_101203_1784611875216.webp', import.meta.url).href, caption: 'Students at School Program', category: 'Students' },
   { src: new URL('@assets/Screenshot_20260721_101220_1784611875234.webp', import.meta.url).href, caption: 'School Gathering', category: 'Campus' },
@@ -85,11 +85,11 @@ const galleryImages = [
   { src: new URL('@assets/Screenshot_20260721_101502_1784612008952.webp', import.meta.url).href, caption: 'Achievement at BVPS', category: 'Events & Achievements' },
   { src: new URL('@assets/Screenshot_20260721_101509_1784612008927.webp', import.meta.url).href, caption: 'School Award Ceremony', category: 'Events & Achievements' },
   { src: new URL('@assets/Screenshot_20260721_101517_1784612008914.webp', import.meta.url).href, caption: 'Students Honoured at BVPS', category: 'Events & Achievements' },
-  { src: new URL('@assets/Screenshot_20260721_101549_1784612008898.webp', import.meta.url).href, caption: 'BVPS Girls Win Gold — All India Karate Championship', category: 'Events & Achievements' },
-  { src: new URL('@assets/Screenshot_20260721_101612_1784612008888.webp', import.meta.url).href, caption: 'Gold Medal Winner with Teachers — BVPS', category: 'Events & Achievements' },
+  { src: new URL('@assets/Screenshot_20260721_101549_1784612008898.webp', import.meta.url).href, caption: 'BVPS Girls Win Gold â€” All India Karate Championship', category: 'Events & Achievements' },
+  { src: new URL('@assets/Screenshot_20260721_101612_1784612008888.webp', import.meta.url).href, caption: 'Gold Medal Winner with Teachers â€” BVPS', category: 'Events & Achievements' },
   { src: new URL('@assets/Screenshot_20260721_101624_1784612008874.webp', import.meta.url).href, caption: 'Student Achievement Recognised at BVPS', category: 'Events & Achievements' },
   { src: new URL('@assets/Screenshot_20260721_101706_1784612008853.webp', import.meta.url).href, caption: 'Students and Staff with Trophies', category: 'Events & Achievements' },
-  { src: new URL('@assets/Screenshot_20260721_101720_1784612008775.webp', import.meta.url).href, caption: 'Trophy Presentation — BVPS Kalayat', category: 'Events & Achievements' },
+  { src: new URL('@assets/Screenshot_20260721_101720_1784612008775.webp', import.meta.url).href, caption: 'Trophy Presentation â€” BVPS Kalayat', category: 'Events & Achievements' },
 ];
 
 const categories = ['All', 'Campus', 'Students', 'Staff & Faculty', 'Events & Achievements'];
@@ -168,19 +168,19 @@ export default function Gallery() {
   const nextImage = (e: React.MouseEvent) => { e.stopPropagation(); setLightboxIndex((p) => p !== null ? (p + 1) % filtered.length : null); };
 
   return (
-    <main>
+        <div>
       <Helmet>
-        <title>Gallery — Bal Vikas Public School Kalayat | School Photos</title>
-        <meta name="description" content="Explore the BVPS Gallery — high-definition school photos, campus life, events & achievements, and student moments from Bal Vikas Public School Kalayat." />
+        <title>Gallery â€” Bal Vikas Public School Kalayat | School Photos</title>
+        <meta name="description" content="Explore the BVPS Gallery â€” high-definition school photos, campus life, events & achievements, and student moments from Bal Vikas Public School Kalayat." />
         <meta name="keywords" content="Gallery Bal Vikas Public School Kalayat, school photos, campus life, events achievements, student moments" />
         <link rel="canonical" href="https://bvps-school.vercel.app/gallery" />
-        <meta property="og:title" content="Gallery — Bal Vikas Public School Kalayat | School Photos" />
-        <meta property="og:description" content="Explore the BVPS Gallery — high-definition school photos, campus life, events & achievements, and student moments from Bal Vikas Public School Kalayat." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
+        <meta property="og:title" content="Gallery â€” Bal Vikas Public School Kalayat | School Photos" />
+        <meta property="og:description" content="Explore the BVPS Gallery â€” high-definition school photos, campus life, events & achievements, and student moments from Bal Vikas Public School Kalayat." />
+        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
         <meta property="og:url" content="https://bvps-school.vercel.app/gallery" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Gallery — Bal Vikas Public School Kalayat | School Photos" />
-        <meta name="twitter:description" content="Explore the BVPS Gallery — high-definition school photos, campus life, events & achievements, and student moments from Bal Vikas Public School Kalayat." />
+        <meta name="twitter:title" content="Gallery â€” Bal Vikas Public School Kalayat | School Photos" />
+        <meta name="twitter:description" content="Explore the BVPS Gallery â€” high-definition school photos, campus life, events & achievements, and student moments from Bal Vikas Public School Kalayat." />
       </Helmet>
 
       {/* Editorial Hero */}
@@ -286,7 +286,7 @@ export default function Gallery() {
               className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-500 shadow-sm"
             >
               {filtered.length} photo{filtered.length !== 1 ? 's' : ''}
-              {activeCategory !== 'All' ? ` · ${activeCategory}` : ' · All stories'}
+              {activeCategory !== 'All' ? ` Â· ${activeCategory}` : ' Â· All stories'}
             </motion.p>
           </div>
 
@@ -332,7 +332,7 @@ export default function Gallery() {
           >
             {/* Gallery counter */}
             <div className="absolute left-5 top-5 z-10 rounded-full border border-white/15 bg-black/60 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/90 md:left-8 md:top-8">
-              BVPS Gallery <span className="mx-1 text-secondary">•</span> {lightboxIndex + 1} / {filtered.length}
+              BVPS Gallery <span className="mx-1 text-secondary">â€¢</span> {lightboxIndex + 1} / {filtered.length}
             </div>
 
             {/* Close */}
@@ -407,6 +407,6 @@ export default function Gallery() {
           </motion.div>
         )}
       </AnimatePresence>
-    </main>
+    </div>
   );
 }

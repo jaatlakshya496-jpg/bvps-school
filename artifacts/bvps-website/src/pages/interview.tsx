@@ -24,7 +24,7 @@ export default function Interview() {
       <link rel="canonical" href="https://bvps-school.vercel.app/interview" />
       <meta property="og:title" content="Interview & Interaction — Bal Vikas Public School Kalayat | Admission Process" />
       <meta property="og:description" content="Bal Vikas Public School Kalayat admission interview process. Learn about interaction modes, what to expect, and how to schedule your friendly interview." />
-      <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
+      <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
       <meta property="og:url" content="https://bvps-school.vercel.app/interview" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Interview & Interaction — Bal Vikas Public School Kalayat | Admission Process" />

@@ -18,7 +18,7 @@ import { useLanguage } from '@/lib/language-context';
 const schoolValues = [
   {
     name: 'Discipline',
-    emoji: '🛡️',
+    emoji: 'ðŸ›¡ï¸',
     icon: ShieldCheck,
     desc: 'Self-control, punctuality, and respect for school rules and social harmony.',
     color: 'from-blue-500 to-indigo-600',
@@ -27,7 +27,7 @@ const schoolValues = [
   },
   {
     name: 'Respect',
-    emoji: '🤝',
+    emoji: 'ðŸ¤',
     icon: HeartHandshake,
     desc: 'Valuing teachers, parents, peers, cultural traditions, and diverse perspectives.',
     color: 'from-emerald-500 to-teal-600',
@@ -36,7 +36,7 @@ const schoolValues = [
   },
   {
     name: 'Honesty',
-    emoji: '⚖️',
+    emoji: 'âš–ï¸',
     icon: Scale,
     desc: 'Upholding truthfulness, high moral integrity, and sincere ethical conduct.',
     color: 'from-amber-500 to-orange-500',
@@ -45,7 +45,7 @@ const schoolValues = [
   },
   {
     name: 'Responsibility',
-    emoji: '🎯',
+    emoji: 'ðŸŽ¯',
     icon: CheckCircle2,
     desc: 'Taking ownership of learning, personal duties, and positive civic contribution.',
     color: 'from-purple-500 to-violet-600',
@@ -54,7 +54,7 @@ const schoolValues = [
   },
   {
     name: 'Hard Work',
-    emoji: '⚡',
+    emoji: 'âš¡',
     icon: Flame,
     desc: 'Relentless effort, focus, resilience, and commitment to academic excellence.',
     color: 'from-rose-500 to-red-600',
@@ -63,7 +63,7 @@ const schoolValues = [
   },
   {
     name: 'Creativity',
-    emoji: '🎨',
+    emoji: 'ðŸŽ¨',
     icon: Palette,
     desc: 'Encouraging curiosity, original thinking, arts, and innovative solutions.',
     color: 'from-fuchsia-500 to-pink-600',
@@ -72,7 +72,7 @@ const schoolValues = [
   },
   {
     name: 'Teamwork',
-    emoji: '👥',
+    emoji: 'ðŸ‘¥',
     icon: Users,
     desc: 'Collaborating enthusiastically, sportsmanship, and lifting each other up.',
     color: 'from-cyan-500 to-blue-600',
@@ -106,7 +106,7 @@ const overviewCards = [
   {
     icon: Clock,
     title: 'School Hours',
-    desc: 'Mon–Sat: 8:00 AM – 3:00 PM\nSunday: Closed',
+    desc: 'Monâ€“Sat: 8:00 AM â€“ 3:00 PM\nSunday: Closed',
     image: campusImg,
     detail: 'School runs six days a week, Monday to Saturday, from 8:00 AM to 3:00 PM. Morning assembly begins the day, building discipline and community spirit.',
   },
@@ -118,7 +118,7 @@ const journeyMilestones = [
   {
     year: '2004',
     title: 'A Vision Takes Root',
-    description: 'Bal Vikas Public School began with a simple promise — to bring meaningful, quality education closer to the families of Kalayat.',
+    description: 'Bal Vikas Public School began with a simple promise â€” to bring meaningful, quality education closer to the families of Kalayat.',
     image: schoolBuildingImg,
     icon: Flag,
     color: 'from-orange-500 to-amber-400',
@@ -132,7 +132,7 @@ const journeyMilestones = [
     color: 'from-cyan-500 to-blue-500',
   },
   {
-    year: 'Classes 1–12',
+    year: 'Classes 1â€“12',
     title: 'A Complete Learning Journey',
     description: 'The school expanded its academic journey from primary years through senior secondary, helping students grow with confidence at every stage.',
     image: studentsImg,
@@ -235,7 +235,7 @@ export default function About() {
         <link rel="canonical" href="https://bvps-school.vercel.app/about" />
         <meta property="og:title" content="About Bal Vikas Public School Kalayat | Admission & School Details" />
         <meta property="og:description" content="About Bal Vikas Public School Kalayat, Kaithal, Haryana. A private co-educational institution offering classes from 1 to 12 since 2004. HBSE affiliated school with focus on values-based education." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
+        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
         <meta property="og:url" content="https://bvps-school.vercel.app/about" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="About Bal Vikas Public School Kalayat | Admission & School Details" />
@@ -244,7 +244,7 @@ export default function About() {
 
       {/* Page Header */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
-        <img src={aboutImg} alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
+        <img src={aboutImg} alt="Bal Vikas Public School campus building, Railway Road, Kalayat, Haryana" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/30 to-primary/55" />
         <div className="container mx-auto text-center relative z-10">
           <ScrollReveal>
@@ -307,7 +307,7 @@ export default function About() {
                     <p className="text-2xl sm:text-3xl font-serif font-black bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
                       <CountUp value={12} suffix="th" />
                     </p>
-                    <p className="text-[11px] font-bold text-purple-900 uppercase tracking-wider mt-1">Classes 1–12</p>
+                    <p className="text-[11px] font-bold text-purple-900 uppercase tracking-wider mt-1">Classes 1â€“12</p>
                   </div>
                 </div>
               </div>
@@ -341,7 +341,7 @@ export default function About() {
                   <div>
                     <span className="text-xs font-bold uppercase tracking-wider text-amber-700">Direction & Purpose</span>
                     <h3 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900 flex items-center gap-2">
-                      Our Mission 🎯
+                      Our Mission ðŸŽ¯
                     </h3>
                   </div>
                 </div>
@@ -350,7 +350,7 @@ export default function About() {
                 </p>
                 <div className="mt-6 pt-4 border-t border-amber-200/80 flex items-center gap-2 text-xs font-bold text-amber-800">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Quality Learning • Confidence • Moral Values</span>
+                  <span>Quality Learning â€¢ Confidence â€¢ Moral Values</span>
                 </div>
               </div>
             </ScrollReveal>
@@ -365,7 +365,7 @@ export default function About() {
                   <div>
                     <span className="text-xs font-bold uppercase tracking-wider text-secondary">Future Aspiration</span>
                     <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white flex items-center gap-2">
-                      Our Vision 👁️
+                      Our Vision ðŸ‘ï¸
                     </h3>
                   </div>
                 </div>
@@ -374,7 +374,7 @@ export default function About() {
                 </p>
                 <div className="mt-6 pt-4 border-t border-white/15 flex items-center gap-2 text-xs font-bold text-secondary">
                   <Star className="w-4 h-4 fill-secondary" />
-                  <span>Academic Success • Social Contribution • Future Leaders</span>
+                  <span>Academic Success â€¢ Social Contribution â€¢ Future Leaders</span>
                 </div>
               </div>
             </ScrollReveal>
@@ -389,7 +389,7 @@ export default function About() {
                   <span>Ethical Foundation</span>
                 </div>
                 <h2 className="text-3xl sm:text-4xl font-serif font-black text-slate-900 flex items-center justify-center gap-2">
-                  Our Values 🌟
+                  Our Values ðŸŒŸ
                 </h2>
                 <p className="text-sm sm:text-base text-slate-600 mt-2 font-medium">
                   The enduring principles that guide every classroom, sports field, and student at Bal Vikas Public School.
@@ -475,7 +475,7 @@ export default function About() {
                   <Quote className="w-10 h-10 text-secondary/50 mb-2 mx-auto md:mx-0" />
                   
                   <blockquote className="text-white text-lg sm:text-xl md:text-2xl leading-relaxed italic font-serif text-amber-100 font-semibold mb-4">
-                    “Every child has unique potential. Our responsibility is to provide the right guidance, opportunities and environment so that every student can discover and achieve their potential.”
+                    â€œEvery child has unique potential. Our responsibility is to provide the right guidance, opportunities and environment so that every student can discover and achieve their potential.â€
                   </blockquote>
 
                   <p className="text-primary-foreground/80 text-sm leading-relaxed mb-6">
@@ -487,7 +487,7 @@ export default function About() {
                       href="/principal-message#message-form" 
                       className="inline-flex items-center gap-2 bg-secondary text-primary hover:bg-secondary/90 font-bold text-xs sm:text-sm px-6 py-2.5 rounded-full transition-all shadow-md active:scale-95 hover:scale-105"
                     >
-                      Write Directly to Principal →
+                      Write Directly to Principal â†’
                     </a>
                     <a 
                       href="/principal-message" 
@@ -517,7 +517,7 @@ export default function About() {
                     </div>
                     <h2 className="font-serif text-3xl font-bold text-white md:text-5xl">Our Journey</h2>
                     <p className="mt-4 leading-relaxed text-white/65">
-                      From a hopeful beginning to a thriving learning community — every chapter of BVPS has been shaped by children, families and teachers moving forward together.
+                      From a hopeful beginning to a thriving learning community â€” every chapter of BVPS has been shaped by children, families and teachers moving forward together.
                     </p>
                   </div>
                   <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 backdrop-blur-sm">
@@ -613,7 +613,7 @@ export default function About() {
                     </div>
                     <h4 className="font-bold text-lg mb-2 text-white relative z-10">{card.title}</h4>
                     <p className="text-primary-foreground/70 text-sm relative z-10 whitespace-pre-line">{card.desc}</p>
-                    <span className="mt-3 text-secondary text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity relative z-10">Tap to see photo →</span>
+                    <span className="mt-3 text-secondary text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity relative z-10">Tap to see photo â†’</span>
                   </motion.button>
                 ))}
               </div>

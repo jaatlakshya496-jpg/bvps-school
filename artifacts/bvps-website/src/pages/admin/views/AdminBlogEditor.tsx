@@ -1,11 +1,69 @@
-import { useEffect, useState } from 'react';
-import { ArrowLeft, Save, Loader2, Newspaper } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowLeft, ImagePlus, Loader2, Newspaper, Save, Trash2 } from 'lucide-react';
 import { apiGetAdmin, apiSend, extractApiError } from '@/lib/api';
 import type { BlogPost } from '../types';
 import { slugify } from '../types';
 
 const inputCls =
   'w-full border-2 border-primary/30 focus:border-primary rounded-xl px-4 py-3 text-sm text-black bg-white outline-none';
+
+// Uploaded image ko chhota karte hain (data URL DB me jaata hai, isliye size
+// control zaroori hai). Target ~700kb se kam — tab body comfortably chalti hai.
+const MAX_IMAGE_WIDTH = 1280;
+const MAX_DATA_URL_LENGTH = 900_000;
+
+function readFileAsDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('Image read nahi ho payi.'));
+    reader.onload = () => resolve(String(reader.result ?? ''));
+    reader.readAsDataURL(file);
+  });
+}
+
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = () => reject(new Error('Image load nahi ho payi.'));
+    image.src = src;
+  });
+}
+
+async function compressImageFile(file: File): Promise<string> {
+  const dataUrl = await readFileAsDataUrl(file);
+  // SVG/GIF ko compress nahi kar sakte (quality/style bigotti jaati hai) —
+  // unhe as-is chhod dete hain agar size theek ho.
+  if (file.type === 'image/svg+xml' || file.type === 'image/gif') {
+    if (dataUrl.length > MAX_DATA_URL_LENGTH) {
+      throw new Error('Image bahut badi hai (limit ~700KB). Chhoti image chunein.');
+    }
+    return dataUrl;
+  }
+
+  const image = await loadImage(dataUrl);
+  const scale = Math.min(1, MAX_IMAGE_WIDTH / (image.naturalWidth || MAX_IMAGE_WIDTH));
+  const width = Math.max(1, Math.round((image.naturalWidth || MAX_IMAGE_WIDTH) * scale));
+  const height = Math.max(1, Math.round((image.naturalHeight || MAX_IMAGE_WIDTH) * scale));
+
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const context = canvas.getContext('2d');
+  if (!context) return dataUrl;
+  context.drawImage(image, 0, 0, width, height);
+
+  let quality = 0.82;
+  let output = canvas.toDataURL('image/jpeg', quality);
+  while (output.length > MAX_DATA_URL_LENGTH && quality > 0.4) {
+    quality -= 0.1;
+    output = canvas.toDataURL('image/jpeg', quality);
+  }
+  if (output.length > MAX_DATA_URL_LENGTH) {
+    throw new Error('Image bahut badi hai. Chhoti image chunein ya image URL use karein.');
+  }
+  return output;
+}
 
 export function AdminBlogEditor({
   token, postId, onDone, onCancel, onExpired,
@@ -21,8 +79,29 @@ export function AdminBlogEditor({
   const [publishedDate, setPublishedDate] = useState('');
   const [loading, setLoading] = useState(postId > 0);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
   const [slugTouched, setSlugTouched] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  async function handleImagePick(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      setError('Sirf image file (jpg, png, webp) chuniye.');
+      return;
+    }
+    setUploading(true);
+    setError('');
+    try {
+      setCoverImage(await compressImageFile(file));
+    } catch (err: any) {
+      setError(err?.message ?? 'Image upload nahi ho payi.');
+    } finally {
+      setUploading(false);
+    }
+  }
 
   useEffect(() => {
     if (postId <= 0) return;
@@ -162,8 +241,56 @@ export function AdminBlogEditor({
             <input type="date" className={inputCls} value={publishedDate} onChange={e => setPublishedDate(e.target.value)} />
           </div>
           <div>
-            <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">Cover Image URL</label>
-            <input className={inputCls} value={coverImage} onChange={e => setCoverImage(e.target.value)} placeholder="https://… image link (optional)" />
+            <label className="block text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2">Cover Image</label>
+            <div className="flex items-center gap-2">
+              <input
+                className={inputCls}
+                value={coverImage}
+                onChange={e => setCoverImage(e.target.value)}
+                placeholder="https://… image link"
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+                className="shrink-0 inline-flex items-center gap-1.5 h-[46px] px-3 rounded-xl border-2 border-primary/30 text-primary text-xs font-bold hover:bg-primary/5 disabled:opacity-60 transition-colors"
+              >
+                {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImagePlus className="w-4 h-4" />}
+                {uploading ? '…' : 'Upload'}
+              </button>
+              {coverImage && (
+                <button
+                  type="button"
+                  onClick={() => setCoverImage('')}
+                  className="shrink-0 inline-flex items-center justify-center w-[46px] h-[46px] rounded-xl border-2 border-red-200 text-red-500 hover:bg-red-50 transition-colors"
+                  aria-label="Remove cover image"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImagePick}
+            />
+            <p className="text-[11px] text-muted-foreground mt-1">
+              Mobile se photo khud choose karein (ya link paste karein). Image chhoti karke save hoti hai.
+            </p>
+            {coverImage && (
+              <div className="mt-2 flex items-center gap-3">
+                <img
+                  src={coverImage}
+                  alt="Cover preview"
+                  className="h-16 w-24 rounded-lg object-cover border border-border"
+                />
+                <p className="text-[11px] text-muted-foreground">
+                  {coverImage.startsWith('data:') ? 'Uploaded photo' : 'Linked photo'} · preview
+                </p>
+              </div>
+            )}
           </div>
         </div>
 

@@ -33,13 +33,15 @@ export function AdminLogin({ onSuccess, initialError }: { onSuccess: () => void;
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 relative overflow-hidden">
-      <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-primary/20 blur-3xl" />
-      <div className="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-secondary/20 blur-3xl" />
+    // Mobile par top-align + scroll zaroori hai, warna mobile keyboard khulte
+    // hi login card screen se bahar chala jata tha aur button daba nahi hota tha.
+    <div className="min-h-[100dvh] bg-slate-950 flex items-start sm:items-center justify-center p-4 sm:p-6 relative overflow-x-hidden overflow-y-auto">
+      <div className="pointer-events-none absolute -top-24 -left-24 w-96 h-96 rounded-full bg-primary/20 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-secondary/20 blur-3xl" />
 
-      <div className="relative w-full max-w-md">
+      <div className="relative w-full max-w-md my-auto">
         <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-white/10">
-          <div className="bg-primary px-8 py-8 text-center">
+          <div className="bg-primary px-6 py-6 sm:px-8 sm:py-8 text-center">
             <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-secondary text-primary mb-4">
               <GraduationCap className="w-8 h-8" />
             </div>
@@ -47,7 +49,7 @@ export function AdminLogin({ onSuccess, initialError }: { onSuccess: () => void;
             <p className="text-primary-foreground/70 text-xs mt-1">Bal Vikas Public School, Kalayat</p>
           </div>
 
-          <div className="p-8 space-y-5">
+          <div className="p-5 sm:p-8 space-y-5">
             {error && (
               <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
                 {error}
@@ -60,12 +62,16 @@ export function AdminLogin({ onSuccess, initialError }: { onSuccess: () => void;
                 <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
                   type="email"
+                  inputMode="email"
                   autoComplete="email"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter') handleSubmit(); }}
                   placeholder="admin email id"
-                  className="w-full border-2 border-primary/30 focus:border-primary rounded-xl pl-10 pr-4 py-3 text-sm text-black bg-white outline-none"
+                  className="w-full border-2 border-primary/30 focus:border-primary rounded-xl pl-10 pr-4 py-3.5 sm:py-3 text-base sm:text-sm text-black bg-white outline-none"
                 />
               </div>
             </div>
@@ -81,7 +87,7 @@ export function AdminLogin({ onSuccess, initialError }: { onSuccess: () => void;
                   onChange={e => setPassword(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter') handleSubmit(); }}
                   placeholder="••••••••"
-                  className="w-full border-2 border-primary/30 focus:border-primary rounded-xl pl-10 pr-4 py-3 text-sm text-black bg-white outline-none"
+                  className="w-full border-2 border-primary/30 focus:border-primary rounded-xl pl-10 pr-4 py-3.5 sm:py-3 text-base sm:text-sm text-black bg-white outline-none"
                 />
               </div>
             </div>

@@ -66,21 +66,21 @@ export default function Facilities() {
   return (
     <div className="flex flex-col">
       <Helmet>
-        <title>School Facilities — Bal Vikas Public School Kalayat | Modern Campus Amenities</title>
-        <meta name="description" content="Explore facilities at Bal Vikas Public School Kalayat — rich library, computer lab, smart classrooms, spacious playground, CCTV security, RO drinking water and more." />
+        <title>School Facilities â€” Bal Vikas Public School Kalayat | Modern Campus Amenities</title>
+        <meta name="description" content="Explore facilities at Bal Vikas Public School Kalayat â€” rich library, computer lab, smart classrooms, spacious playground, CCTV security, RO drinking water and more." />
         <meta name="keywords" content="school facilities Kalayat, Bal Vikas Public School facilities, smart classrooms Kalayat, computer lab school, best school Kalayat Haryana" />
         <link rel="canonical" href="https://bvps-school.vercel.app/facilities" />
-        <meta property="og:title" content="School Facilities — Bal Vikas Public School Kalayat" />
-        <meta property="og:description" content="Modern amenities — library, computer lab, smart classes, playground, CCTV security, RO water. Campus built for holistic learning." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp" />
+        <meta property="og:title" content="School Facilities â€” Bal Vikas Public School Kalayat" />
+        <meta property="og:description" content="Modern amenities â€” library, computer lab, smart classes, playground, CCTV security, RO water. Campus built for holistic learning." />
+        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
         <meta property="og:url" content="https://bvps-school.vercel.app/facilities" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="School Facilities — Bal Vikas Public School Kalayat" />
+        <meta name="twitter:title" content="School Facilities â€” Bal Vikas Public School Kalayat" />
         <meta name="twitter:description" content="Modern campus amenities for holistic learning in Kalayat." />
       </Helmet>
       {/* Page Header */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
-        <img src={mainCampusImg} alt="BVPS Campus" className="absolute inset-0 w-full h-full object-cover object-center brightness-105 contrast-105" />
+        <img src={mainCampusImg} alt="Bal Vikas Public School campus building, Railway Road, Kalayat, Haryana" className="absolute inset-0 w-full h-full object-cover object-center brightness-105 contrast-105" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/50 to-primary/80" />
         <div className="container mx-auto text-center relative z-10">
           <ScrollReveal>

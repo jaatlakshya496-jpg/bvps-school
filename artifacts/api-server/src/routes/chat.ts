@@ -3,7 +3,10 @@ import { Router, type IRouter } from "express";
 const router: IRouter = Router();
 
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
-const GROQ_MODEL = "openai/gpt-oss-20b";
+// Ek model band ho toh doosra try hota hai — Groq kabhi-kabhi model retire
+// kar deta hai, usse chatbot poora down nahi hona chahiye.
+const GROQ_MODELS = ["openai/gpt-oss-20b", "llama-3.3-70b-versatile"];
+const GROQ_TIMEOUT_MS = 25_000;
 const MAX_MESSAGE_LENGTH = 2000;
 const MAX_HISTORY_MESSAGES = 12;
 
@@ -112,46 +115,61 @@ router.post("/chat", async (req, res) => {
   }
 
   try {
-    const groqResponse = await fetch(GROQ_URL, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: GROQ_MODEL,
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          ...history,
-          { role: "user", content: message },
-        ],
-        temperature: 0.35,
-        max_tokens: 280,
-      }),
-    });
+    const groqMessages = [
+      { role: "system", content: SYSTEM_PROMPT },
+      ...history,
+      { role: "user", content: message },
+    ];
 
-    if (!groqResponse.ok) {
-      const providerBody = await groqResponse.text();
-      console.error("Groq chat request failed", {
-        status: groqResponse.status,
-        body: providerBody.slice(0, 500),
-      });
+    let reply = "";
+    let lastError = "no model available";
+
+    for (const model of GROQ_MODELS) {
+      try {
+        const groqResponse = await fetch(GROQ_URL, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          signal: AbortSignal.timeout(GROQ_TIMEOUT_MS),
+          body: JSON.stringify({
+            model,
+            messages: groqMessages,
+            temperature: 0.35,
+            max_tokens: 280,
+          }),
+        });
+
+        if (!groqResponse.ok) {
+          const providerBody = await groqResponse.text();
+          console.error("Groq chat request failed", {
+            model,
+            status: groqResponse.status,
+            body: providerBody.slice(0, 500),
+          });
+          lastError = `${model} -> ${groqResponse.status}`;
+          continue;
+        }
+
+        const payload = (await groqResponse.json()) as {
+          choices?: Array<{ message?: { content?: string } }>;
+        };
+        reply = payload.choices?.[0]?.message?.content?.trim() ?? "";
+        if (reply) break;
+
+        lastError = `${model} -> empty reply`;
+      } catch (error) {
+        console.error("Groq request threw", { model, error });
+        lastError = `${model} -> ${(error as Error)?.message ?? "network error"}`;
+      }
+    }
+
+    if (!reply) {
+      console.error("No Groq model produced a reply", { lastError });
       return res.status(502).json({
         error:
           "I’m having trouble reaching the school assistant right now. Please call the school office at +91 98125 50200.",
-      });
-    }
-
-    const payload = (await groqResponse.json()) as {
-      choices?: Array<{ message?: { content?: string } }>;
-    };
-    const reply = payload.choices?.[0]?.message?.content?.trim();
-
-    if (!reply) {
-      console.error("Groq returned no assistant message");
-      return res.status(502).json({
-        error:
-          "I couldn’t prepare an answer just now. Please call the school office at +91 98125 50200.",
       });
     }
 

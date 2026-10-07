@@ -1,10 +1,40 @@
-import { Link } from 'wouter';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation } from 'wouter';
 import { MapPin, Phone, Mail, Clock, GraduationCap, Info } from 'lucide-react';
 import schoolLogo from '@/assets/school-logo-kalayat.webp';
 
+const ADMIN_TAPS_NEEDED = 5;
+
 export function Footer() {
+  const [, navigate] = useLocation();
+  const [logoTaps, setLogoTaps] = useState(0);
+  const [showAdminHint, setShowAdminHint] = useState(false);
+  const resetTimer = useRef<number | null>(null);
+
+  // Admin portal website par link se nahi dikhaya jaata (private rahe). Mobile par
+  // owner ko wahi se khulna hota hai — isliye footer logo par 5 baar tap karne
+  // par /admin khul jata hai. Link + ?admin=1 dono chalte hain.
+  useEffect(() => {
+    if (logoTaps === 0) return;
+    if (logoTaps >= ADMIN_TAPS_NEEDED) {
+      navigate('/admin');
+      setLogoTaps(0);
+      setShowAdminHint(false);
+      return;
+    }
+    setShowAdminHint(true);
+    if (resetTimer.current) window.clearTimeout(resetTimer.current);
+    resetTimer.current = window.setTimeout(() => {
+      setLogoTaps(0);
+      setShowAdminHint(false);
+    }, 1500);
+    return () => {
+      if (resetTimer.current) window.clearTimeout(resetTimer.current);
+    };
+  }, [logoTaps, navigate]);
+
   return (
-    <footer className="bg-primary text-primary-foreground pt-16 pb-8 border-t-[8px] border-secondary">
+    <footer aria-label="Site footer" className="bg-primary text-primary-foreground pt-16 pb-8 border-t-[8px] border-secondary">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
           
@@ -101,7 +131,7 @@ export function Footer() {
               </li>
               <li className="flex items-center gap-3 text-sm text-primary-foreground/80">
                 <Mail className="w-5 h-5 text-secondary shrink-0" />
-                <a href="mailto:info@bvpskalayat.edu" className="hover:text-secondary transition-colors">info@bvpskalayat.edu</a>
+                <a href="mailto:info@bvpskalayat.edu.in" className="hover:text-secondary transition-colors">info@bvpskalayat.edu.in</a>
               </li>
             </ul>
           </div>
@@ -132,9 +162,20 @@ export function Footer() {
         </div>
 
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-primary-foreground/60 text-sm text-center md:text-left">
+          {/* Copyright line par hidden admin access: 5 tap. Website links se admin
+              portal public nahi dikhta, par mobile par owner usi se khol sakta hai. */}
+          <button
+            type="button"
+            onClick={() => setLogoTaps((count) => count + 1)}
+            className="text-primary-foreground/60 text-sm text-center md:text-left hover:text-secondary transition-colors"
+          >
             © {new Date().getFullYear()} Bal Vikas Public School, Kalayat. All rights reserved.
-          </p>
+            {showAdminHint && (
+              <span className="block text-[11px] text-secondary mt-1">
+                Admin portal kholne ke liye {ADMIN_TAPS_NEEDED - logoTaps} aur tap karein…
+              </span>
+            )}
+          </button>
           <p className="text-primary-foreground/60 text-sm text-center md:text-right">
             Affiliated to BSEH | Est. 2004 | School Code: 06050300920
           </p>

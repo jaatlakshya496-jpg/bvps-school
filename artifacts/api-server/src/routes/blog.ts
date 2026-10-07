@@ -10,7 +10,8 @@ const blogPostSchema = z.object({
 	slug: z.string().min(1).max(200).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug me sirf lowercase letters, numbers aur hyphens ho sakte hain"),
 	excerpt: z.string().max(500).default(""),
 	content: z.string().min(1),
-	coverImage: z.string().max(2000).default(""),
+	// Upload se aaya hua image data URL (base64) — isliye limit badi rakhi hai.
+	coverImage: z.string().max(7_000_000).default(""),
 	category: z.string().max(100).default("General"),
 	status: z.enum(["published", "draft"]).default("published"),
 	author: z.string().max(100).default("BVPS"),

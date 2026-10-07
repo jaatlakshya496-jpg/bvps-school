@@ -26,10 +26,23 @@ export default function Blog() {
       <Helmet>
         <title>Blog &amp; News — Bal Vikas Public School Kalayat</title>
         <meta name="description" content="Latest blog posts, news, updates and announcements from Bal Vikas Public School, Kalayat." />
+        {/* Ye page pehle sirf title/description set karta tha — react-helmet-async
+            pichle page ke og/twitter tags hata deta tha, isliye koi bhi blog link
+            share karne par homepage ka preview aa raha tha. */}
+        <link rel="canonical" href="https://bvps-school.vercel.app/blog" />
+        <meta property="og:title" content="Blog &amp; News — Bal Vikas Public School Kalayat" />
+        <meta property="og:description" content="Latest blog posts, news, updates and announcements from Bal Vikas Public School, Kalayat." />
+        <meta property="og:url" content="https://bvps-school.vercel.app/blog" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Blog &amp; News — Bal Vikas Public School Kalayat" />
+        <meta name="twitter:description" content="Latest blog posts, news, updates and announcements from Bal Vikas Public School, Kalayat." />
+        <meta name="twitter:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
       </Helmet>
 
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
-        <img src={heroImg} alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
+        <img src={heroImg} alt="Bal Vikas Public School campus building, Railway Road, Kalayat, Haryana" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/40 to-primary/60" />
         <div className="container mx-auto text-center relative z-10">
           <ScrollReveal>

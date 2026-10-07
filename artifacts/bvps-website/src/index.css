@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@300..900&display=swap');
+/* Google Fonts ab index.html se <link rel="stylesheet"> + preconnect se load hote
+   hain. Yahan CSS @import ek extra render-blocking round-trip tha (HTML -> CSS
+   bundle -> Google Fonts CSS -> woff2). */
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @plugin "@tailwindcss/typography";
