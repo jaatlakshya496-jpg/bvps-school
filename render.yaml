@@ -29,3 +29,8 @@ services:
         sync: false
       - key: GROQ_API_KEY
         sync: false
+      # Website ke har form (contact/admission/feedback/principal) ka alert
+      # owner ke WhatsApp par bhejne ke liye. Key sirf usi phone se milti hai
+      # jo CallMeBot ko "I allow callmebot to send me messages" bhejta hai.
+      - key: CALLMEBOT_APIKEY
+        sync: false

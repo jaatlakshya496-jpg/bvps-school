@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Star, CheckCircle2 } from 'lucide-react';
+import { Star, CheckCircle2, MessageCircle } from 'lucide-react';
 import { apiPost } from '@/lib/api';
 import { PageSeo } from '@/lib/seo';
 import { useSiteContent } from '@/lib/site-content';
@@ -77,6 +77,7 @@ export default function Feedback() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -94,7 +95,7 @@ export default function Feedback() {
     setIsLoading(true);
     setError(null);
     try {
-      await apiPost('/feedback', {
+      const res: any = await apiPost('/feedback', {
         name: values.name,
         email: values.email,
         role: values.role,
@@ -102,6 +103,7 @@ export default function Feedback() {
         message: values.feedback,
         rating: values.rating,
       });
+      setWhatsappUrl(res?.whatsappUrl || null);
       setIsSubmitted(true);
       form.reset();
     } catch (err: any) {
@@ -146,6 +148,16 @@ export default function Feedback() {
                   <p className="text-muted-foreground max-w-sm">
                     Your feedback has been received. We appreciate you taking the time to share your experience with us.
                   </p>
+                  {whatsappUrl && (
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-green-700 hover:text-green-800 underline-offset-2 hover:underline"
+                    >
+                      <MessageCircle className="w-4 h-4" /> Send the same feedback on WhatsApp
+                    </a>
+                  )}
                   <Button
                     className="mt-8 bg-primary hover:bg-primary/90 text-white rounded-full px-8"
                     onClick={() => setIsSubmitted(false)}

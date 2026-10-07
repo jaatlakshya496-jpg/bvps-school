@@ -2,7 +2,7 @@ import { Router, type Request, type Response } from "express";
 import { db } from "@workspace/db";
 import { feedbackSubmissionsTable } from "@workspace/db";
 import { z } from "zod";
-import { notify, type Notification } from "../lib/notify";
+import { notify, whatsAppClickLink, type Notification } from "../lib/notify";
 
 const router = Router();
 
@@ -50,13 +50,14 @@ router.post("/", async (req: Request, res: Response) => {
 		};
 
 		const { emailSent, whatsappSent } = await notify(notification);
+		const whatsappUrl = whatsAppClickLink(notification);
 
 		if (!savedToDb && !emailSent && !whatsappSent) {
 			res.status(500).json({ success: false, error: "Failed to save feedback" });
 			return;
 		}
 
-		res.status(201).json({ success: true, message: "Feedback saved", savedToDb, emailSent, whatsappSent });
+		res.status(201).json({ success: true, message: "Feedback saved", savedToDb, emailSent, whatsappSent, whatsappUrl });
 	} catch (err: any) {
 		if (err instanceof z.ZodError) {
 			res.status(400).json({ success: false, error: err.errors });

@@ -133,10 +133,21 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - ✅ Verify: `npm run lint` clean · `npm run build` OK (17 shells + 404 + sitemap, lastmod 2026-10-07) · api-server esbuild bundle OK · local `/health` 200, `/api/content` → `{"data":{}}` (DB down par bhi), `/api/content/admin` bina key ke 500 "Admin not configured" (local me `ADMIN_SECRET` nahi — Render par configured hai) · **live Render `POST /api/chat` → 200** (Groq reply aaya) · `dist/fee-structure/index.html` me title "Fee Structure 2026–27" + canonical/og:url/og:image:alt/twitter:card sab present.
   - ⚠️ Render par pehla deploy `POST /api/content` 404 dega jab tak naya build deploy na ho (auto-deploy on push).
 
+- **[2026-10-07]** 📲 **Website ke har message ko owner ke WhatsApp par bhejne ka rasta ready kiya (CallMeBot):**
+  - **Code pehle se ready tha** — saare 4 forms (`contact-email.ts`, `admission.ts`, `feedback.ts`, `principal-messages.ts`) `notify()` call karte hain jo `sendEmail()` (FormSubmit) + `sendWhatsApp()` (CallMeBot) chalata hai. `sendWhatsApp()` tabhi chalta hai jab `CALLMEBOT_APIKEY` env set ho — ab tak tha hi nahi, isliye chup chap skip ho raha tha.
+  - **Changes:** `notify.ts` me key na hone par ek baar Render log me warning; `feedback.ts` ab `whatsappUrl` bhi return karta hai (baaki 3 pehle se dete the); `feedback.tsx` aur `application.tsx` ke success card me "Send … on WhatsApp" fallback button add kiya (contact + principal me pehle se tha); `render.yaml` me `CALLMEBOT_APIKEY: sync: false` document kiya.
+  - **⚠️ Activation user ko khud karna hai (main nahi kar sakta — uske phone se ek message jaana hai):**
+    1. `https://www.callmebot.com/?ae_global_templates=setup-whatsapp` par jaakar latest bot number save karein (page ke hisaab se +34 684 72 39 62 / alag-alag time par alag number).
+    2. Us number par WhatsApp se ye text bhejein (bilkul same): `I allow callmebot to send me messages`
+    3. 2 minute me bot reply karega: `API Activated for your phone number. Your APIKEY is <XXXX>` — wahi key chahiye. (24 ghante me na aaye toh dobara try karein.)
+    4. Key deni → **Render dashboard → bvps-api → Environment → `CALLMEBOT_APIKEY` add + Deploy** (ya Render API se). Uske baad har form submit par message owner ke **+91 9671772205** par automatic aayega.
+  - **Note:** CallMeBot free API **personal use** ke liye hai aur key usi phone se activate hoti hai jis number par message aane hain — isliye key sirf admin ke hi number se banani hai. Message fail hone par site par hamesha `whatsappUrl` (manual wa.me link) dikhta rehta hai + DB me enquiry safe rehti hai.
+  - ✅ Verify: `npm run lint` clean · `npm run build` (17 shells) OK · api-server bundle OK.
+
 ## To-Do Notes
 - ⭐ **Chatbot ab "hamesha working":** Render API fail/lag par bhi website ka local knowledge base (`src/lib/school-kb.ts`) jawab de deta hai — user ko dead-end "unavailable" message nahi milta. Server theek ho jaye toh Groq wala reply aata hai. Offline reply me Retry + Call office buttons aate hain.
 - ⚠️ **`GROQ_API_KEY`** — set ho chuka hai ✅ (chatbot live).
-- ⚠️ **CallMeBot activation** — abhi zaroorat nahi (email primary channel hai); WhatsApp chahiye to activate karna hoga.
+- ⚠️ **CallMeBot activation (ABHI SABSE ZAROORI)** — user ne CallMeBot chun liya; code ready hai, sirf `CALLMEBOT_APIKEY` chahiye. Steps upar [2026-10-07] entry me hain: CallMeBot number ko WhatsApp par `I allow callmebot to send me messages` bhejo → key milti hai → Render me `CALLMEBOT_APIKEY` set + Deploy. Uske baad website ke saare messages +91 9671772205 par automatic aayenge. Key milte hi ek test message bhej kar verify karna hai.
 - ⚠️ **FormSubmit activation** — jaatlakshya496@gmail.com par FormSubmit ka "Activate Form" email aaya hai; uska link click karna baaki hai. Iske bina email nahi jayega (`emailSent: false` rahega).
 - ⚠️ **naya Gmail app password** abhi bhi rotate karna hai (purana compromised tha; Render free par SMTP block hai isliye abhi zaroorat nahi, par rotate kar lo).
 - ⚠️ Render API key (`rnd_fj9gv5IMZwG2RhiuCnS2w3pzBZuJ`) user ne chat mein share ki thi — kaam khatam hone ke baad revoke kar dena (Render → Account Settings → API Keys → Revoke).

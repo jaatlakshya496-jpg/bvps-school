@@ -42,10 +42,19 @@ export async function sendEmail(n: Notification): Promise<boolean> {
 	}
 }
 
+let warnedMissingKey = false;
+
 export async function sendWhatsApp(n: Notification): Promise<boolean> {
 	const apikey = process.env.CALLMEBOT_APIKEY;
 	if (!apikey) {
-		// CallMeBot activate nahi hai - chup chap skip (WhatsApp link UI me already milta hai)
+		if (!warnedMissingKey) {
+			warnedMissingKey = true;
+			// Render logs me ek baar dikh jayega - warna pata hi nahi chalega ki
+			// WhatsApp alerts band hain.
+			console.warn(
+				"notify: CALLMEBOT_APIKEY set nahi hai - WhatsApp alerts disabled (message sirf DB/email tak jayega)",
+			);
+		}
 		return false;
 	}
 
