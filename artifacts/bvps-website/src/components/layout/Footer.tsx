@@ -2,11 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { MapPin, Phone, Mail, Clock, GraduationCap, Info } from 'lucide-react';
 import schoolLogo from '@/assets/school-logo-kalayat.webp';
+import { useSiteContent } from '@/lib/site-content';
 
 const ADMIN_TAPS_NEEDED = 5;
 
 export function Footer() {
   const [, navigate] = useLocation();
+  const { get } = useSiteContent();
   const [logoTaps, setLogoTaps] = useState(0);
   const [showAdminHint, setShowAdminHint] = useState(false);
   const resetTimer = useRef<number | null>(null);
@@ -99,14 +101,14 @@ export function Footer() {
                 <Info className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
                 <div>
                   <p className="font-medium text-white mb-1">Year of Establishment</p>
-                  <p>2004</p>
+                  <p>{get('site.established')}</p>
                 </div>
               </li>
               <li className="flex items-start gap-3 text-sm text-primary-foreground/80">
                 <Info className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
                 <div>
                   <p className="font-medium text-white mb-1">School Code</p>
-                  <p>06050300920</p>
+                  <p>{get('site.schoolCode')}</p>
                 </div>
               </li>
             </ul>
@@ -120,18 +122,18 @@ export function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start gap-3 text-sm text-primary-foreground/80">
                 <MapPin className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
-                <span>Railway Road, Kalayat,<br />District Kaithal, Haryana – 136117</span>
+                <span>{get('site.address')}</span>
               </li>
               <li className="flex items-center gap-3 text-sm text-primary-foreground/80">
                 <Phone className="w-5 h-5 text-secondary shrink-0" />
                 <div className="flex flex-col gap-0.5">
-                  <a href="tel:+919812550200" className="hover:text-secondary transition-colors">+91 98125 50200</a>
-                  <a href="tel:+919812550202" className="hover:text-secondary transition-colors">+91 98125 50202</a>
+                  <a href={`tel:${get('site.phone1').replace(/[^+\d]/g, '')}`} className="hover:text-secondary transition-colors">{get('site.phone1')}</a>
+                  <a href={`tel:${get('site.phone2').replace(/[^+\d]/g, '')}`} className="hover:text-secondary transition-colors">{get('site.phone2')}</a>
                 </div>
               </li>
               <li className="flex items-center gap-3 text-sm text-primary-foreground/80">
                 <Mail className="w-5 h-5 text-secondary shrink-0" />
-                <a href="mailto:info@bvpskalayat.edu.in" className="hover:text-secondary transition-colors">info@bvpskalayat.edu.in</a>
+                <a href={`mailto:${get('site.emailGeneral')}`} className="hover:text-secondary transition-colors">{get('site.emailGeneral')}</a>
               </li>
             </ul>
           </div>
@@ -145,15 +147,15 @@ export function Footer() {
               <li className="flex items-start gap-3 text-sm text-primary-foreground/80">
                 <Clock className="w-5 h-5 text-secondary shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-medium text-white mb-1">Monday - Saturday</p>
-                  <p>8:00 AM – 3:00 PM</p>
+                  <p className="font-medium text-white mb-1">School Days</p>
+                  <p>{get('site.hoursWeek')}</p>
                 </div>
               </li>
               <li className="flex items-start gap-3 text-sm text-primary-foreground/80">
                 <Clock className="w-5 h-5 text-primary-foreground/40 shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-medium text-primary-foreground/60 mb-1">Sunday</p>
-                  <p className="text-primary-foreground/60">Closed</p>
+                  <p className="font-medium text-primary-foreground/60 mb-1">Weekly Off</p>
+                  <p className="text-primary-foreground/60">{get('site.hoursSunday')}</p>
                 </div>
               </li>
             </ul>

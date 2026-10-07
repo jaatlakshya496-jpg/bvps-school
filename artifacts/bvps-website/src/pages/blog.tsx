@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Link } from 'wouter';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Newspaper, ArrowLeft, ArrowRight, Calendar, Tag, Loader2 } from 'lucide-react';
+import { PageSeo } from '@/lib/seo';
+import { useSiteContent } from '@/lib/site-content';
 import { apiGet } from '@/lib/api';
 import type { BlogPost } from '@/pages/admin/types';
 import { formatDate } from '@/pages/admin/types';
@@ -11,6 +12,7 @@ import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6
 export default function Blog() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const { get } = useSiteContent();
 
   useEffect(() => {
     let active = true;
@@ -23,23 +25,10 @@ export default function Blog() {
 
   return (
     <div className="flex flex-col">
-      <Helmet>
-        <title>Blog &amp; News — Bal Vikas Public School Kalayat</title>
-        <meta name="description" content="Latest blog posts, news, updates and announcements from Bal Vikas Public School, Kalayat." />
-        {/* Ye page pehle sirf title/description set karta tha — react-helmet-async
-            pichle page ke og/twitter tags hata deta tha, isliye koi bhi blog link
-            share karne par homepage ka preview aa raha tha. */}
-        <link rel="canonical" href="https://bvps-school.vercel.app/blog" />
-        <meta property="og:title" content="Blog &amp; News — Bal Vikas Public School Kalayat" />
-        <meta property="og:description" content="Latest blog posts, news, updates and announcements from Bal Vikas Public School, Kalayat." />
-        <meta property="og:url" content="https://bvps-school.vercel.app/blog" />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Blog &amp; News — Bal Vikas Public School Kalayat" />
-        <meta name="twitter:description" content="Latest blog posts, news, updates and announcements from Bal Vikas Public School, Kalayat." />
-        <meta name="twitter:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
-      </Helmet>
+      {/* SEO tags ab central PageSeo se (lib/seo.tsx) — react-helmet-async
+          pichle page ke og/twitter tags hata deta tha, isliye pehle ye page
+          poora og/twitter block khud likhta tha. */}
+      <PageSeo path="/blog" />
 
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
         <img src={heroImg} alt="Bal Vikas Public School campus building, Railway Road, Kalayat, Haryana" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
@@ -47,10 +36,10 @@ export default function Blog() {
         <div className="container mx-auto text-center relative z-10">
           <ScrollReveal>
             <span className="text-secondary font-semibold uppercase tracking-widest text-sm">News &amp; Updates</span>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4 mt-2">BVPS Blog &amp; News</h1>
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4 mt-2">{get('blog.hero.title', 'BVPS Blog & News')}</h1>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full" />
             <p className="mt-6 text-primary-foreground/80 text-lg max-w-2xl mx-auto">
-              School ki taaza khabarein, events aur updates — ek jagah par.
+              {get('blog.hero.subtitle', 'School ki taaza khabarein, events aur updates — ek jagah par.')}
             </p>
           </ScrollReveal>
           <ScrollReveal>

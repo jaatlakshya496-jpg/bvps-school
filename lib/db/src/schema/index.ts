@@ -103,3 +103,17 @@ export const blogPostsTable = pgTable("blog_posts", {
 export const blogPostInsertSchema = createInsertSchema(blogPostsTable).omit({ id: true, createdAt: true, updatedAt: true });
 export type BlogPostInsert = z.infer<typeof blogPostInsertSchema>;
 export type BlogPost = z.infer<typeof blogPostsTable>;
+
+/**
+ * Website ka editable content — key/value store jo admin portal se edit hota hai.
+ * `value` me JSON string rakha jaata hai (text column, drizzle `jsonb` ke bina
+ * portable), jisse string/number/array sab store ho sake.
+ * Examples: "site.phone1" -> "\"+919812550200\"", "home.hero.title" -> "\"...\"".
+ */
+export const siteContentTable = pgTable("site_content", {
+	key: text("key").primaryKey(),
+	value: text("value").notNull(),
+	updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type SiteContentRow = z.infer<typeof siteContentTable>;

@@ -5,7 +5,8 @@ import { Building2, PhoneCall, CheckCircle2, Info, Video, ArrowLeft, ArrowRight,
 import heroImg from '@assets/principal-ramphal-sharma.webp';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Helmet } from 'react-helmet-async';
+import { PageSeo } from '@/lib/seo';
+import { useSiteContent } from '@/lib/site-content';
 
 const timeSlots = ['9:00 AM – 10:00 AM', '10:00 AM – 11:00 AM', '11:00 AM – 12:00 PM', '12:00 PM – 1:00 PM'];
 
@@ -14,22 +15,11 @@ export default function Interview() {
   const [interviewSlot, setInterviewSlot] = useState('');
   const [interviewMode, setInterviewMode] = useState('');
   const [scheduled, setScheduled] = useState(false);
+  const { get } = useSiteContent();
 
   return (
     <>
-    <Helmet>
-      <title>Interview & Interaction — Bal Vikas Public School Kalayat | Admission Process</title>
-      <meta name="description" content="Bal Vikas Public School Kalayat admission interview process. Learn about interaction modes, what to expect, and how to schedule your friendly interview with our admissions team." />
-      <meta name="keywords" content="Bal Vikas Public School Kalayat, Bal Vikas Public School, admission interview Kalayat, school in Kalayat Haryana, HBSE school Kalayat, admission Bal Vikas Public School Kalayat" />
-      <link rel="canonical" href="https://bvps-school.vercel.app/interview" />
-      <meta property="og:title" content="Interview & Interaction — Bal Vikas Public School Kalayat | Admission Process" />
-      <meta property="og:description" content="Bal Vikas Public School Kalayat admission interview process. Learn about interaction modes, what to expect, and how to schedule your friendly interview." />
-      <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
-      <meta property="og:url" content="https://bvps-school.vercel.app/interview" />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="Interview & Interaction — Bal Vikas Public School Kalayat | Admission Process" />
-      <meta name="twitter:description" content="Bal Vikas Public School Kalayat admission interview process. Learn about interaction modes, what to expect, and how to schedule your friendly interview." />
-    </Helmet>
+    <PageSeo path="/interview" />
     <div className="flex flex-col">
       <div className="bg-primary pt-24 pb-0 px-4 relative overflow-hidden">
         <div className="container mx-auto relative z-10">
@@ -39,10 +29,10 @@ export default function Interview() {
             <div className="flex-1 pb-16 text-center md:text-left">
               <ScrollReveal>
                 <span className="text-secondary font-semibold uppercase tracking-widest text-sm">Admissions</span>
-                <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4 mt-2">Interview &amp; Interaction</h1>
+                <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4 mt-2">{get('interview.hero.title', 'Interview & Interaction')}</h1>
                 <div className="w-24 h-1.5 bg-secondary rounded-full md:mx-0 mx-auto" />
                 <p className="mt-6 text-primary-foreground/80 text-lg max-w-xl">
-                  A brief, friendly interaction with the student and parents — not a test.
+                  {get('interview.hero.subtitle', 'A brief, friendly interaction with the student and parents — not a test.')}
                 </p>
               </ScrollReveal>
               <ScrollReveal>

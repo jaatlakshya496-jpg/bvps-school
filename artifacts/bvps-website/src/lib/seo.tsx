@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import publicRoutes from './public-routes.json';
+import { useSiteContent } from '@/lib/site-content';
 
 /**
  * Central SEO module.
@@ -210,5 +211,50 @@ export function SeoBase() {
 export function SchoolStructuredData() {
   return (
     <script type="application/ld+json">{JSON.stringify(buildSchoolSchema())}</script>
+  );
+}
+
+/**
+ * Har public page ka poora SEO block — title, description, canonical aur
+ * complete `og:*` / `twitter:*` set.
+ *
+ * Pehle ye tags har page apne `<Helmet>` me likhta tha jisme se zyadatar me
+ * `og:url`, `canonical`, `og:image:alt`, `twitter:image` missing the, aur kuch
+ * pages purana "2025-26" session dikha rahe the. Ab ek hi jagah se sab pages
+ * milte hain, aur admin portal → School Information/SEO se title-description
+ * edit kiya ja sakta hai (site_content override).
+ *
+ * `path` public-routes.json me na mile toh null (jaise /blog/:slug ya 404) —
+ * wo page apna dynamic Helmet khud likhta hai.
+ */
+export function PageSeo({ path }: { path: string }) {
+  const { get } = useSiteContent();
+  const route = PUBLIC_ROUTES.find((r) => r.path === path);
+  if (!route) return null;
+
+  const slug = path === '/' ? 'home' : path.replace(/^\//, '');
+  const title = get(`seo.${slug}.title`, route.title);
+  const description = get(`seo.${slug}.description`, route.description);
+  const url = `${SITE_URL}${path}`;
+
+  return (
+    <Helmet>
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+      <link rel="canonical" href={url} />
+
+      <meta property="og:url" content={url} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:image" content={OG_IMAGE} />
+      <meta property="og:image:alt" content={OG_IMAGE_ALT} />
+
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={OG_IMAGE} />
+      <meta name="twitter:image:alt" content={OG_IMAGE_ALT} />
+    </Helmet>
   );
 }

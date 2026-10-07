@@ -2,7 +2,8 @@ import { useState, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { X, ZoomIn, Images, ChevronLeft, ChevronRight } from 'lucide-react';
 import heroSchoolImg from '@assets/bal-vikas-public-school_1784611430239.webp';
-import { Helmet } from 'react-helmet-async';
+import { PageSeo } from '@/lib/seo';
+import { useSiteContent } from '@/lib/site-content';
 
 // All uploaded school photos
 const galleryImages = [
@@ -156,6 +157,7 @@ function GalleryCard({
 }
 
 export default function Gallery() {
+  const { get } = useSiteContent();
   const [activeCategory, setActiveCategory] = useState('All');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
@@ -169,19 +171,7 @@ export default function Gallery() {
 
   return (
         <div>
-      <Helmet>
-        <title>Gallery â€” Bal Vikas Public School Kalayat | School Photos</title>
-        <meta name="description" content="Explore the BVPS Gallery â€” high-definition school photos, campus life, events & achievements, and student moments from Bal Vikas Public School Kalayat." />
-        <meta name="keywords" content="Gallery Bal Vikas Public School Kalayat, school photos, campus life, events achievements, student moments" />
-        <link rel="canonical" href="https://bvps-school.vercel.app/gallery" />
-        <meta property="og:title" content="Gallery â€” Bal Vikas Public School Kalayat | School Photos" />
-        <meta property="og:description" content="Explore the BVPS Gallery â€” high-definition school photos, campus life, events & achievements, and student moments from Bal Vikas Public School Kalayat." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
-        <meta property="og:url" content="https://bvps-school.vercel.app/gallery" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Gallery â€” Bal Vikas Public School Kalayat | School Photos" />
-        <meta name="twitter:description" content="Explore the BVPS Gallery â€” high-definition school photos, campus life, events & achievements, and student moments from Bal Vikas Public School Kalayat." />
-      </Helmet>
+      <PageSeo path="/gallery" />
 
       {/* Editorial Hero */}
       <section className="relative overflow-hidden bg-[#07101f] py-10 text-white md:py-14">
@@ -198,13 +188,13 @@ export default function Gallery() {
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-secondary">The BVPS Archive</span>
             </div>
 <h1 className="font-serif text-5xl font-bold leading-[0.95] tracking-tight text-white md:text-7xl">
-  School Moments
+  {get('gallery.hero.title', 'School Moments')}
   <span className="block bg-gradient-to-r from-orange-400 via-pink-400 to-cyan-300 bg-clip-text text-transparent">
-    at Bal Vikas Public School
+    {get('gallery.hero.name', 'at Bal Vikas Public School')}
   </span>
 </h1>
             <p className="mt-6 max-w-lg text-base leading-relaxed text-white/65 md:text-lg">
-              Explore the people, places and celebrations that make Bal Vikas Public School a special part of Kalayat.
+              {get('gallery.hero.subtitle', 'Explore the people, places and celebrations that make Bal Vikas Public School a special part of Kalayat.')}
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3 text-sm">
               <div className="rounded-full border border-white/15 bg-white/10 px-4 py-2 backdrop-blur-sm">

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Button } from '@/components/ui/button';
 import heroImg from '@assets/generated_images/about-classroom.webp';
@@ -25,6 +24,8 @@ import {
 } from '@/components/ui/select';
 import { Star, CheckCircle2 } from 'lucide-react';
 import { apiPost } from '@/lib/api';
+import { PageSeo } from '@/lib/seo';
+import { useSiteContent } from '@/lib/site-content';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -72,6 +73,7 @@ function StarRating({
 const ratingLabels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
 
 export default function Feedback() {
+  const { get } = useSiteContent();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -111,31 +113,19 @@ export default function Feedback() {
 
   return (
     <div className="flex flex-col">
-      <Helmet>
-        <title>Parent Feedback & Reviews — Bal Vikas Public School Kalayat</title>
-        <meta name="description" content="Share your feedback and read parent reviews about Bal Vikas Public School Kalayat, Kaithal. Your opinion helps us improve quality education and student experience." />
-        <meta name="keywords" content="Bal Vikas Public School feedback, school reviews Kalayat, parent feedback school, BVPS Kalayat reviews" />
-        <link rel="canonical" href="https://bvps-school.vercel.app/feedback" />
-        <meta property="og:title" content="Parent Feedback & Reviews — Bal Vikas Public School Kalayat" />
-        <meta property="og:description" content="Share feedback and read parent reviews about Bal Vikas Public School Kalayat." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
-        <meta property="og:url" content="https://bvps-school.vercel.app/feedback" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Parent Feedback & Reviews — Bal Vikas Public School Kalayat" />
-        <meta name="twitter:description" content="Share feedback about Bal Vikas Public School Kalayat." />
-      </Helmet>
+      <PageSeo path="/feedback" />
       {/* Page Header */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
-        <img src={heroImg} alt="Bal Vikas Public School campus building, Railway Road, Kalayat, Haryana" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
+        <img src={heroImg} alt="Students in classroom at Bal Vikas Public School Kalayat" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/30 to-primary/55" />
         <div className="container mx-auto text-center relative z-10">
           <ScrollReveal>
             <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">
-              Share Your Feedback
+              {get('feedback.hero.title', 'Share Your Feedback')}
             </h1>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full"></div>
             <p className="mt-6 text-primary-foreground/80 text-lg max-w-2xl mx-auto">
-              Your thoughts help us grow. We value feedback from parents, students, and visitors.
+              {get('feedback.hero.subtitle', 'Your thoughts help us grow. We value feedback from parents, students, and visitors.')}
             </p>
           </ScrollReveal>
         </div>

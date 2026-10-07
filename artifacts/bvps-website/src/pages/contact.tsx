@@ -3,7 +3,6 @@ import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Button } from '@/components/ui/button';
 import { MapPin, Phone, Mail, Clock, Send, MessageCircle } from 'lucide-react';
 import heroImg from '@assets/bal-vikas-public-school_1784611430239.webp';
-import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -18,6 +17,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { apiPost } from '@/lib/api';
+import { PageSeo } from '@/lib/seo';
+import { useSiteContent } from '@/lib/site-content';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -28,6 +29,7 @@ const formSchema = z.object({
 });
 
 export default function Contact() {
+  const { get } = useSiteContent();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -62,19 +64,7 @@ export default function Contact() {
 
   return (
     <div className="flex flex-col">
-      <Helmet>
-        <title>Contact Bal Vikas Public School Kalayat | Get in Touch</title>
-        <meta name="description" content="Contact Bal Vikas Public School Kalayat. Get address, phone number (+91 98125 50200), and reach out for admissions, queries, or just to say hello." />
-        <meta name="keywords" content="Contact Bal Vikas Public School Kalayat, school in Kalayat, admissions enquiry, phone number school Kalayat Haryana" />
-        <link rel="canonical" href="https://bvps-school.vercel.app/contact" />
-        <meta property="og:title" content="Contact Bal Vikas Public School Kalayat | Get in Touch" />
-        <meta property="og:description" content="Contact Bal Vikas Public School Kalayat. Get address, phone number, and reach out for admissions, queries, or just to say hello." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
-        <meta property="og:url" content="https://bvps-school.vercel.app/contact" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Contact Bal Vikas Public School Kalayat | Get in Touch" />
-        <meta name="twitter:description" content="Contact Bal Vikas Public School Kalayat. Get address, phone number, and reach out for admissions, queries, or just to say hello." />
-      </Helmet>
+      <PageSeo path="/contact" />
 
       {/* Page Header */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
@@ -82,10 +72,10 @@ export default function Contact() {
         <div className="absolute inset-0 bg-gradient-to-b from-primary/30 to-primary/55" />
         <div className="container mx-auto text-center relative z-10">
           <ScrollReveal>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">Contact Bal Vikas Public School Kalayat</h1>
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">{get('contact.hero.title', 'Contact Bal Vikas Public School Kalayat')}</h1>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full"></div>
             <p className="mt-6 text-primary-foreground/80 text-lg max-w-2xl mx-auto">
-              We're here to help. Reach out to us for admissions, queries, or just to say hello.
+              {get('contact.hero.subtitle', "We're here to help. Reach out to us for admissions, queries, or just to say hello.")}
             </p>
           </ScrollReveal>
         </div>
@@ -109,8 +99,7 @@ export default function Contact() {
                     <div>
                       <h4 className="font-bold text-lg text-foreground mb-1">Our Address</h4>
                       <p className="text-muted-foreground leading-relaxed">
-                        Railway Road, Kalayat,<br />
-                        District Kaithal, Haryana – 136117
+                        {get('site.address')}
                       </p>
                     </div>
                   </div>
@@ -122,7 +111,9 @@ export default function Contact() {
                     <div>
                       <h4 className="font-bold text-lg text-foreground mb-1">Phone</h4>
                       <p className="text-muted-foreground leading-relaxed">
-                        +91 98125 50200
+                        <a href={`tel:${get('site.phone1').replace(/[^+\d]/g, '')}`} className="hover:text-primary">{get('site.phone1')}</a>
+                        <br />
+                        <a href={`tel:${get('site.phone2').replace(/[^+\d]/g, '')}`} className="hover:text-primary">{get('site.phone2')}</a>
                       </p>
                     </div>
                   </div>
@@ -134,8 +125,9 @@ export default function Contact() {
                     <div>
                       <h4 className="font-bold text-lg text-foreground mb-1">School Hours</h4>
                       <p className="text-muted-foreground leading-relaxed">
-                        Monday to Saturday: 8:00 AM – 3:00 PM<br />
-                        Sunday: Closed
+                        {get('site.hoursWeek')}
+                        <br />
+                        {get('site.hoursSunday')}
                       </p>
                     </div>
                   </div>

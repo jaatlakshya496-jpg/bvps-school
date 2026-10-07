@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { LanguageProvider } from '@/lib/language-context';
+import { SiteContentProvider } from '@/lib/site-content';
 import { HelmetProvider } from 'react-helmet-async';
 import NotFound from '@/pages/not-found';
 import { Route, Switch, Router as WouterRouter, useLocation } from 'wouter';
@@ -122,10 +123,14 @@ function App() {
           <HelmetProvider>
             <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
               <AdminShortcut />
-              <Suspense fallback={<RouteFallback />}>
-                <Router />
-              </Suspense>
-              <Toaster />
+              {/* Site content (admin se editable text) — dono public website aur
+                  admin portal iske andar hain, taaki overrides har jagah milen. */}
+              <SiteContentProvider>
+                <Suspense fallback={<RouteFallback />}>
+                  <Router />
+                </Suspense>
+                <Toaster />
+              </SiteContentProvider>
             </WouterRouter>
           </HelmetProvider>
         </TooltipProvider>

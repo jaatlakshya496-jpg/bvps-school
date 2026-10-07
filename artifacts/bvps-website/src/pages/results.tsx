@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Trophy, Medal, Star, Award, Filter, X } from 'lucide-react';
+import { PageSeo } from '@/lib/seo';
+import { useSiteContent } from '@/lib/site-content';
 import heroSchoolImg from '@assets/bal-vikas-public-school_1784611430239.webp';
 
 // â”€â”€ Football photos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -293,6 +294,7 @@ export default function Results() {
   const [sportFilter, setSportFilter] = useState<SportFilter>('All');
   const [levelFilter, setLevelFilter] = useState('All Levels');
   const [selected, setSelected]       = useState<Achievement | null>(null);
+  const { get } = useSiteContent();
 
   const filtered = achievements.filter(a => {
     const sportOk = sportFilter === 'All' || a.sport === sportFilter;
@@ -302,19 +304,7 @@ export default function Results() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Helmet>
-        <title>Results & Achievements â€” Bal Vikas Public School Kalayat</title>
-        <meta name="description" content="Celebrating the results and achievements of Bal Vikas Public School Kalayat â€” district & state champions in karate, football, athletics, wrestling, cricket and academic excellence." />
-        <meta name="keywords" content="Bal Vikas Public School results, school achievements Kalayat, karate champions Kalayat, football winners, district champion school Haryana, BVPS results" />
-        <link rel="canonical" href="https://bvps-school.vercel.app/results" />
-        <meta property="og:title" content="Results & Achievements â€” Bal Vikas Public School Kalayat" />
-        <meta property="og:description" content="District & state champions in sports and academic excellence at BVPS Kalayat." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
-        <meta property="og:url" content="https://bvps-school.vercel.app/results" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Results & Achievements â€” Bal Vikas Public School Kalayat" />
-        <meta name="twitter:description" content="Sports champions and academic excellence at BVPS Kalayat." />
-      </Helmet>
+      <PageSeo path="/results" />
 
       {/* â”€â”€ Hero â”€â”€ */}
       <div className="bg-primary pt-24 pb-20 px-4 relative overflow-hidden">
@@ -336,11 +326,12 @@ export default function Results() {
               <Trophy className="w-4 h-4" /> Hall of Fame
             </div>
             <h1 className="text-5xl md:text-6xl font-serif font-bold text-white mb-4">
-              Our <span className="text-secondary">Achievers</span>
+              {get('results.hero.lead', 'Our')}{' '}
+              <span className="text-secondary">{get('results.hero.name', 'Achievers')}</span>
             </h1>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full" />
             <p className="mt-6 text-primary-foreground/80 text-lg max-w-2xl mx-auto">
-              Celebrating every champion of Bal Vikas Public School â€” Football, Cricket, Karate & Athletics.
+              {get('results.hero.subtitle', 'Celebrating every champion of Bal Vikas Public School â€” Football, Cricket, Karate & Athletics.')}
             </p>
           </ScrollReveal>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 max-w-2xl mx-auto">

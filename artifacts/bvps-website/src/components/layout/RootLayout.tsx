@@ -5,11 +5,16 @@ import { Footer } from './Footer';
 import { WhatsAppButton } from './WhatsAppButton';
 import { ChatbotWidget } from '@/components/chatbot/ChatbotWidget';
 import { SeoBase, SchoolStructuredData } from '@/lib/seo';
+import { useSiteContent } from '@/lib/site-content';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'wouter';
 
 export function RootLayout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
+  const { get } = useSiteContent();
+  // Admin portal → School Information se set hota hai. Khaali ho toh bar hi nahi
+  // dikhta — isliye owner "notice" ko kabhi bhi band kar sakta hai.
+  const announcement = get('site.announcement', '').trim();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -33,6 +38,14 @@ export function RootLayout({ children }: { children: ReactNode }) {
 
       {/* Sticky header: top info bar + navbar together */}
       <div className="sticky top-0 z-50">
+        {announcement && (
+          <div
+            role="status"
+            className="bg-secondary text-primary text-center text-xs sm:text-sm font-semibold px-4 py-2 leading-snug"
+          >
+            {announcement}
+          </div>
+        )}
         <FloatingContact />
         <Navbar />
       </div>

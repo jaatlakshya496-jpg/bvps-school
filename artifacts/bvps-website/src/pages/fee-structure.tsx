@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Link } from 'wouter';
 import { IndianRupee, CheckCircle2, Phone, ArrowLeft, Info, BookOpen, FlaskConical, TrendingUp, Palette, ChevronDown, Copy, Check, QrCode, Smartphone, Lock, X, Save, RotateCcw, Loader2, Pencil } from 'lucide-react';
 import QRCode from 'react-qr-code';
 import { apiGet, apiGetAdmin, apiSend } from '@/lib/api';
+import { PageSeo } from '@/lib/seo';
+import { useSiteContent } from '@/lib/site-content';
 import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
 
 // ── UPI Payment Config ────────────────────────────────────────────────────────
@@ -165,6 +166,7 @@ const upiApps = [
 ];
 
 export default function FeeStructure() {
+  const { get } = useSiteContent();
   const [fees, setFees]                     = useState<FeeConfig>(DEFAULT_FEES);
   const [selectedClass, setSelectedClass]   = useState<string>('Class 1');
   const [copied, setCopied]                 = useState(false);
@@ -311,19 +313,7 @@ export default function FeeStructure() {
 
   return (
     <div className="flex flex-col">
-      <Helmet>
-        <title>Fee Structure 2025–26 — Bal Vikas Public School Kalayat</title>
-        <meta name="description" content="Complete fee structure for Bal Vikas Public School Kalayat — class-wise admission fees, monthly tuition, and easy UPI payment options. Transparent and affordable education." />
-        <meta name="keywords" content="school fee structure Kalayat, Bal Vikas Public School fees, admission fee Kalayat, school fees 2025-26, pay school fee online" />
-        <link rel="canonical" href="https://bvps-school.vercel.app/fee-structure" />
-        <meta property="og:title" content="Fee Structure 2025–26 — Bal Vikas Public School Kalayat" />
-        <meta property="og:description" content="Class-wise fee structure with online UPI payment options. Affordable quality education." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
-        <meta property="og:url" content="https://bvps-school.vercel.app/fee-structure" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Fee Structure 2025–26 — Bal Vikas Public School Kalayat" />
-        <meta name="twitter:description" content="Transparent class-wise fee structure with UPI payment." />
-      </Helmet>
+      <PageSeo path="/fee-structure" />
 
       {/* ── Hero ── */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
@@ -340,10 +330,10 @@ export default function FeeStructure() {
         <div className="container mx-auto text-center relative z-10">
           <ScrollReveal>
             <span className="text-secondary font-semibold uppercase tracking-widest text-sm">Admissions</span>
-            <h1 onClick={handleSecretTap} className="text-4xl md:text-5xl font-serif font-bold text-white mb-4 mt-2 select-none">Fee Structure</h1>
+            <h1 onClick={handleSecretTap} className="text-4xl md:text-5xl font-serif font-bold text-white mb-4 mt-2 select-none">{get('fee.hero.title', 'Fee Structure')}</h1>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full" />
             <p className="mt-6 text-primary-foreground/80 text-lg max-w-2xl mx-auto">
-              Complete, transparent fee details for Class 1 to 12 — Session 2025–26.
+              {get('fee.hero.subtitle', 'Complete, transparent fee details for Class 1 to 12 — Session 2026–27.')}
             </p>
           </ScrollReveal>
           <ScrollReveal>
@@ -367,7 +357,7 @@ export default function FeeStructure() {
                   </div>
                   <div>
                     <h2 className="text-2xl font-serif font-bold text-white">Class 1 – 10 Fee Structure</h2>
-                    <p className="text-primary-foreground/70 text-sm">Session 2025–26</p>
+                    <p className="text-primary-foreground/70 text-sm">Session 2026–27</p>
                   </div>
                 </div>
                 {isOwner && (
@@ -429,7 +419,7 @@ export default function FeeStructure() {
                 </div>
                 <div>
                   <h2 className="text-2xl font-serif font-bold text-black">Class 11 &amp; 12 — Stream-wise Fees</h2>
-                  <p className="text-muted-foreground text-sm">Session 2025–26 · Choose your stream below</p>
+                  <p className="text-muted-foreground text-sm">Session 2026–27 · Choose your stream below</p>
                 </div>
               </div>
 
@@ -571,7 +561,7 @@ export default function FeeStructure() {
                   <div>
                     <p className="text-xs font-bold uppercase tracking-widest text-green-700 mb-1">Admission Fee for {selectedClass}</p>
                     <p className="text-4xl font-serif font-bold text-green-700">₹ {admissionAmt.toLocaleString('en-IN')}</p>
-                    <p className="text-xs text-green-600 mt-1">One-time · Session 2025–26</p>
+                    <p className="text-xs text-green-600 mt-1">One-time · Session 2026–27</p>
                   </div>
                   <div className="w-14 h-14 rounded-full bg-green-200 flex items-center justify-center">
                     <IndianRupee className="w-7 h-7 text-green-700" />

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { PageSeo } from '@/lib/seo';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Link } from 'wouter';
 import { 
@@ -101,19 +101,7 @@ export default function PrincipalMessage() {
 
   return (
     <div className="flex flex-col">
-      <Helmet>
-        <title>Principal's Message — Bal Vikas Public School Kalayat</title>
-        <meta name="description" content="A message from Sh. Ramphal Sharma, Principal & Founder of Bal Vikas Public School Kalayat — our vision for disciplined, value-based quality education and student development." />
-        <meta name="keywords" content="principal message Bal Vikas Public School, principal Kalayat Haryana, Ramphal Sharma, school vision Kalayat, message principal Kalayat" />
-        <link rel="canonical" href="https://bvps-school.vercel.app/principal-message" />
-        <meta property="og:title" content="Principal's Message — Bal Vikas Public School Kalayat" />
-        <meta property="og:description" content="Vision of Sh. Ramphal Sharma, Principal & Founder — value-based quality education in Kalayat." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
-        <meta property="og:url" content="https://bvps-school.vercel.app/principal-message" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Principal's Message — Bal Vikas Public School Kalayat" />
-        <meta name="twitter:description" content="Value-based quality education under the guidance of our principal." />
-      </Helmet>
+      <PageSeo path="/principal-message" />
       {/* ── HEADER BANNER ── */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#F59E0B_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
@@ -498,7 +486,7 @@ export default function PrincipalMessage() {
                             onChange={(e) => setCategory(e.target.value)}
                             className="w-full bg-background border border-border rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all font-medium"
                           >
-                            <option value="Admission Guidance">Admission Guidance &amp; Session 2025-26</option>
+                            <option value="Admission Guidance">Admission Guidance &amp; Session 2026-27</option>
                             <option value="Academic Progress">Student Academic Performance &amp; Guidance</option>
                             <option value="Personal Appointment Request">Request In-Person Meeting with Principal</option>
                             <option value="Discipline & Values">School Discipline &amp; Student Welfare</option>

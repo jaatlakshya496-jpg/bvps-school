@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { Link } from 'wouter';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
+import { PageSeo } from '@/lib/seo';
+import { useSiteContent } from '@/lib/site-content';
 import {
   IndianRupee, Send, MessageSquare, Clock, ClipboardList,
   GraduationCap, Quote, CheckCircle2, Star, ArrowRight,
@@ -108,6 +109,7 @@ export default function Admissions() {
   const [fbRating, setFbRating] = useState(0);
   const [fbMessage, setFbMessage] = useState('');
   const [fbErrors, setFbErrors] = useState<Record<string, string>>({});
+  const { get } = useSiteContent();
 
   useEffect(() => { setFeedbacks(getFeedbacks()); }, []);
 
@@ -128,29 +130,18 @@ export default function Admissions() {
 
   return (
     <div className="flex flex-col">
-      <Helmet>
-        <title>Admissions 2025–26 — Bal Vikas Public School Kalayat | Apply Now</title>
-        <meta name="description" content="Admissions open for classes 1 to 12 at Bal Vikas Public School Kalayat, Kaithal. Simple application process, clear fee structure, and easy enrollment. Apply online today." />
-        <meta name="keywords" content="admissions Kalayat, school admission Bal Vikas Public School, admission 2025-26 Kalayat, admission in Kalayat Haryana, best school admission Kalayat" />
-        <link rel="canonical" href="https://bvps-school.vercel.app/admissions" />
-        <meta property="og:title" content="Admissions 2025–26 — Bal Vikas Public School Kalayat" />
-        <meta property="og:description" content="Admissions open for classes 1 to 12 at Bal Vikas Public School Kalayat. Apply online today." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
-        <meta property="og:url" content="https://bvps-school.vercel.app/admissions" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Admissions 2025–26 — Bal Vikas Public School Kalayat" />
-        <meta name="twitter:description" content="Admissions open for classes 1 to 12 at Bal Vikas Public School Kalayat." />
-      </Helmet>
+      {/* SEO tags ab central PageSeo se (lib/seo.tsx) */}
+      <PageSeo path="/admissions" />
       {/* Header */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
         <img src={heroImg} alt="Bal Vikas Public School campus building, Railway Road, Kalayat, Haryana" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/30 to-primary/55" />
         <div className="container mx-auto text-center relative z-10">
           <ScrollReveal>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">Admissions 2025–26</h1>
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">{get('admissions.hero.title', 'Admissions 2026-27')}</h1>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full" />
             <p className="mt-6 text-primary-foreground/80 text-lg max-w-2xl mx-auto">
-              Join the BVPS family. Admissions open for Classes 1 to 12.
+              {get('admissions.hero.subtitle', 'Join the BVPS family. Admissions open for Classes 1 to 12.')}
             </p>
           </ScrollReveal>
         </div>
@@ -164,7 +155,7 @@ export default function Admissions() {
             <div className="bg-white rounded-3xl p-8 md:p-10 border border-border shadow-sm mb-16">
               <div className="inline-flex items-center gap-3 px-4 py-3 bg-primary/5 rounded-xl text-primary font-medium border border-primary/10 text-sm mb-4">
                 <span className="flex h-2 w-2 rounded-full bg-secondary animate-pulse" />
-                Admissions open for Classes 1 to 12 — Session 2025–26
+                Admissions open for Classes 1 to 12 — Session 2026-27
               </div>
               <h2 className="text-3xl font-serif font-bold text-black mb-3">Start Your Child's Journey With Us</h2>
               <p className="text-muted-foreground leading-relaxed max-w-2xl">

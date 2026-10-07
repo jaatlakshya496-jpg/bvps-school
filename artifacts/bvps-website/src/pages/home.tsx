@@ -2,7 +2,8 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { buildBreadcrumbSchema } from '@/lib/seo';
+import { buildBreadcrumbSchema, PageSeo } from '@/lib/seo';
+import { useSiteContent } from '@/lib/site-content';
 
 // School + WebSite JSON-LD ab RootLayout me mount hai (har page par rehta hai,
 // SPA navigation par bhi survive karta hai). Pehle ye sirf homepage par tha aur
@@ -341,6 +342,7 @@ export default function Home() {
   const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null);
   const [lightboxImg, setLightboxImg] = useState<{ src: string; title: string } | null>(null);
   const { t } = useLanguage();
+  const { get } = useSiteContent();
 
   const changeSlide = useCallback(
     (pick: (prev: number) => number) => {
@@ -387,18 +389,10 @@ export default function Home() {
   return (
     <div className="flex flex-col">
 
+      {/* SEO tags ab central PageSeo se (lib/seo.tsx) — sirf homepage ka
+           breadcrumb JSON-LD yahan apna rahta hai. */}
+      <PageSeo path="/" />
       <Helmet>
-        <title>Bal Vikas Public School Kalayat | Best School in Kalayat Haryana</title>
-        <meta name="description" content="Bal Vikas Public School in Kalayat, Kaithal, Haryana. Co-educational HBSE (BSEH) school for Classes 1 to 12 since 2004, with smart classrooms, 31 classrooms, library, computer lab and a spacious playground. Call +91 98125 50200 for admissions." />
-        <meta name="keywords" content="Bal Vikas Public School Kalayat, Bal Vikas Public School, school in Kalayat, best school in Kalayat Haryana, admission Bal Vikas Public School Kalayat, HBSE school Kalayat" />
-        <link rel="canonical" href="https://bvps-school.vercel.app/" />
-        <meta property="og:title" content="Bal Vikas Public School Kalayat | Best School in Kalayat Haryana" />
-        <meta property="og:description" content="Bal Vikas Public School in Kalayat, Kaithal, Haryana. Co-educational HBSE (BSEH) school for Classes 1 to 12 since 2004, with smart classrooms, 31 classrooms, library, computer lab and a spacious playground. Call +91 98125 50200 for admissions." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
-        <meta property="og:url" content="https://bvps-school.vercel.app/" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Bal Vikas Public School Kalayat | Best School in Kalayat Haryana" />
-        <meta name="twitter:description" content="Bal Vikas Public School in Kalayat, Kaithal, Haryana. Co-educational HBSE (BSEH) school for Classes 1 to 12 since 2004, with smart classrooms, 31 classrooms, library, computer lab and a spacious playground. Call +91 98125 50200 for admissions." />
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
       </Helmet>
       <section className="relative min-h-[600px] overflow-hidden bg-black">
@@ -455,24 +449,27 @@ export default function Home() {
             <div className="flex flex-wrap items-center gap-2 mb-3">
               <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-secondary text-primary font-bold text-xs sm:text-sm shadow-md">
                 <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                Admissions Open 2025–26
+                Admissions Open 2026–27
               </span>
               <span className="inline-flex px-3 py-1 rounded-full bg-black/50 text-amber-300 text-xs font-semibold border border-amber-300/30 backdrop-blur-xs">
-                📍 Kalayat, Kaithal
+                📍 {get('home.hero.badge', 'Kalayat, Kaithal')}
               </span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif font-bold text-white leading-[1.1] mb-2 drop-shadow-md">
-              Welcome to <br />
-              <span className="text-secondary">Bal Vikas Public School</span>
+              {get('home.hero.lead', 'Welcome to')} <br />
+              <span className="text-secondary">{get('home.hero.name', 'Bal Vikas Public School')}</span>
             </h1>
 
             <p className="text-sm sm:text-lg text-amber-200 font-semibold italic mb-3 tracking-wide drop-shadow">
-              “Empowering Young Minds, Building Bright Futures.”
+              “{get('home.hero.tagline', 'Empowering Young Minds, Building Bright Futures.')}”
             </p>
 
             <p className="text-xs sm:text-sm md:text-base text-white/90 mb-6 max-w-2xl leading-relaxed font-normal bg-black/35 backdrop-blur-xs p-3.5 sm:p-4 rounded-2xl border border-white/10 shadow-lg">
-              Bal Vikas Public School mein hum students ko quality education ke saath discipline, confidence aur strong moral values dene par focus karte hain. Hamara goal hai ki har student apni knowledge aur talent ko develop karke future ke liye ready ho.
+              {get(
+                'home.hero.intro',
+                'Bal Vikas Public School mein hum students ko quality education ke saath discipline, confidence aur strong moral values dene par focus karte hain. Hamara goal hai ki har student apni knowledge aur talent ko develop karke future ke liye ready ho.',
+              )}
             </p>
 
             <div className="flex flex-wrap gap-3 sm:gap-4">

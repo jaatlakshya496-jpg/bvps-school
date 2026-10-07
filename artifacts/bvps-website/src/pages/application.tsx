@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Link } from 'wouter';
 import { Link as RouterLink } from 'wouter';
 import { Send, CheckCircle2, Phone, ArrowLeft, User, Briefcase } from 'lucide-react';
+import { PageSeo } from '@/lib/seo';
+import { useSiteContent } from '@/lib/site-content';
 import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -22,6 +23,7 @@ export default function Application() {
     parentName: '', relation: '', mobile: '', email: '',
     address: '', previousSchool: '', message: '',
   });
+  const { get } = useSiteContent();
 
   const showStream = form.classApplying === '11' || form.classApplying === '12';
 
@@ -79,29 +81,18 @@ export default function Application() {
 
   return (
     <div className="flex flex-col">
-      <Helmet>
-        <title>Application Form — Bal Vikas Public School Kalayat | Online Admission</title>
-        <meta name="description" content="Fill the online application form for admission at Bal Vikas Public School Kalayat, Kaithal. Register your admission enquiry for session 2025–26 in just 2 minutes." />
-        <meta name="keywords" content="school application form Kalayat, admission form Bal Vikas Public School, apply online school Kalayat, admission enquiry form, apply now Kalayat school" />
-        <link rel="canonical" href="https://bvps-school.vercel.app/application" />
-        <meta property="og:title" content="Application Form — Bal Vikas Public School Kalayat" />
-        <meta property="og:description" content="Online admission application form for Bal Vikas Public School Kalayat." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
-        <meta property="og:url" content="https://bvps-school.vercel.app/application" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Application Form — Bal Vikas Public School Kalayat" />
-        <meta name="twitter:description" content="Online admission application form for session 2025–26." />
-      </Helmet>
+      {/* SEO tags ab central PageSeo se (lib/seo.tsx) */}
+      <PageSeo path="/application" />
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
         <img src={heroImg} alt="Bal Vikas Public School campus building, Railway Road, Kalayat, Haryana" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/30 to-primary/55" />
         <div className="container mx-auto text-center relative z-10">
           <ScrollReveal>
             <span className="text-secondary font-semibold uppercase tracking-widest text-sm">Admissions</span>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4 mt-2">Application Submission</h1>
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4 mt-2">{get('application.hero.title', 'Application Submission')}</h1>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full" />
             <p className="mt-6 text-primary-foreground/80 text-lg max-w-2xl mx-auto">
-              Fill this form to register your admission enquiry for session 2025–26.
+              {get('application.hero.subtitle', 'Fill this form to register your admission enquiry for session 2026-27.')}
             </p>
           </ScrollReveal>
           <ScrollReveal>

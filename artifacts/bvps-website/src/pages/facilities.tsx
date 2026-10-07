@@ -1,5 +1,6 @@
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
-import { Helmet } from 'react-helmet-async';
+import { PageSeo } from '@/lib/seo';
+import { useSiteContent } from '@/lib/site-content';
 import { 
   BookOpen, 
   Monitor, 
@@ -18,6 +19,7 @@ import schoolBuildingImg from '@assets/Screenshot_20260721_101356_1784611875357.
 import mainCampusImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
 
 export default function Facilities() {
+  const { get } = useSiteContent();
   const facilities = [
     {
       title: 'Rich Library',
@@ -65,29 +67,17 @@ export default function Facilities() {
 
   return (
     <div className="flex flex-col">
-      <Helmet>
-        <title>School Facilities â€” Bal Vikas Public School Kalayat | Modern Campus Amenities</title>
-        <meta name="description" content="Explore facilities at Bal Vikas Public School Kalayat â€” rich library, computer lab, smart classrooms, spacious playground, CCTV security, RO drinking water and more." />
-        <meta name="keywords" content="school facilities Kalayat, Bal Vikas Public School facilities, smart classrooms Kalayat, computer lab school, best school Kalayat Haryana" />
-        <link rel="canonical" href="https://bvps-school.vercel.app/facilities" />
-        <meta property="og:title" content="School Facilities â€” Bal Vikas Public School Kalayat" />
-        <meta property="og:description" content="Modern amenities â€” library, computer lab, smart classes, playground, CCTV security, RO water. Campus built for holistic learning." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
-        <meta property="og:url" content="https://bvps-school.vercel.app/facilities" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="School Facilities â€” Bal Vikas Public School Kalayat" />
-        <meta name="twitter:description" content="Modern campus amenities for holistic learning in Kalayat." />
-      </Helmet>
+      <PageSeo path="/facilities" />
       {/* Page Header */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
         <img src={mainCampusImg} alt="Bal Vikas Public School campus building, Railway Road, Kalayat, Haryana" className="absolute inset-0 w-full h-full object-cover object-center brightness-105 contrast-105" />
         <div className="absolute inset-0 bg-gradient-to-b from-primary/30 via-primary/50 to-primary/80" />
         <div className="container mx-auto text-center relative z-10">
           <ScrollReveal>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">Our Facilities</h1>
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">{get('facilities.hero.title', 'Our Facilities')}</h1>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full"></div>
             <p className="mt-6 text-primary-foreground/90 text-lg max-w-2xl mx-auto font-medium">
-              Modern amenities blending with traditional values to create the perfect learning environment in Kalayat.
+              {get('facilities.hero.subtitle', 'Modern amenities blending with traditional values to create the perfect learning environment in Kalayat.')}
             </p>
           </ScrollReveal>
         </div>
@@ -103,7 +93,7 @@ export default function Facilities() {
                   <div className="h-52 overflow-hidden relative bg-slate-900">
                     <img 
                       src={facility.image} 
-                      alt={facility.title} 
+                      alt={`${facility.title} at Bal Vikas Public School Kalayat`} 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 brightness-105 contrast-105"
                     />
                   </div>

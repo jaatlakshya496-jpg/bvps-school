@@ -1,7 +1,12 @@
+import { useSiteContent } from '@/lib/site-content';
+
 export function WhatsAppButton() {
+  const { get } = useSiteContent();
+  // Admin portal → School Information se badla ja sakta hai (91XXXXXXXXXX format).
+  const number = get('site.whatsappNumber', '919812550200').replace(/\D/g, '');
   return (
     <a
-      href="https://wa.me/919812550200"
+      href={`https://wa.me/${number}`}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"

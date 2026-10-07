@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { BookOpen, Clock, GraduationCap, FlaskConical, Calculator, Globe, Music, Dumbbell, Monitor } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
+import { PageSeo } from '@/lib/seo';
+import { useSiteContent } from '@/lib/site-content';
 
 /* ── Timetable data ──────────────────────────────────── */
 
@@ -103,31 +104,21 @@ const highlights = [
 export default function Academics() {
   const [activeGroup, setActiveGroup] = useState(classGroups[0]);
   const schedule = timetables[activeGroup];
+  const { get } = useSiteContent();
 
   return (
     <div className="flex flex-col">
-      <Helmet>
-        <title>Academics — Bal Vikas Public School Kalayat | HBSE School (BSEH)</title>
-        <meta name="description" content="Academics at Bal Vikas Public School Kalayat — curriculum, subjects, and timetable for Classes 1 to 12 aligned with the HBSE (BSEH) syllabus." />
-        <meta name="keywords" content="Academics Bal Vikas Public School Kalayat, HBSE school Kalayat, curriculum subjects, school in Kalayat Haryana" />
-        <link rel="canonical" href="https://bvps-school.vercel.app/academics" />
-        <meta property="og:title" content="Academics — Bal Vikas Public School Kalayat | HBSE School (BSEH)" />
-        <meta property="og:description" content="Academics at Bal Vikas Public School Kalayat — curriculum, subjects, and timetable for Classes 1 to 12 aligned with the HBSE (BSEH) syllabus." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
-        <meta property="og:url" content="https://bvps-school.vercel.app/academics" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Academics — Bal Vikas Public School Kalayat | HBSE School (BSEH)" />
-        <meta name="twitter:description" content="Academics at Bal Vikas Public School Kalayat — curriculum, subjects, and timetable for Classes 1 to 12 aligned with the HBSE (BSEH) syllabus." />
-      </Helmet>
+      {/* SEO tags ab central PageSeo se (lib/seo.tsx) */}
+      <PageSeo path="/academics" />
 
       {/* Page Header */}
       <div className="bg-primary pt-24 pb-16 px-4">
         <div className="container mx-auto text-center">
           <ScrollReveal>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">Academics — Bal Vikas Public School Kalayat</h1>
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">{get('academics.hero.title', 'Academics — Bal Vikas Public School Kalayat')}</h1>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full" />
             <p className="mt-6 text-primary-foreground/80 text-lg max-w-2xl mx-auto">
-              A structured, well-rounded curriculum designed to nurture every student from Class 1 to 12.
+              {get('academics.hero.subtitle', 'A structured, well-rounded curriculum designed to nurture every student from Class 1 to 12.')}
             </p>
           </ScrollReveal>
         </div>

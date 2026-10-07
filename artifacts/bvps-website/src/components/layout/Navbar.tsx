@@ -191,7 +191,7 @@ export function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
               className="inline-flex w-full items-center justify-center h-11 bg-secondary text-primary hover:bg-secondary/90 font-bold rounded-xl text-sm shadow-xs transition-colors"
             >
-              Apply for Admission 2025–26
+              Apply for Admission 2026–27
             </Link>
             <a
               href="tel:+919812550200"

@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
+import { PageSeo } from '@/lib/seo';
+import { useSiteContent } from '@/lib/site-content';
 import { 
   Target, BookOpen, Clock, Heart, Award, Quote, X, ArrowRight, Flag, 
   Building2, Trophy, Users, ShieldCheck, HeartHandshake, Scale, CheckCircle2, 
@@ -218,6 +219,7 @@ function CountUp({
 export default function About() {
   const [selected, setSelected] = useState<OverviewCard | null>(null);
   const { t } = useLanguage();
+  const { get } = useSiteContent();
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setSelected(null); };
@@ -228,19 +230,8 @@ export default function About() {
   return (
     <div className="flex flex-col">
 
-      <Helmet>
-        <title>About Bal Vikas Public School Kalayat | Admission & School Details</title>
-        <meta name="description" content="About Bal Vikas Public School Kalayat, Kaithal, Haryana. A private co-educational institution offering classes from 1 to 12 since 2004. HBSE affiliated school with focus on values-based education." />
-        <meta name="keywords" content="Bal Vikas Public School Kalayat, Bal Vikas Public School, school in Kalayat Haryana, HBSE school Kalayat, private co-educational school Kalayat" />
-        <link rel="canonical" href="https://bvps-school.vercel.app/about" />
-        <meta property="og:title" content="About Bal Vikas Public School Kalayat | Admission & School Details" />
-        <meta property="og:description" content="About Bal Vikas Public School Kalayat, Kaithal, Haryana. A private co-educational institution offering classes from 1 to 12 since 2004. HBSE affiliated school with focus on values-based education." />
-        <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
-        <meta property="og:url" content="https://bvps-school.vercel.app/about" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="About Bal Vikas Public School Kalayat | Admission & School Details" />
-        <meta name="twitter:description" content="About Bal Vikas Public School Kalayat, Kaithal, Haryana. A private co-educational institution offering classes from 1 to 12 since 2004. HBSE affiliated school with focus on values-based education." />
-      </Helmet>
+      {/* SEO tags ab central PageSeo se (lib/seo.tsx) */}
+      <PageSeo path="/about" />
 
       {/* Page Header */}
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
@@ -248,10 +239,10 @@ export default function About() {
         <div className="absolute inset-0 bg-gradient-to-b from-primary/30 to-primary/55" />
         <div className="container mx-auto text-center relative z-10">
           <ScrollReveal>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">About Bal Vikas Public School Kalayat</h1>
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">{get('about.hero.title', 'About Bal Vikas Public School Kalayat')}</h1>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full"></div>
             <p className="mt-6 text-primary-foreground/80 text-lg max-w-2xl mx-auto">
-              Nurturing minds and shaping futures in Kalayat since 2004.
+              {get('about.hero.subtitle', 'Nurturing minds and shaping futures in Kalayat since 2004.')}
             </p>
           </ScrollReveal>
         </div>
@@ -522,11 +513,15 @@ export default function About() {
                   </div>
                   <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 backdrop-blur-sm">
                     <div className="flex -space-x-2">
-                      {[schoolBuildingImg, studentsImg, schoolEventImg].map((image, i) => (
+                      {[
+                        { src: schoolBuildingImg, alt: 'Bal Vikas Public School building, Kalayat' },
+                        { src: studentsImg, alt: 'BVPS Kalayat students' },
+                        { src: schoolEventImg, alt: 'BVPS school celebration' },
+                      ].map((image, i) => (
                         <img
-                          key={image}
-                          src={image}
-                          alt=""
+                          key={image.src}
+                          src={image.src}
+                          alt={image.alt}
                           className="h-10 w-10 rounded-full border-2 border-[#07101f] object-cover"
                           style={{ zIndex: 3 - i }}
                         />

@@ -9,6 +9,7 @@ import feesRouter from "./fees";
 import blogRouter from "./blog";
 import adminRouter from "./admin";
 import chatRouter from "./chat";
+import contentRouter from "./content";
 
 const router: IRouter = Router();
 
@@ -21,6 +22,7 @@ router.use("/principal-messages", principalMessagesRouter);
 router.use("/fees", feesRouter);
 router.use("/blog", blogRouter);
 router.use("/admin", adminRouter);
+router.use("/content", contentRouter);
 router.use(chatRouter);
 
 export default router;

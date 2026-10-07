@@ -1,25 +1,16 @@
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Link } from 'wouter';
 import { Clock, MapPin, Phone, ArrowLeft, Building2, User, Info } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
+import { PageSeo } from '@/lib/seo';
+import { useSiteContent } from '@/lib/site-content';
 import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
 
 export default function SchoolTiming() {
+  const { get } = useSiteContent();
+
   return (
     <>
-    <Helmet>
-      <title>School Timings & Schedule — Bal Vikas Public School Kalayat | HBSE School</title>
-      <meta name="description" content="Bal Vikas Public School Kalayat school timings and schedule. Office hours, school schedule, and visit guidelines for HBSE-affiliated school in Kalayat, Kaithal, Haryana." />
-      <meta name="keywords" content="Bal Vikas Public School Kalayat, school timings Kalayat, HBSE school Kalayat, school schedule Kalayat Haryana, best school in Kalayat Haryana" />
-      <link rel="canonical" href="https://bvps-school.vercel.app/school-timing" />
-      <meta property="og:title" content="School Timings & Schedule — Bal Vikas Public School Kalayat | HBSE School" />
-      <meta property="og:description" content="Bal Vikas Public School Kalayat school timings and schedule. Office hours, school schedule, and visit guidelines." />
-      <meta property="og:image" content="https://bvps-school.vercel.app/og-bvps.jpg" />
-      <meta property="og:url" content="https://bvps-school.vercel.app/school-timing" />
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content="School Timings & Schedule — Bal Vikas Public School Kalayat | HBSE School" />
-      <meta name="twitter:description" content="Bal Vikas Public School Kalayat school timings and schedule. Office hours, school schedule, and visit guidelines." />
-    </Helmet>
+    <PageSeo path="/school-timing" />
     <div className="flex flex-col">
       <div className="bg-primary pt-24 pb-16 px-4 relative overflow-hidden">
         <img src={heroImg} alt="Bal Vikas Public School campus building, Railway Road, Kalayat, Haryana" className="absolute inset-0 w-full h-full object-cover object-center opacity-100" />
@@ -27,10 +18,10 @@ export default function SchoolTiming() {
         <div className="container mx-auto text-center relative z-10">
           <ScrollReveal>
             <span className="text-secondary font-semibold uppercase tracking-widest text-sm">Admissions</span>
-            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4 mt-2">School Timings</h1>
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4 mt-2">{get('timing.hero.title', 'School Timings')}</h1>
             <div className="w-24 h-1.5 bg-secondary mx-auto rounded-full" />
             <p className="mt-6 text-primary-foreground/80 text-lg max-w-2xl mx-auto">
-              Office hours, school schedule, and visit guidelines.
+              {get('timing.hero.subtitle', 'Office hours, school schedule, and visit guidelines.')}
             </p>
           </ScrollReveal>
           <ScrollReveal>
