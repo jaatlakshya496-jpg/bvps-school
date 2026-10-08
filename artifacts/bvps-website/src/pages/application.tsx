@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Link } from 'wouter';
-import { Send, CheckCircle2, Phone, ArrowLeft, User, Briefcase, MessageCircle } from 'lucide-react';
+import { Send, CheckCircle2, Phone, ArrowLeft, User, Briefcase } from 'lucide-react';
 import { PageSeo } from '@/lib/seo';
 import { useSiteContent } from '@/lib/site-content';
 import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
@@ -17,7 +17,6 @@ export default function Application() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null);
   const [form, setForm] = useState({
     studentName: '', dob: '', gender: '', classApplying: '', stream: '',
     parentName: '', relation: '', mobile: '', email: '',
@@ -64,8 +63,7 @@ export default function Application() {
       previousSchool: form.previousSchool,
       message: form.message,
     })
-      .then((res: any) => {
-        setWhatsappUrl(res?.whatsappUrl || null);
+      .then(() => {
         setSubmitted(true);
         setIsLoading(false);
         setForm({
@@ -116,16 +114,6 @@ export default function Application() {
                   <h3 className="text-2xl font-serif font-bold text-black mb-3">Application Submitted!</h3>
                   <p className="text-muted-foreground mb-2 max-w-md mx-auto">Thank you! Your admission enquiry has been recorded. Our team will contact you within <strong>1–2 working days</strong> on the mobile number provided.</p>
                   <p className="text-sm text-muted-foreground mb-6">For urgent queries: <a href="tel:+919812550200" className="text-primary font-semibold">+91 98125 50200</a></p>
-                  {whatsappUrl && (
-                    <a
-                      href={whatsappUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="mb-4 inline-flex items-center gap-2 text-sm font-semibold text-green-700 hover:text-green-800 underline-offset-2 hover:underline"
-                    >
-                      <MessageCircle className="w-4 h-4" /> Send this application on WhatsApp too
-                    </a>
-                  )}
                   <button onClick={() => setSubmitted(false)} className="inline-flex items-center gap-2 text-primary font-bold text-sm hover:text-secondary transition-colors border border-primary/20 rounded-full px-6 py-2.5">
                     Submit Another Application
                   </button>
