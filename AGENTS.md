@@ -144,10 +144,18 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - **Note:** CallMeBot free API **personal use** ke liye hai aur key usi phone se activate hoti hai jis number par message aane hain — isliye key sirf admin ke hi number se banani hai. Message fail hone par site par hamesha `whatsappUrl` (manual wa.me link) dikhta rehta hai + DB me enquiry safe rehti hai.
   - ✅ Verify: `npm run lint` clean · `npm run build` (17 shells) OK · api-server bundle OK.
 
+- **[2026-10-08]** 📧 **Email ab Resend se — website ke har form ka message owner ke Gmail par aayega:**
+  - **Problem:** FormSubmit activation pending tha isliye `emailSent: false` rehta tha — koi bhi form ka email owner tak nahi ja raha tha.
+  - **Fix (`artifacts/api-server/src/lib/notify.ts`):** `sendEmail()` ab **Resend REST API** (`POST https://api.resend.com/emails`) pehle try karta hai — `RESEND_API_KEY` env set ho toh. HTML formatted email (subject heading amber + lines list) + `reply_to` = visitor ka email. Resend fail/missing ho toh **FormSubmit fallback** (purana code) chalta hai — code path alag functions `sendViaResend()` / `sendViaFormSubmit()` me hain.
+  - **From:** `BVPS Website <onboarding@resend.dev>` (Resend default — account me koi custom domain add nahi, test me `delivered` verify hua). To: `jaatlakshya496@gmail.com`. ⚠️ Resend free tier + bina domain ke Gmail ko delivery confirm hui hai par spam me ja sakti hai; custom domain (`bvpskalayat.edu.in` jaisa) verify kar lo toh better hai.
+  - **Env:** `RESEND_API_KEY` Render (`bvps-school-1`, `srv-dab9vics728c73a2p9lg`) par **API se set kar diya** (PUT `/v1/services/:id/env-vars/RESEND_API_KEY` → 200) + `render.yaml` me `sync: false` document kiya. Key repo me commit **nahi** ki.
+  - Saare 4 forms (`contact-email`, `admission`, `feedback`, `principal-messages`) isi `notify()` se hain — sab par email chalenge.
+  - ✅ Verify: `npm run lint` clean · `npm run build` OK · api-server esbuild bundle OK · **live API test** (`notify.ts` ka naya code path bundle kar ke node se chalaya) → `emailSent = true`, Resend dashboard me `last_event: delivered` (2 test emails).
+
 ## To-Do Notes
 - ⭐ **Chatbot ab "hamesha working":** Render API fail/lag par bhi website ka local knowledge base (`src/lib/school-kb.ts`) jawab de deta hai — user ko dead-end "unavailable" message nahi milta. Server theek ho jaye toh Groq wala reply aata hai. Offline reply me Retry + Call office buttons aate hain.
 - ⚠️ **`GROQ_API_KEY`** — set ho chuka hai ✅ (chatbot live).
 - ⚠️ **CallMeBot activation (ABHI SABSE ZAROORI)** — user ne CallMeBot chun liya; code ready hai, sirf `CALLMEBOT_APIKEY` chahiye. Steps upar [2026-10-07] entry me hain: CallMeBot number ko WhatsApp par `I allow callmebot to send me messages` bhejo → key milti hai → Render me `CALLMEBOT_APIKEY` set + Deploy. Uske baad website ke saare messages +91 9671772205 par automatic aayenge. Key milte hi ek test message bhej kar verify karna hai.
-- ⚠️ **FormSubmit activation** — jaatlakshya496@gmail.com par FormSubmit ka "Activate Form" email aaya hai; uska link click karna baaki hai. Iske bina email nahi jayega (`emailSent: false` rahega).
+- ⚠️ **FormSubmit activation** — jaatlakshya496@gmail.com par FormSubmit ka "Activate Form" email aaya hai; uska link click karna baaki hai. Ab **Resend primary** hai (2026-10-08) — FormSubmit sirf fallback hai, activate kar do toh backup mil jayega.
 - ⚠️ **naya Gmail app password** abhi bhi rotate karna hai (purana compromised tha; Render free par SMTP block hai isliye abhi zaroorat nahi, par rotate kar lo).
 - ⚠️ Render API key (`rnd_fj9gv5IMZwG2RhiuCnS2w3pzBZuJ`) user ne chat mein share ki thi — kaam khatam hone ke baad revoke kar dena (Render → Account Settings → API Keys → Revoke).

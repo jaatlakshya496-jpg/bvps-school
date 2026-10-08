@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Bot, Loader2, MessageCircle, Phone, RotateCcw, Send, Sparkles, X } from "lucide-react";
+import { Bot, Loader2, Phone, RotateCcw, Send, Sparkles, X } from "lucide-react";
 import campusImage from "@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp";
 import studentsImage from "@assets/Screenshot_20260721_101418_1784611875385.webp";
 import facilitiesImage from "@assets/Screenshot_20260721_100254_1784611512184.webp";
+import schoolLogo from "@/assets/school-logo-kalayat.webp";
 import { getLocalAnswer } from "@/lib/school-kb";
 
 type ChatMessage = {
@@ -233,20 +234,26 @@ export function ChatbotWidget() {
     <>
       {isOpen && (
         <section
-          className="fixed inset-x-3 bottom-[5.5rem] left-3 z-[60] flex h-[min(620px,calc(100dvh-9rem))] max-h-[calc(100dvh-9rem)] flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl sm:inset-x-auto sm:left-5 sm:w-[380px]"
+          className="fixed inset-x-0 bottom-0 z-[60] flex h-[min(78dvh,640px)] flex-col overflow-hidden rounded-t-3xl border border-slate-200 bg-white shadow-2xl sm:inset-x-auto sm:bottom-[5.5rem] sm:left-5 sm:h-[min(620px,calc(100dvh-9rem))] sm:max-h-[calc(100dvh-9rem)] sm:w-[380px] sm:rounded-3xl"
           aria-label="BVPS school assistant"
         >
           <header className="flex items-center justify-between gap-2 bg-primary px-4 py-3.5 text-white sm:px-5 sm:py-4">
             <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-secondary text-primary shadow-sm">
-                <Bot className="h-6 w-6" aria-hidden="true" />
+              <div className="relative shrink-0">
+                <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl bg-secondary shadow-sm ring-2 ring-white/20">
+                  <img src={schoolLogo} alt="Bal Vikas Public School logo" className="h-full w-full object-cover" />
+                </div>
+                <span
+                  className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-green-400 ring-2 ring-primary"
+                  aria-hidden="true"
+                />
               </div>
               <div className="min-w-0">
                 <p className="font-serif text-base font-bold leading-tight sm:text-lg">
                   BVPS Assistant
                 </p>
                 <p className="mt-0.5 truncate text-[11px] text-white/70 sm:text-xs">
-                  Bal Vikas Public School, Kalayat
+                  Online · School receptionist
                 </p>
               </div>
             </div>
@@ -265,10 +272,18 @@ export function ChatbotWidget() {
               {messages.map((message, index) => (
                 <div
                   key={`${message.role}-${index}`}
-                  className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+                  className={`flex gap-2 ${message.role === "user" ? "justify-end" : "justify-start"}`}
                 >
+                  {message.role === "assistant" && (
+                    <span
+                      className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-secondary ring-1 ring-primary/10"
+                      aria-hidden="true"
+                    >
+                      <Bot className="h-4 w-4" />
+                    </span>
+                  )}
                   <div
-                    className={`max-w-[88%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${
+                    className={`max-w-[84%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${
                       message.role === "user"
                         ? "rounded-br-md bg-primary text-white"
                         : "rounded-bl-md border border-slate-200 bg-white text-slate-700"
@@ -319,7 +334,13 @@ export function ChatbotWidget() {
               ))}
 
               {isLoading && (
-                <div className="flex justify-start">
+                <div className="flex justify-start gap-2">
+                  <span
+                    className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary text-secondary ring-1 ring-primary/10"
+                    aria-hidden="true"
+                  >
+                    <Bot className="h-4 w-4" />
+                  </span>
                   <div
                     className="flex items-center gap-2 rounded-2xl rounded-bl-md border border-slate-200 bg-white px-4 py-3 text-sm text-slate-500 shadow-sm"
                     aria-label="Assistant is typing"
@@ -352,7 +373,7 @@ export function ChatbotWidget() {
               ))}
             </div>
 
-            <div className="flex items-end gap-2 px-3 pb-3 sm:px-4 sm:pb-4">
+            <div className="flex items-end gap-2 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-4 sm:pb-4">
               <textarea
                 ref={inputRef}
                 value={input}
@@ -382,8 +403,13 @@ export function ChatbotWidget() {
         </section>
       )}
 
-      {/* Launcher — bottom LEFT corner (jaisa pehle tha) */}
-      <div className="fixed bottom-5 left-4 z-[60] flex items-center gap-2 sm:left-5">
+      {/* Launcher — bottom LEFT corner. Mobile par panel khulne ke waqt sheet
+          neeche tak cover kar leti hai, isliye launcher chhup jaata hai. */}
+      <div
+        className={`fixed bottom-5 left-4 z-[60] items-center gap-2 sm:left-5 ${
+          isOpen ? "hidden sm:flex" : "flex"
+        }`}
+      >
         {!isOpen && (
           <span className="hidden rounded-full bg-primary px-3 py-1.5 text-[11px] font-bold text-white shadow-md sm:block">
             Ask BVPS
@@ -402,7 +428,7 @@ export function ChatbotWidget() {
               aria-hidden="true"
             />
           )}
-          {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
+          {isOpen ? <X className="h-6 w-6" /> : <Bot className="h-6 w-6" />}
         </button>
       </div>
 

@@ -34,3 +34,6 @@ services:
       # jo CallMeBot ko "I allow callmebot to send me messages" bhejta hai.
       - key: CALLMEBOT_APIKEY
         sync: false
+      # Resend se owner ko email (FormSubmit fallback rahega).
+      - key: RESEND_API_KEY
+        sync: false
