@@ -162,6 +162,8 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - ✅ **Deploy ho gaya (09-Oct):** commit `1290ebb` push → Render auto-deploy live (`/api/content/images` → 200) + Vercel auto-deploy live (`index-D58sg37K.js` serve ho raha hai). Render `preDeployCommand`/startup migration OK.
   - ⚠️ Vercel CLI se manual `vercel --prod` "Not authorized" deta hai (CLI personal account `jaatlakshya496-7056` ko team `bal-vikas` project par access nahi). Isliye deploy hamesha **git push → GitHub integration auto-deploy** se hi karo.
 
+- **[2026-10-09]** 🔓 **Admin Portal link wapas footer me (public)** — user ne kaha website par admin portal link dikhna chahiye aur wo **Principal Message ke neeche** ho. `Footer.tsx` Quick Links me "🔒 Admin Portal" (`/admin`) link add kiya, bilkul **"Write to Principal" ke neeche** (wahi style, `before:content-['›']`). Ye [2026-09-30] ke "admin private" decision ko override karta hai — ab admin link footer me visible hai (5-tap + `#admin` wale hidden shortcuts bhi abhi bhi chalte hain). Portal khud email+password (`jaatlakshya496@gmail.com` / `LAXYAMALIK`) se protected hai.
+
 ## To-Do Notes
 - ⭐ **Chatbot ab "hamesha working":** Render API fail/lag par bhi website ka local knowledge base (`src/lib/school-kb.ts`) jawab de deta hai — user ko dead-end "unavailable" message nahi milta. Server theek ho jaye toh Groq wala reply aata hai. Offline reply me Retry + Call office buttons aate hain.
 - ⚠️ **`GROQ_API_KEY`** — set ho chuka hai ✅ (chatbot live).

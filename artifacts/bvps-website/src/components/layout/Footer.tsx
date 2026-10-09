@@ -77,6 +77,7 @@ export function Footer() {
                 { name: 'Contact Us', path: '/contact' },
                 { name: "Principal's Desk & Message", path: '/principal-message' },
                 { name: 'Write to Principal', path: '/principal-message#message-form' },
+                { name: '🔒 Admin Portal', path: '/admin' },
                 { name: 'Admission Form', path: '/application' },
               ].map((link) => (
                 <li key={link.path}>
