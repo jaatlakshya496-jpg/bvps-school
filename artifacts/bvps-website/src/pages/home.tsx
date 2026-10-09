@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { buildBreadcrumbSchema, PageSeo } from '@/lib/seo';
 import { useSiteContent } from '@/lib/site-content';
+import { useSiteImages } from '@/lib/site-images';
+import { baseHeroSlides } from '@/lib/hero-data';
 
 // School + WebSite JSON-LD ab RootLayout me mount hai (har page par rehta hai,
 // SPA navigation par bhi survive karta hai). Pehle ye sirf homepage par tha aur
@@ -21,13 +23,8 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '@/lib/language-context';
 
-// High-resolution real BVPS school photos
-import campusHeroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
-import studentsSportsImg from '@assets/Screenshot_20260721_101418_1784611875385.webp';
-import awardsImg from '@assets/Screenshot_20260721_101356_1784611875357.webp';
-import karateChampImg from '@assets/Screenshot_20260721_101612_1784612008888.webp';
-import footballGoldImg from '@assets/Screenshot_20260721_101549_1784612008898.webp';
-import celebrationsImg from '@assets/Screenshot_20260721_101332_1784611875316.webp';
+// High-resolution real BVPS school photos (hero slides) ab `lib/hero-data.ts`
+// me hain — admin portal ka photo editor bhi wahi base list use karta hai.
 
 import libImg from '@assets/Screenshot_20260721_101220_1784611875234.webp';
 import compImg from '@assets/Screenshot_20260721_100132_1784611430446.webp';
@@ -115,40 +112,6 @@ const schoolHighlights = [
     border: 'border-teal-200 hover:border-teal-400',
     bg: 'bg-teal-50/70',
     iconBg: 'bg-teal-600 text-white shadow-teal-600/30',
-  },
-];
-
-// Real BVPS hero images from top high-resolution uploaded photos
-const heroSlides = [
-  {
-    src: campusHeroImg,
-    label: 'Bal Vikas Public School Campus — Kalayat',
-    tag: 'Trusted Since 2004',
-  },
-  {
-    src: studentsSportsImg,
-    label: 'Our Champion Students & Sports Teams',
-    tag: 'District & State Winners',
-  },
-  {
-    src: awardsImg,
-    label: 'Excellence & Annual Prize Distribution Ceremony',
-    tag: 'Merit & Honour',
-  },
-  {
-    src: karateChampImg,
-    label: 'State & District Karate Champions — BVPS Kalayat',
-    tag: 'Discipline & Martial Arts',
-  },
-  {
-    src: footballGoldImg,
-    label: 'District Gold Medalists & Sports Excellence',
-    tag: 'Victory Earned',
-  },
-  {
-    src: celebrationsImg,
-    label: 'Vibrant School Cultural Events & Celebrations',
-    tag: 'Holistic Development',
   },
 ];
 
@@ -343,6 +306,11 @@ export default function Home() {
   const [lightboxImg, setLightboxImg] = useState<{ src: string; title: string } | null>(null);
   const { t } = useLanguage();
   const { get } = useSiteContent();
+  // Admin portal se replace/hide ki gayi hero slides (site-content `image.*` keys)
+  const { getHomeHeroSlides } = useSiteImages();
+  const heroSlides = getHomeHeroSlides(baseHeroSlides);
+  // Slide count admin se kam/badal jaaye toh currentSlide kabhi out-of-range na ho.
+  const activeSlide = heroSlides.length ? currentSlide % heroSlides.length : 0;
 
   const changeSlide = useCallback(
     (pick: (prev: number) => number) => {
@@ -355,13 +323,13 @@ export default function Home() {
     [],
   );
 
-  // Auto-advance hero slides
+  // Auto-advance hero slides (length badle toh interval bhi naya closure le)
   useEffect(() => {
     const timer = setInterval(() => {
       changeSlide((prev) => (prev + 1) % heroSlides.length);
     }, 4500);
     return () => clearInterval(timer);
-  }, [changeSlide]);
+  }, [changeSlide, heroSlides.length]);
 
   // Blur backfill ke transition ke dauran rakhne ke baad hata dete hain, taaki
   // purani slides ka extra `<img>` DOM me na rahe.
@@ -398,7 +366,7 @@ export default function Home() {
       <section className="relative min-h-[600px] overflow-hidden bg-black">
         <AnimatePresence mode="sync">
           <motion.div
-            key={currentSlide}
+            key={activeSlide}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -410,9 +378,9 @@ export default function Home() {
                   Ye sirf pehli slide par render hota hai; baaki slides tabhi add hoti
                   hain jab background blur-transition poori ho jaaye, jisse do slider
                   slide ke ek saath 4 image requests nahi jaati (1.2MB+ per change). */}
-              {(currentSlide === 0 || exitingSlide === currentSlide) && (
+              {(activeSlide === 0 || exitingSlide === activeSlide) && (
                 <img
-                  src={heroSlides[currentSlide].src}
+                  src={heroSlides[activeSlide].src}
                   alt=""
                   aria-hidden
                   className="w-full h-full object-contain blur-2xl brightness-75"
@@ -421,10 +389,10 @@ export default function Home() {
               {/* Sharp full photo — never cropped. Ye page ka LCP element hai, isliye
                   pehli slide par `fetchpriority="high"` + eager (baaki slides lazy). */}
               <img
-                src={heroSlides[currentSlide].src}
-                alt={heroSlides[currentSlide].label}
-                loading={currentSlide === 0 ? 'eager' : 'lazy'}
-                fetchPriority={currentSlide === 0 ? 'high' : 'auto'}
+                src={heroSlides[activeSlide].src}
+                alt={heroSlides[activeSlide].label}
+                loading={activeSlide === 0 ? 'eager' : 'lazy'}
+                fetchPriority={activeSlide === 0 ? 'high' : 'auto'}
                 decoding="async"
                 width={2000}
                 height={1305}
@@ -440,7 +408,7 @@ export default function Home() {
         {/* Hero content */}
         <div className="absolute inset-0 flex flex-col justify-center items-start z-10 container mx-auto px-4 md:px-10">
           <motion.div
-            key={`content-${currentSlide}`}
+            key={`content-${activeSlide}`}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}

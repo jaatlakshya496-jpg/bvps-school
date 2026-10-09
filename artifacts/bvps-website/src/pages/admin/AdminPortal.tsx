@@ -3,7 +3,7 @@ import { useLocation } from 'wouter';
 import { Helmet } from 'react-helmet-async';
 import {
   LayoutDashboard, Newspaper, IndianRupee, MessageSquare, LogOut, ExternalLink,
-  GraduationCap, Mail, Globe2,
+  GraduationCap, Mail, Globe2, Images,
 } from 'lucide-react';
 import { apiGetAdmin } from '@/lib/api';
 import { getAdminToken, getAdminEmail, clearAdminSession } from '@/lib/admin-store';
@@ -14,12 +14,14 @@ import { AdminBlogEditor } from './views/AdminBlogEditor';
 import { AdminFees } from './views/AdminFees';
 import { AdminMessages } from './views/AdminMessages';
 import { AdminSite } from './views/AdminSite';
+import { AdminImages } from './views/AdminImages';
 
-type View = 'dashboard' | 'site' | 'blog' | 'blog-new' | 'blog-edit' | 'fees' | 'messages';
+type View = 'dashboard' | 'site' | 'images' | 'blog' | 'blog-new' | 'blog-edit' | 'fees' | 'messages';
 
 const NAV_ITEMS: { view: View; label: string; icon: typeof LayoutDashboard; path: string }[] = [
   { view: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/admin' },
   { view: 'site', label: 'Website', icon: Globe2, path: '/admin/site' },
+  { view: 'images', label: 'Photos', icon: Images, path: '/admin/images' },
   { view: 'blog', label: 'Blog', icon: Newspaper, path: '/admin/blog' },
   { view: 'fees', label: 'Fee Structure', icon: IndianRupee, path: '/admin/fees' },
   { view: 'messages', label: 'Messages', icon: MessageSquare, path: '/admin/messages' },
@@ -29,6 +31,7 @@ function parseView(pathname: string): View {
   const path = pathname.replace(/^\/admin/, '') || '/';
   if (path === '/' || path === '') return 'dashboard';
   if (path === '/site') return 'site';
+  if (path === '/images') return 'images';
   if (path === '/blog') return 'blog';
   if (path === '/blog/new') return 'blog-new';
   if (/^\/blog\/\d+\/edit$/.test(path)) return 'blog-edit';
@@ -212,6 +215,7 @@ export default function AdminPortal() {
         <main className="flex-1 p-4 sm:p-5 overflow-x-auto">
           {view === 'dashboard' && <AdminDashboard token={token} onExpired={onExpired} />}
           {view === 'site' && <AdminSite token={token} onExpired={onExpired} />}
+          {view === 'images' && <AdminImages token={token} onExpired={onExpired} />}
           {view === 'blog' && <AdminBlog token={token} onExpired={onExpired} />}
           {(view === 'blog-new' || view === 'blog-edit') && (
             <AdminBlogEditor

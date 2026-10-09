@@ -19,6 +19,24 @@ import { requireAdmin } from "../lib/admin-auth";
 
 const KEY_RE = /^[a-zA-Z0-9_.\-/]{1,120}$/;
 const MAX_VALUE_CHARS = 20000;
+// `image.*` keys me photo data URLs hote hain (base64) — unke liye alag bada
+// limit. Baaki text keys chhoti hi rehti hain (AdminSite editor ke liye).
+const IMAGE_KEY_PREFIX = "image.";
+const MAX_IMAGE_VALUE_CHARS = 16_000_000;
+
+function maxCharsFor(key: string): number {
+	return key.startsWith(IMAGE_KEY_PREFIX) ? MAX_IMAGE_VALUE_CHARS : MAX_VALUE_CHARS;
+}
+
+/**
+ * `image.*` keys ko normal content se alag rakha hai:
+ * - Normal GET `/` (har page load par chalta hai) me inhe exclude kiya — warna
+ *   data URLs ki wajah se har page load par MBs download hote.
+ * - Photos (gallery/hero) pages alag `/images` endpoint se inhe lazy load karte hain.
+ */
+function isImageKey(key: string): boolean {
+	return key.startsWith(IMAGE_KEY_PREFIX);
+}
 
 /** DB row -> JS value (JSON parse; galat data par raw string wapas). */
 function decode(raw: string): unknown {
@@ -33,10 +51,29 @@ export async function getContentMap(): Promise<Record<string, unknown>> {
 	try {
 		const rows = await db.select().from(siteContentTable);
 		const out: Record<string, unknown> = {};
-		for (const row of rows) out[row.key] = decode(row.value);
+		for (const row of rows) {
+			if (isImageKey(row.key)) continue;
+			out[row.key] = decode(row.value);
+		}
 		return out;
 	} catch (err) {
 		console.error("site_content read error (using defaults):", err);
+		return {};
+	}
+}
+
+/** Sirf `image.*` keys — photos endpoint ke liye. */
+export async function getImageMap(): Promise<Record<string, unknown>> {
+	try {
+		const rows = await db.select().from(siteContentTable);
+		const out: Record<string, unknown> = {};
+		for (const row of rows) {
+			if (!isImageKey(row.key)) continue;
+			out[row.key] = decode(row.value);
+		}
+		return out;
+	} catch (err) {
+		console.error("site_images read error (using defaults):", err);
 		return {};
 	}
 }
@@ -56,6 +93,13 @@ router.get("/", async (_req: Request, res: Response) => {
 	res.json({ success: true, data });
 });
 
+/** Public — sirf `image.*` keys (gallery/hero photos). Alag endpoint isliye
+ *  ki ye data URLs MBs me ho sakte hain — har page load par inhe bhejna theek nahi. */
+router.get("/images", async (_req: Request, res: Response) => {
+	const data = await getImageMap();
+	res.json({ success: true, data });
+});
+
 /** Admin — keys ke saath updatedAt bhi (UI "last edited" dikhata hai). */
 router.get("/admin", requireAdmin, async (_req: Request, res: Response) => {
 	try {
@@ -63,6 +107,7 @@ router.get("/admin", requireAdmin, async (_req: Request, res: Response) => {
 		const data: Record<string, unknown> = {};
 		const meta: Record<string, string> = {};
 		for (const row of rows) {
+			if (isImageKey(row.key)) continue;
 			data[row.key] = decode(row.value);
 			meta[row.key] = new Date(row.updatedAt).toISOString();
 		}
@@ -84,10 +129,11 @@ router.put("/", requireAdmin, async (req: Request, res: Response) => {
 		}
 		for (const [key, value] of entries) {
 			const encoded = JSON.stringify(value ?? null);
-			if (encoded.length > MAX_VALUE_CHARS) {
+			const limit = maxCharsFor(key);
+			if (encoded.length > limit) {
 				res.status(400).json({
 					success: false,
-					error: `"${key}" ki value bahut badi hai (max ${MAX_VALUE_CHARS} characters).`,
+					error: `"${key}" ki value bahut badi hai (max ${limit} characters).`,
 				});
 				return;
 			}

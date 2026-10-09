@@ -19,7 +19,7 @@ import { useLanguage } from '@/lib/language-context';
 const schoolValues = [
   {
     name: 'Discipline',
-    emoji: 'ðŸ›¡ï¸',
+    emoji: '🛡️',
     icon: ShieldCheck,
     desc: 'Self-control, punctuality, and respect for school rules and social harmony.',
     color: 'from-blue-500 to-indigo-600',
@@ -28,7 +28,7 @@ const schoolValues = [
   },
   {
     name: 'Respect',
-    emoji: 'ðŸ¤',
+    emoji: '🤝',
     icon: HeartHandshake,
     desc: 'Valuing teachers, parents, peers, cultural traditions, and diverse perspectives.',
     color: 'from-emerald-500 to-teal-600',
@@ -37,7 +37,7 @@ const schoolValues = [
   },
   {
     name: 'Honesty',
-    emoji: 'âš–ï¸',
+    emoji: '⚖️',
     icon: Scale,
     desc: 'Upholding truthfulness, high moral integrity, and sincere ethical conduct.',
     color: 'from-amber-500 to-orange-500',
@@ -46,7 +46,7 @@ const schoolValues = [
   },
   {
     name: 'Responsibility',
-    emoji: 'ðŸŽ¯',
+    emoji: '🎯',
     icon: CheckCircle2,
     desc: 'Taking ownership of learning, personal duties, and positive civic contribution.',
     color: 'from-purple-500 to-violet-600',
@@ -55,7 +55,7 @@ const schoolValues = [
   },
   {
     name: 'Hard Work',
-    emoji: 'âš¡',
+    emoji: '⚡',
     icon: Flame,
     desc: 'Relentless effort, focus, resilience, and commitment to academic excellence.',
     color: 'from-rose-500 to-red-600',
@@ -64,7 +64,7 @@ const schoolValues = [
   },
   {
     name: 'Creativity',
-    emoji: 'ðŸŽ¨',
+    emoji: '🎨',
     icon: Palette,
     desc: 'Encouraging curiosity, original thinking, arts, and innovative solutions.',
     color: 'from-fuchsia-500 to-pink-600',
@@ -73,7 +73,7 @@ const schoolValues = [
   },
   {
     name: 'Teamwork',
-    emoji: 'ðŸ‘¥',
+    emoji: '👥',
     icon: Users,
     desc: 'Collaborating enthusiastically, sportsmanship, and lifting each other up.',
     color: 'from-cyan-500 to-blue-600',
@@ -107,7 +107,7 @@ const overviewCards = [
   {
     icon: Clock,
     title: 'School Hours',
-    desc: 'Monâ€“Sat: 8:00 AM â€“ 3:00 PM\nSunday: Closed',
+    desc: 'Mon–Sat: 8:00 AM – 3:00 PM\nSunday: Closed',
     image: campusImg,
     detail: 'School runs six days a week, Monday to Saturday, from 8:00 AM to 3:00 PM. Morning assembly begins the day, building discipline and community spirit.',
   },
@@ -119,7 +119,7 @@ const journeyMilestones = [
   {
     year: '2004',
     title: 'A Vision Takes Root',
-    description: 'Bal Vikas Public School began with a simple promise â€” to bring meaningful, quality education closer to the families of Kalayat.',
+    description: 'Bal Vikas Public School began with a simple promise — to bring meaningful, quality education closer to the families of Kalayat.',
     image: schoolBuildingImg,
     icon: Flag,
     color: 'from-orange-500 to-amber-400',
@@ -133,7 +133,7 @@ const journeyMilestones = [
     color: 'from-cyan-500 to-blue-500',
   },
   {
-    year: 'Classes 1â€“12',
+    year: 'Classes 1–12',
     title: 'A Complete Learning Journey',
     description: 'The school expanded its academic journey from primary years through senior secondary, helping students grow with confidence at every stage.',
     image: studentsImg,
@@ -298,7 +298,7 @@ export default function About() {
                     <p className="text-2xl sm:text-3xl font-serif font-black bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
                       <CountUp value={12} suffix="th" />
                     </p>
-                    <p className="text-[11px] font-bold text-purple-900 uppercase tracking-wider mt-1">Classes 1â€“12</p>
+                    <p className="text-[11px] font-bold text-purple-900 uppercase tracking-wider mt-1">Classes 1–12</p>
                   </div>
                 </div>
               </div>
@@ -332,7 +332,7 @@ export default function About() {
                   <div>
                     <span className="text-xs font-bold uppercase tracking-wider text-amber-700">Direction & Purpose</span>
                     <h3 className="text-2xl sm:text-3xl font-serif font-bold text-slate-900 flex items-center gap-2">
-                      Our Mission ðŸŽ¯
+                      Our Mission 🎯
                     </h3>
                   </div>
                 </div>
@@ -341,7 +341,7 @@ export default function About() {
                 </p>
                 <div className="mt-6 pt-4 border-t border-amber-200/80 flex items-center gap-2 text-xs font-bold text-amber-800">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Quality Learning â€¢ Confidence â€¢ Moral Values</span>
+                  <span>Quality Learning • Confidence • Moral Values</span>
                 </div>
               </div>
             </ScrollReveal>
@@ -356,7 +356,7 @@ export default function About() {
                   <div>
                     <span className="text-xs font-bold uppercase tracking-wider text-secondary">Future Aspiration</span>
                     <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white flex items-center gap-2">
-                      Our Vision ðŸ‘ï¸
+                      Our Vision 👁️
                     </h3>
                   </div>
                 </div>
@@ -365,7 +365,7 @@ export default function About() {
                 </p>
                 <div className="mt-6 pt-4 border-t border-white/15 flex items-center gap-2 text-xs font-bold text-secondary">
                   <Star className="w-4 h-4 fill-secondary" />
-                  <span>Academic Success â€¢ Social Contribution â€¢ Future Leaders</span>
+                  <span>Academic Success • Social Contribution • Future Leaders</span>
                 </div>
               </div>
             </ScrollReveal>
@@ -380,7 +380,7 @@ export default function About() {
                   <span>Ethical Foundation</span>
                 </div>
                 <h2 className="text-3xl sm:text-4xl font-serif font-black text-slate-900 flex items-center justify-center gap-2">
-                  Our Values ðŸŒŸ
+                  Our Values 🌟
                 </h2>
                 <p className="text-sm sm:text-base text-slate-600 mt-2 font-medium">
                   The enduring principles that guide every classroom, sports field, and student at Bal Vikas Public School.
@@ -466,7 +466,7 @@ export default function About() {
                   <Quote className="w-10 h-10 text-secondary/50 mb-2 mx-auto md:mx-0" />
                   
                   <blockquote className="text-white text-lg sm:text-xl md:text-2xl leading-relaxed italic font-serif text-amber-100 font-semibold mb-4">
-                    â€œEvery child has unique potential. Our responsibility is to provide the right guidance, opportunities and environment so that every student can discover and achieve their potential.â€
+                    “Every child has unique potential. Our responsibility is to provide the right guidance, opportunities and environment so that every student can discover and achieve their potential.”
                   </blockquote>
 
                   <p className="text-primary-foreground/80 text-sm leading-relaxed mb-6">
@@ -478,7 +478,7 @@ export default function About() {
                       href="/principal-message#message-form" 
                       className="inline-flex items-center gap-2 bg-secondary text-primary hover:bg-secondary/90 font-bold text-xs sm:text-sm px-6 py-2.5 rounded-full transition-all shadow-md active:scale-95 hover:scale-105"
                     >
-                      Write Directly to Principal â†’
+                      Write Directly to Principal →
                     </a>
                     <a 
                       href="/principal-message" 
@@ -508,7 +508,7 @@ export default function About() {
                     </div>
                     <h2 className="font-serif text-3xl font-bold text-white md:text-5xl">Our Journey</h2>
                     <p className="mt-4 leading-relaxed text-white/65">
-                      From a hopeful beginning to a thriving learning community â€” every chapter of BVPS has been shaped by children, families and teachers moving forward together.
+                      From a hopeful beginning to a thriving learning community — every chapter of BVPS has been shaped by children, families and teachers moving forward together.
                     </p>
                   </div>
                   <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.07] px-4 py-3 backdrop-blur-sm">
@@ -608,7 +608,7 @@ export default function About() {
                     </div>
                     <h4 className="font-bold text-lg mb-2 text-white relative z-10">{card.title}</h4>
                     <p className="text-primary-foreground/70 text-sm relative z-10 whitespace-pre-line">{card.desc}</p>
-                    <span className="mt-3 text-secondary text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity relative z-10">Tap to see photo â†’</span>
+                    <span className="mt-3 text-secondary text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity relative z-10">Tap to see photo →</span>
                   </motion.button>
                 ))}
               </div>

@@ -41,12 +41,51 @@ const BlogPostPage = lazy(() => import('@/pages/blog-post'));
 // Admin portal (website ki layout se alag, apna alag page)
 const AdminPortal = lazy(() => import('@/pages/admin/AdminPortal'));
 
+// Loading flash fix: lazy loading se har pehle navigation par "Loading…"
+// aata tha. App khulne ke baad idle time me ye saare chunks background me
+// preload ho jaate hain — navigation instant, koi spinner nahi.
+const ROUTE_LOADERS: (() => Promise<unknown>)[] = [
+  () => import('@/pages/home'),
+  () => import('@/pages/about'),
+  () => import('@/pages/facilities'),
+  () => import('@/pages/admissions'),
+  () => import('@/pages/contact'),
+  () => import('@/pages/gallery'),
+  () => import('@/pages/feedback'),
+  () => import('@/pages/results'),
+  () => import('@/pages/fee-structure'),
+  () => import('@/pages/application'),
+  () => import('@/pages/interview'),
+  () => import('@/pages/school-timing'),
+  () => import('@/pages/enrollment'),
+  () => import('@/pages/streams'),
+  () => import('@/pages/principal-message'),
+  () => import('@/pages/academics'),
+  () => import('@/pages/blog'),
+  () => import('@/pages/blog-post'),
+  () => import('@/pages/admin/AdminPortal'),
+];
+
+function preloadRoutes() {
+  const idle: (cb: () => void) => void =
+    (window as any).requestIdleCallback ?? ((cb) => setTimeout(cb, 1200));
+  idle(() => {
+    for (const load of ROUTE_LOADERS) load().catch(() => {});
+  });
+}
+
 const queryClient = new QueryClient();
 
 function RouteFallback() {
   return (
-    <div className="flex min-h-[60vh] items-center justify-center text-muted-foreground text-sm">
-      Loading…
+    <div className="min-h-[60vh] animate-pulse space-y-6 p-6 md:p-10" aria-hidden="true">
+      <div className="mx-auto h-8 w-2/3 max-w-lg rounded-xl bg-muted" />
+      <div className="mx-auto h-4 w-1/2 max-w-md rounded-lg bg-muted" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="h-40 rounded-2xl bg-muted" />
+        ))}
+      </div>
     </div>
   );
 }
@@ -116,6 +155,8 @@ function Router() {
 }
 
 function App() {
+  useEffect(preloadRoutes, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>

@@ -30,6 +30,8 @@ app.use(cors());
 // express limit se bada hota hai — isliye sirf blog routes ke liye limit badhaayi
 // hai, baaki endpoints par default chhota limit rahega.
 app.use("/api/blog", express.json({ limit: "8mb" }));
+// Content editor me `image.*` keys (hero/gallery photo data URLs) save hoti hain.
+app.use("/api/content", express.json({ limit: "16mb" }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
