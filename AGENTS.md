@@ -164,6 +164,12 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
 
 - **[2026-10-09]** 🔓 **Admin Portal link wapas footer me (public)** — user ne kaha website par admin portal link dikhna chahiye aur wo **Principal Message ke neeche** ho. `Footer.tsx` Quick Links me "🔒 Admin Portal" (`/admin`) link add kiya, bilkul **"Write to Principal" ke neeche** (wahi style, `before:content-['›']`). Ye [2026-09-30] ke "admin private" decision ko override karta hai — ab admin link footer me visible hai (5-tap + `#admin` wale hidden shortcuts bhi abhi bhi chalte hain). Portal khud email+password (`jaatlakshya496@gmail.com` / `LAXYAMALIK`) se protected hai.
 
+- **[2026-10-09]** 🚨 **SITE DOWN fix — `/admin` aur blog posts 404 de rahe the** (user ne report kiya "website chal nahi rahi"):
+  - **Root cause:** `vercel.json` me `cleanUrls: true` tha aur rewrites ka destination `"/index.html"` tha. Vercel par `cleanUrls` ki wajah se `/index.html` pehle `/` par 308 redirect hota hai — isliye rewrite `destination: "/index.html"` resolve nahi hota aur request **404** deti hai. Isse `/admin`, `/admin/blog`, `/admin/*` aur **`/blog/:slug` (blog posts)** — sab live Vercel par 404 the. Footer ka naya "Admin Portal" link bhi isi liye 404 de raha tha.
+  - **Fix:** `vercel.json` ke teeno rewrites ka `destination` `"/"` kar diya (`/admin`, `/admin/:path*`, `/blog/:slug`). Root pehle se theek tha, isliye "site down" sirf in routes par tha.
+  - ✅ **Verify (live):** `72d0dbc` push → Vercel auto-deploy ke turant baad `/`, `/admin`, `/admin/blog`, `/blog/<slug>`, `/blog`, `/about` sab **200** (aur response me `#root` aa raha hai). Backend bhi 200: `/health`, `/api/content`, `/api/content/images`, `/api/fees`, `/api/blog`.
+  - ⚠️ **Lesson:** Vercel par `cleanUrls: true` ke saath rewrite destination kabhi `/index.html` na rakho — `"/"` use karo.
+
 ## To-Do Notes
 - ⭐ **Chatbot ab "hamesha working":** Render API fail/lag par bhi website ka local knowledge base (`src/lib/school-kb.ts`) jawab de deta hai — user ko dead-end "unavailable" message nahi milta. Server theek ho jaye toh Groq wala reply aata hai. Offline reply me Retry + Call office buttons aate hain.
 - ⚠️ **`GROQ_API_KEY`** — set ho chuka hai ✅ (chatbot live).
