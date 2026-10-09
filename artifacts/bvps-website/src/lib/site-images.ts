@@ -86,38 +86,43 @@ export function useSiteImages() {
 
   const map = query.data?.data ?? {};
 
+  // NOTE: ye methods `this` use nahi karte (closures hain). Consumers inhe
+  // destructure kar ke call karte hain (`const { getHomeHeroSlides } = ...`),
+  // aur `this` wale object methods aise destructure hone par `undefined`
+  // ho jaate the — jisse poora React app crash ho kar blank page aa jata tha.
+  /** Raw string image (data URL / asset URL) — key se, nahi mila toh undefined. */
+  const getImage = (key: string): string | undefined => {
+    const v = map[key];
+    return typeof v === 'string' && v ? v : undefined;
+  };
+
+  const getGalleryConfig = (): GalleryAdminConfig =>
+    safeParse<GalleryAdminConfig>(map[IMAGE_KEYS.gallery], {});
+
+  const getHomeHeroConfig = (): HomeHeroAdminConfig =>
+    safeParse<HomeHeroAdminConfig>(map[IMAGE_KEYS.homeHero], {});
+
+  /** Final public gallery list (base + admin overrides). */
+  const getGalleryImages = (): GalleryItem[] =>
+    applyGalleryConfig(baseGalleryImages, getGalleryConfig());
+
+  /** Final public hero slides (base + admin overrides). */
+  const getHomeHeroSlides = (base: HeroSlide[]): HeroSlide[] =>
+    applyHeroConfig(base, getHomeHeroConfig());
+
+  /** Gallery page ki featured (hero) photo — admin override ho toh wahi. */
+  const getGalleryHeroImage = (): string | undefined =>
+    getImage(IMAGE_KEYS.galleryHero);
+
   return {
     isLoading: query.isLoading,
     isFetched: query.isFetched,
     refetch: query.refetch,
-
-    /** Raw string image (data URL / asset URL) — key se, nahi mila toh undefined. */
-    getImage(key: string): string | undefined {
-      const v = map[key];
-      return typeof v === 'string' && v ? v : undefined;
-    },
-
-    getGalleryConfig(): GalleryAdminConfig {
-      return safeParse<GalleryAdminConfig>(map[IMAGE_KEYS.gallery], {});
-    },
-
-    getHomeHeroConfig(): HomeHeroAdminConfig {
-      return safeParse<HomeHeroAdminConfig>(map[IMAGE_KEYS.homeHero], {});
-    },
-
-    /** Final public gallery list (base + admin overrides). */
-    getGalleryImages(): GalleryItem[] {
-      return applyGalleryConfig(baseGalleryImages, this.getGalleryConfig());
-    },
-
-    /** Final public hero slides (base + admin overrides). */
-    getHomeHeroSlides(base: HeroSlide[]): HeroSlide[] {
-      return applyHeroConfig(base, this.getHomeHeroConfig());
-    },
-
-    /** Gallery page ki featured (hero) photo — admin override ho toh wahi. */
-    getGalleryHeroImage(): string | undefined {
-      return this.getImage(IMAGE_KEYS.galleryHero);
-    },
+    getImage,
+    getGalleryConfig,
+    getHomeHeroConfig,
+    getGalleryImages,
+    getHomeHeroSlides,
+    getGalleryHeroImage,
   };
 }
