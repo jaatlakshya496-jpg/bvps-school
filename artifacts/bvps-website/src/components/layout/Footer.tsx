@@ -3,6 +3,7 @@ import { Link, useLocation } from 'wouter';
 import { MapPin, Phone, Mail, Clock, GraduationCap, Info } from 'lucide-react';
 import schoolLogo from '@/assets/school-logo-kalayat.webp';
 import { useSiteContent } from '@/lib/site-content';
+import { getAdminToken } from '@/lib/admin-store';
 
 const ADMIN_TAPS_NEEDED = 5;
 
@@ -11,11 +12,20 @@ export function Footer() {
   const { get } = useSiteContent();
   const [logoTaps, setLogoTaps] = useState(0);
   const [showAdminHint, setShowAdminHint] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const resetTimer = useRef<number | null>(null);
 
-  // Admin portal website par link se nahi dikhaya jaata (private rahe). Mobile par
-  // owner ko wahi se khulna hota hai — isliye footer logo par 5 baar tap karne
-  // par /admin khul jata hai. Link + ?admin=1 dono chalte hain.
+  // Admin Portal link SIRF owner (logged-in admin) ko dikhta hai — baaki koi
+  // visitor ise nahi dekhta. Login ke baad /admin se wapas site par aane par
+  // footer remount hoke link dikha deta hai. Login na hone par hidden raasta:
+  // footer ki copyright line par 5 tap, ya URL me #admin.
+  useEffect(() => {
+    setIsAdmin(!!getAdminToken());
+    const sync = () => setIsAdmin(!!getAdminToken());
+    window.addEventListener('storage', sync);
+    return () => window.removeEventListener('storage', sync);
+  }, []);
+
   useEffect(() => {
     if (logoTaps === 0) return;
     if (logoTaps >= ADMIN_TAPS_NEEDED) {
@@ -77,7 +87,7 @@ export function Footer() {
                 { name: 'Contact Us', path: '/contact' },
                 { name: "Principal's Desk & Message", path: '/principal-message' },
                 { name: 'Write to Principal', path: '/principal-message#message-form' },
-                { name: '🔒 Admin Portal', path: '/admin' },
+                ...(isAdmin ? [{ name: '🔒 Admin Portal', path: '/admin' }] : []),
                 { name: 'Admission Form', path: '/application' },
               ].map((link) => (
                 <li key={link.path}>

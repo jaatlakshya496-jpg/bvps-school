@@ -80,19 +80,28 @@ async function sendViaFormSubmit(n: Notification): Promise<boolean> {
 }
 
 export async function sendEmail(n: Notification): Promise<boolean> {
+	// FormSubmit primary — user ne activation kar li hai, aur ye seedha admin ke
+	// Gmail par relay karta hai (koi API key/domain nahi chahiye, spam risk kam).
+	let formSubmitErr: unknown = null;
+	try {
+		return await sendViaFormSubmit(n);
+	} catch (err) {
+		formSubmitErr = err;
+		console.error("notify: FormSubmit email failed, Resend fallback try ho raha hai", err);
+	}
+
+	// Fallback: Resend (agar RESEND_API_KEY set hai).
 	if (process.env.RESEND_API_KEY) {
 		try {
 			return await sendViaResend(n);
 		} catch (err) {
-			console.error("notify: resend email failed, FormSubmit fallback try ho raha hai", err);
+			console.error("notify: Resend fallback bhi fail ho gaya", err);
 		}
+	} else if (formSubmitErr) {
+		console.error("notify: RESEND_API_KEY set nahi hai - koi email channel available nahi");
 	}
-	try {
-		return await sendViaFormSubmit(n);
-	} catch (err) {
-		console.error("notify: email failed", err);
-		return false;
-	}
+
+	return false;
 }
 
 let warnedMissingKey = false;
