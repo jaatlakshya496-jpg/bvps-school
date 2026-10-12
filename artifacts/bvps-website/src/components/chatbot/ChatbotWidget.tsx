@@ -431,16 +431,6 @@ export function ChatbotWidget() {
           {isOpen ? <X className="h-6 w-6" /> : <Bot className="h-6 w-6" />}
         </button>
       </div>
-
-      {!isOpen && (
-        <a
-          href={`tel:${OFFICE_PHONE}`}
-          className="fixed bottom-[4.75rem] left-4 z-[59] hidden items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-[11px] font-semibold text-primary shadow-md sm:flex sm:left-5"
-        >
-          <Phone className="h-3 w-3 text-secondary" />
-          Need help?
-        </a>
-      )}
     </>
   );
 }

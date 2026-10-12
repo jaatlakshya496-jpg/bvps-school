@@ -3,7 +3,7 @@ import { FloatingContact } from './FloatingContact';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { WhatsAppButton } from './WhatsAppButton';
-import { ChatbotWidget } from '@/components/chatbot/ChatbotWidget';
+import { VoiceBot } from '@/components/voice-bot/VoiceBot';
 import { SeoBase, SchoolStructuredData } from '@/lib/seo';
 import { useSiteContent } from '@/lib/site-content';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -63,7 +63,7 @@ export function RootLayout({ children }: { children: ReactNode }) {
         </AnimatePresence>
       </main>
       <Footer />
-      <ChatbotWidget />
+      <VoiceBot />
       <WhatsAppButton />
     </div>
   );

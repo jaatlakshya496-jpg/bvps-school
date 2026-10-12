@@ -89,6 +89,7 @@ export function Footer() {
                 { name: 'Write to Principal', path: '/principal-message#message-form' },
                 ...(isAdmin ? [{ name: '🔒 Admin Portal', path: '/admin' }] : []),
                 { name: 'Admission Form', path: '/application' },
+                { name: 'Feedback', path: '/feedback' },
               ].map((link) => (
                 <li key={link.path}>
                   <Link 
