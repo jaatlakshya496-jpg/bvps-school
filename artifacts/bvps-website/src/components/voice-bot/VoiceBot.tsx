@@ -431,7 +431,7 @@ export function VoiceBot() {
           className="relative flex items-center gap-2.5 bg-gradient-to-tr from-primary via-[#1e3a8a] to-secondary text-white p-2 sm:pl-3.5 sm:pr-4 sm:py-2.5 rounded-full shadow-2xl hover:shadow-primary/50 hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-amber-300/40 group"
         >
           {/* Animated Mini Robot Icon */}
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-primary/40 flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-full bg-primary/40 flex items-center justify-center shrink-0">
             <RobotAvatar size="sm" isSpeaking={isSpeaking} isListening={isListening} isGreeting={isGreeting} showHands={false} />
           </div>
 

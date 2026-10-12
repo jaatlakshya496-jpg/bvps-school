@@ -54,18 +54,18 @@ export function Navbar() {
       <div className="border-b border-border/60 bg-primary/[0.03] py-2 px-4 md:px-6">
         <div className="container mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3.5 group">
-            <div className="relative flex items-center justify-center h-12 w-12 sm:h-14 sm:w-14 rounded-xl bg-white shadow-sm border border-border/80 p-0.5 group-hover:scale-105 transition-all duration-200 shrink-0 overflow-hidden">
+            <div className="relative flex items-center justify-center h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-white shadow-sm border border-border/80 p-0.5 group-hover:scale-105 transition-all duration-200 shrink-0 overflow-hidden">
               <img 
                 src={schoolLogo} 
-                alt="Bal Vikas Public School Kalayat Official Logo" 
+                alt="Bal Vikas Public School Logo" 
                 className="h-full w-full object-contain" 
               />
             </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
-                <span className="font-serif text-xl sm:text-2xl font-bold leading-none text-primary group-hover:text-secondary transition-colors">BVPS</span>
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-primary/10 text-primary tracking-wider uppercase">Kalayat</span>
-                <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-semibold text-secondary bg-secondary/15 px-2 py-0.5 rounded-full">
+                <span className="font-serif text-lg sm:text-xl font-bold leading-none text-primary group-hover:text-secondary transition-colors">BVPS</span>
+                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-primary/10 text-primary tracking-wider uppercase">Kalayat</span>
+                <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-semibold text-secondary bg-secondary/15 px-2 py-0.5 rounded-full">
                   <Sparkles className="w-3 h-3" />
                   Est. 2004
                 </span>
