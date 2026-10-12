@@ -207,6 +207,7 @@ function renderPage({ title, description, canonical, robots, schema }) {
   );
   html = upsertTag(html, /<meta\s+name="robots"[\s\S]*?\/>/, `<meta name="robots" content="${robots}" />`);
   html = upsertTag(html, /<link\s+rel="canonical"[\s\S]*?>/, `<link rel="canonical" href="${SITE_URL}${canonical}" />`);
+  html = upsertTag(html, /<meta\s+name="google-site-verification"[\s\S]*?\/>/, `<meta name="google-site-verification" content="xxxxxxxxxxxx" />`);
 
   html = upsertTag(html, /<meta\s+property="og:title"[\s\S]*?\/>/, `<meta property="og:title" content="${esc(title)}" />`);
   html = upsertTag(html, /<meta\s+property="og:description"[\s\S]*?\/>/, `<meta property="og:description" content="${esc(description)}" />`);
