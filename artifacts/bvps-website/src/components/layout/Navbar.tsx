@@ -121,12 +121,10 @@ export function Navbar() {
             {navLinks.map((link) => {
               const isActive = location === link.path;
               return (
-                <motion.a
+                <Link
                   key={link.path}
                   href={link.path}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`relative px-3 py-1.5 rounded-full text-xs font-semibold overflow-hidden transition-all duration-150 flex items-center gap-1.5 ${
+                  className={`relative px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 flex items-center gap-1.5 hover:scale-[1.05] active:scale-95 ${
                     isActive
                       ? 'bg-primary text-white shadow-xs'
                       : link.highlight
@@ -134,9 +132,7 @@ export function Navbar() {
                       : 'text-foreground/80 hover:text-primary hover:bg-gray-100/80'
                   }`}
                 >
-                  <motion.span
-                    className={`w-3.5 h-3.5 rounded-full flex items-center justify-center ${isActive ? 'text-secondary' : 'opacity-70'} transition-transform`}
-                  />
+                  <link.icon className={`w-3.5 h-3.5 ${isActive ? 'text-secondary' : 'opacity-70'}`} />
                   <span>{link.name}</span>
                   {link.badge && (
                     <span className={`text-[9px] font-bold px-1.5 py-0.2 rounded-full uppercase ${
@@ -145,7 +141,7 @@ export function Navbar() {
                       {link.badge}
                     </span>
                   )}
-                </motion.a>
+                </Link>
               );
             })}
           </nav>

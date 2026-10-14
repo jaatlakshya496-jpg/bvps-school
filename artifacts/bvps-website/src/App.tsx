@@ -7,12 +7,9 @@ import { SiteContentProvider } from '@/lib/site-content';
 import { HelmetProvider } from 'react-helmet-async';
 import NotFound from '@/pages/not-found';
 import { Route, Switch, Router as WouterRouter, useLocation } from 'wouter';
-import { motion, AnimatePresence } from 'framer-motion';
 
 // Layout & Pages
 import { RootLayout } from '@/components/layout/RootLayout';
-
-// ... rest of imports stay the same
 
 // Pehle saare 19 pages statically import the, jiski wajah se ek hi 1MB+ ka
 // bundle banta tha aur har visitor ko admission/contact page ka code bhi
@@ -145,19 +142,18 @@ function PublicRouter() {
 
 function Router() {
   return (
-    <AnimatePresence>
-      <RootLayout>
-        <Switch>
-          {/* Admin portal website se alag page hai — iska apna layout/login hai.
-              NOTE: wouter me wildcard "/admin/*" hota hai (":rest*" nahi) — ":rest*" se
-              /admin/blog/new jaise nested pages match hi nahi hote the aur 404 page aa raha tha. */}
-          <Route path="/admin" component={AdminPortal} />
-          <Route path="/admin/*" component={AdminPortal} />
-          {/* Baaki sab public website */}
-          <Route component={PublicRouter} />
-        </Switch>
-      </RootLayout>
-    </AnimatePresence>
+    <Switch>
+      {/* Admin portal website se alag page hai — iska apna layout/login hai.
+          NOTE: wouter me wildcard "/admin/*" hota hai (":rest*" nahi) — ":rest*" se
+          /admin/blog/new jaise nested pages match hi nahi hote the aur 404 page aa raha tha.
+          NOTE 2: Yahan `<RootLayout>` kabhi na lagao — `PublicRouter` already uske
+          andar hai, isliye nested RootLayout se Navbar/Footer do baar render hone
+          lage the (aur admin portal par bhi public navbar/footer aa jaata tha). */}
+      <Route path="/admin" component={AdminPortal} />
+      <Route path="/admin/*" component={AdminPortal} />
+      {/* Baaki sab public website */}
+      <Route component={PublicRouter} />
+    </Switch>
   );
 }
 
