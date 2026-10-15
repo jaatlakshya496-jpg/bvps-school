@@ -91,6 +91,7 @@ export default function Feedback() {
   const rating = form.watch('rating');
 
   async function onSubmit(values: FormValues) {
+    if (isLoading) return; // double-click se duplicate submission na ho
     setIsLoading(true);
     setError(null);
     try {
@@ -279,6 +280,7 @@ export default function Feedback() {
                       <Button
                         type="submit"
                         className="w-full bg-secondary text-primary hover:bg-secondary/90 rounded-lg py-6 text-lg font-bold"
+                        disabled={isLoading}
                       >
                         Submit Feedback
                       </Button>

@@ -177,7 +177,8 @@ export default function BlogPostPage() {
                 {post.excerpt}
               </p>
             )}
-            <div className="space-y-1">{renderContent(post.content)}</div>
+            {/* content kabhi bhi null/undefined na ho — API se aaye data par bhi guard */}
+            <div className="space-y-1">{renderContent(post.content ?? '')}</div>
 
             <div className="mt-10 pt-6 border-t border-border flex items-center gap-2 text-xs text-muted-foreground">
               <Newspaper className="w-4 h-4 text-secondary" />

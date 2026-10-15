@@ -167,10 +167,18 @@ export function VoiceBot() {
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isVoiceMuted, setIsVoiceMuted] = useState(false);
+  // Ref zaroori hai: voice recognition ka `onresult` callback purani closure
+  // capture karta hai, isliye mute toggle ke baad bhi nayi value padhni padti
+  // hai — warna bot ki voice replies mute hone par bhi bolti rehti hain.
+  const isVoiceMutedRef = useRef(false);
+  useEffect(() => { isVoiceMutedRef.current = isVoiceMuted; }, [isVoiceMuted]);
   const [isGreeting, setIsGreeting] = useState(false);
   const [inputVal, setInputVal] = useState('');
   const [speechSupported, setSpeechSupported] = useState(true);
   const [hasGreetedVoice, setHasGreetedVoice] = useState(false);
+  // Yahi ref "greet sirf ek baar" guarantee deta hai — `open-bvps-voicebot`
+  // event ka listener deps `[]` hai, isliye state purani (false) rehti hai.
+  const hasGreetedVoiceRef = useRef(false);
 
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -218,7 +226,7 @@ export function VoiceBot() {
       };
 
       recognition.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript;
+        const transcript = event.results?.[0]?.[0]?.transcript;
         if (transcript) {
           if (viewMode === 'robot-welcome') {
             setViewMode('chat');
@@ -255,7 +263,7 @@ export function VoiceBot() {
 
   // Handle Text-to-Speech
   const speakText = (text: string, onEndCallback?: () => void) => {
-    if (isVoiceMuted || !('speechSynthesis' in window)) {
+    if (isVoiceMutedRef.current || !('speechSynthesis' in window)) {
       onEndCallback?.();
       return;
     }
@@ -316,7 +324,8 @@ export function VoiceBot() {
   const openBot = (autoGreet = true) => {
     setIsOpen(true);
     setViewMode('robot-welcome');
-    if (autoGreet && !hasGreetedVoice) {
+    if (autoGreet && !hasGreetedVoiceRef.current) {
+      hasGreetedVoiceRef.current = true;
       setTimeout(() => {
         triggerNamasteGreeting();
       }, 300);

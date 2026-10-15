@@ -46,6 +46,7 @@ export default function Contact() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    if (isLoading) return; // double-click se duplicate submission na ho
     setIsLoading(true);
     setError(null);
     apiPost("/contact-email", values)
@@ -143,15 +144,6 @@ export default function Contact() {
                     referrerPolicy="no-referrer-when-downgrade"
                     title="Bal Vikas Public School Kalayat — Location"
                   ></iframe>
-                  <a
-                    href="https://maps.google.com/?q=Bal+Vikas+Public+School,Railway+Road,Kalayat,Haryana"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-3 inline-flex items-center gap-2 text-sm text-primary font-semibold hover:text-secondary transition-colors"
-                  >
-                    <MapPin className="w-4 h-4" />
-                    Open in Google Maps
-                  </a>
                 </div>
                 <a
                   href="https://maps.google.com/?q=Bal+Vikas+Public+School,Railway+Road,Kalayat,Haryana"
@@ -263,7 +255,7 @@ export default function Contact() {
                           <p className="text-red-700">{error}</p>
                         </div>
                       )}
-                      <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg py-6 text-lg font-bold">
+                      <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white rounded-lg py-6 text-lg font-bold" disabled={isLoading}>
                         Submit Enquiry
                       </Button>
                       {isLoading && (

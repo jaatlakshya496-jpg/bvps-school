@@ -200,6 +200,17 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
 - **[2026-10-15]** ✅ **14-Oct ke teeno commits GitHub par PUSH ho gaye** — `git push origin main` successful (`b12d58b..c7f5917`), ab `origin/main` = `c7f5917` (9a083d7 google-site-verification fix + 8c615c5 docs + 9d5f1b2 blank-page crash fix). Is baar github.com reachable tha. Vercel + Render auto-deploy trigger ho gaya.
   - **Saath hi ek stray working-tree change discard kiya:** `artifacts/bvps-website/public/robots.txt` me wapas `google589d0697c356eade.html` line a gayi thi (HEAD me nahi hai aur AGENTS.md ke mutabik ye galti se judi line hai — robots.txt kuch verify nahi karta) → `git checkout --` se revert kar diya, commit nahi kiya.
   - ⚠️ **Baaki user action:** Vercel deploy ke baad Search Console me "Verify" dabayein + `sitemap.xml` submit karein.
+- **[2026-10-15]** 🔧 **Codebase audit + runtime bug fixes (commit pending)** — saare routes, assets, API endpoints, form↔schema mismatch, deploy config sab verify kiya; jo mila wo fix kiya:
+  - **Double-submit race (3 forms):** `application.tsx`, `contact.tsx`, `feedback.tsx` me `isLoading` set ho raha tha par guard nahi tha — double-click par **do DB rows + do emails** jaate the. Ab handler me `if (isLoading) return` + submit button `disabled={isLoading}`.
+  - **`contact.tsx` duplicate link:** "Open in Google Maps" ka link **do baar** tha — ek map ke `overflow-hidden` box ke andar (clip hoke invisible), ek bahar. Andar wala hata diya.
+  - **`VoiceBot.tsx` (live, har page par):**
+    - `event.results[0][0].transcript` — empty results par TypeError; ab `?.` guard.
+    - Mute button kaam nahi karta tha voice-path par (stale closure); ab `isVoiceMutedRef`.
+    - "Greet sirf ek baar" toota tha (stale closure); ab `hasGreetedVoiceRef`.
+  - **`blog-post.tsx`:** `renderContent(post.content)` — API se `content` null aaye toh crash; ab `?? ''`.
+  - **Dead code (identify kiya, DELETE NAHI kiya — user confirm chahiye):** `UnifiedAiAgent.tsx`, `GlobalVoiceCommander.tsx`, `EntranceWelcomeRobot.tsx` (teeno unreferenced), `lib/enquiry-store.ts` (unreferenced), `principal-message-store.ts` ka `savePrincipalMessage()` (sirf type use hota hai). Sab hata sakte hain — par pehle user poochein.
+  - ✅ Verify: `npm run lint` clean · `npm run build` OK (17 shells + 404 + sitemap, lastmod 2026-10-15).
+  - ⚠️ **Deploy baaki hai** — is environment se `github.com` reachable nahi (DNS/TCP fail). User ko `git push origin main` chalana hoga.
 - **[2026-10-15]** 🔑 **Google Search Console "HTML file" verification fix (`893dd36`)** — user ko Search Console par error aa raha tha: *"Your verification file was not found in the required location."*
   - **Root cause:** Google ne **HTML file** method diya tha (`google589d0697c356eade.html` root par chahiye) par wo file repo me **kabhi commit hi nahi hui thi** (sirf meta-tag method ka code tha). Isliye file live par 404 → verification fail.
   - **Fix 1 — file add:** `artifacts/bvps-website/public/google589d0697c356eade.html` banaya (content: `google-site-verification: google589d0697c356eade.html`). Vite ise `dist/` root par copy karta hai → `https://bvps-school.vercel.app/google589d0697c356eade.html` par serve hota hai.

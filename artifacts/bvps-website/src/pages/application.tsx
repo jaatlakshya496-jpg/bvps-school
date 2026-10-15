@@ -44,6 +44,7 @@ export default function Application() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (isLoading) return; // double-click se duplicate submission na ho
     const errs = validate();
     setErrors(errs);
     if (Object.keys(errs).length > 0) return;
@@ -227,7 +228,7 @@ export default function Application() {
                     <Textarea placeholder="Any specific question, requirement, or information you'd like to share…" value={form.message} onChange={e => set('message', e.target.value)} className="resize-none min-h-[80px]" />
                   </div>
 
-                  <Button type="submit" className="bg-secondary text-primary hover:bg-secondary/90 font-bold rounded-xl px-10 h-12 text-base gap-2 w-full sm:w-auto">
+                  <Button type="submit" className="bg-secondary text-primary hover:bg-secondary/90 font-bold rounded-xl px-10 h-12 text-base gap-2 w-full sm:w-auto" disabled={isLoading}>
                     <Send className="w-4 h-4" /> Submit Application
                   </Button>
                   {isLoading && (
