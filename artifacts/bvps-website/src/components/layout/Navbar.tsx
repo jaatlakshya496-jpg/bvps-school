@@ -32,9 +32,12 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t } = useLanguage();
 
+  // Active link tracking based on full path match
   const navLinks = navLinksConfig.map((item) => ({
     ...item,
     name: t(item.key, item.name),
+    // Highlight current page + apply badge highlighting
+    highlight: item.key === 'nav.fees' ? true : undefined,
   }));
 
   useEffect(() => {
@@ -54,10 +57,10 @@ export function Navbar() {
       <div className="border-b border-border/60 bg-primary/[0.03] py-2 px-4 md:px-6">
         <div className="container mx-auto flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3.5 group">
-            <div className="relative flex items-center justify-center h-10 w-10 sm:h-12 sm:w-12 rounded-lg bg-white shadow-sm border border-border/80 p-0.5 group-hover:scale-105 transition-all duration-200 shrink-0 overflow-hidden">
+            <div className="relative flex items-center justify-center h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-white/80 shadow-sm border border-white/20 p-0.5 group-hover:scale-105 transition-all duration-200 shrink-0 overflow-hidden">
               <img 
                 src={schoolLogo} 
-                alt="Bal Vikas Public School Logo" 
+                alt="Bal Vikas Public School" 
                 className="h-full w-full object-contain" 
               />
             </div>
