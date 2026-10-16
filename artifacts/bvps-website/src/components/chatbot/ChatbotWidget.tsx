@@ -3,7 +3,7 @@ import { Bot, Loader2, Phone, RotateCcw, Send, Sparkles, X } from "lucide-react"
 import campusImage from "@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp";
 import studentsImage from "@assets/Screenshot_20260721_101418_1784611875385.webp";
 import facilitiesImage from "@assets/Screenshot_20260721_100254_1784611512184.webp";
-import schoolLogo from "@/assets/school-logo-kalayat.webp";
+import schoolLogo from "@/public/school-logo.png";
 import { getLocalAnswer } from "@/lib/school-kb";
 
 type ChatMessage = {
