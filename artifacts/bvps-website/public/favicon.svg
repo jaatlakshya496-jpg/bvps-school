@@ -1,8 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="BVPS">
   <title>Bal Vikas Public School, Kalayat</title>
-  <rect width="64" height="64" rx="14" fill="#111C2E"/>
-  <path d="M32 11 8 25v4h48v-4L32 11Z" fill="#FF5A1F"/>
-  <path d="M15 32v16M25 32v16M39 32v16M49 32v16" stroke="#FF5A1F" stroke-width="3.4" stroke-linecap="round"/>
-  <rect x="12" y="51" width="40" height="3.6" rx="1.8" fill="#FF5A1F"/>
-  <circle cx="32" cy="42.5" r="3.6" fill="#111C2E"/>
+  <!-- Background circle with school brand color -->
+  <circle cx="32" cy="32" r="30" fill="#111C2E"/>
+  <!-- Simplified school building silhouette in brand orange -->
+  <g fill="#FF5A1F">
+    <!-- Main building roof -->
+    <path d="M32 14 L14 28h36z"/>
+    <!-- Building body -->
+    <rect x="14" y="28" width="36" height="24" rx="1"/>
+    <!-- Windows -->
+    <rect x="19" y="33" width="8" height="8" rx="1" fill="#111C2E"/>
+    <rect x="37" y="33" width="8" height="8" rx="1" fill="#111C2E"/>
+    <!-- Door -->
+    <rect x="28" y="42" width="8" height="10" rx="1" fill="#111C2E"/>
+    <!-- Bell tower -->
+    <rect x="29" y="10" width="6" height="6" rx="1"/>
+    <rect x="27" y="8" width="10" height="4" rx="1"/>
+  </g>
 </svg>

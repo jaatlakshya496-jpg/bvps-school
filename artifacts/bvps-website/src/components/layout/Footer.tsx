@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { MapPin, Phone, Mail, Clock, GraduationCap, Info } from 'lucide-react';
-import schoolLogo from '@/public/school-logo.png';
+import schoolLogo from '/school-logo.png';
 import { useSiteContent } from '@/lib/site-content';
 import { getAdminToken } from '@/lib/admin-store';
 

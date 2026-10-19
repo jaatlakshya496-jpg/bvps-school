@@ -5,7 +5,7 @@ import {
   Languages, PhoneCall, ArrowRight, MessageSquare, 
   RotateCcw, Play, CornerDownLeft, Award, HelpCircle
 } from 'lucide-react';
-import schoolLogo from '@/public/school-logo.png';
+import schoolLogo from '/school-logo.png';
 import { RobotAvatar } from './RobotAvatar';
 
 interface Message {
