@@ -37,8 +37,8 @@ interface KnowledgeItem {
 const KNOWLEDGE_BASE: KnowledgeItem[] = [
   {
     keywords: ['admission', 'admissions', 'apply', 'form', 'enroll', 'daakhila', 'dakhila', 'pravesh', 'admission form', 'online form', 'dakhile'],
-    responseEn: "Admissions for Session 2025–26 are open for Classes 1 to 12 at Bal Vikas Public School, Kalayat! You can submit the online enquiry form or visit the school admission office between 9:00 AM and 2:00 PM.",
-    responseHi: "सत्र 2025-26 के लिए कक्षा 1 से 12वीं तक बाल विकास पब्लिक स्कूल, कलायत में प्रवेश खुले हैं! आप ऑनलाइन फॉर्म भर सकते हैं या सुबह 9:00 से दोपहर 2:00 बजे तक स्कूल आ सकते हैं।",
+    responseEn: "Admissions for Session 2026–27 are open for Classes 1 to 12 at Bal Vikas Public School, Kalayat! You can submit the online enquiry form or visit the school admission office between 9:00 AM and 2:00 PM.",
+    responseHi: "सत्र 2026-27 के लिए कक्षा 1 से 12वीं तक बाल विकास पब्लिक स्कूल, कलायत में प्रवेश खुले हैं! आप ऑनलाइन फॉर्म भर सकते हैं या सुबह 9:00 से दोपहर 2:00 बजे तक स्कूल आ सकते हैं।",
     actionLink: { label: 'Online Admission Form', path: '/application' },
     suggestedFollowUps: ['Fee Structure', 'Required Documents', 'Streams in 11th']
   },

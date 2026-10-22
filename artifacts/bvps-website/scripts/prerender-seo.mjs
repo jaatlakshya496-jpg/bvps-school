@@ -36,6 +36,80 @@ const routes = JSON.parse(
   fs.readFileSync(path.join(WEBSITE, "src/lib/public-routes.json"), "utf8"),
 );
 
+// ---- Blog posts (dynamic sitemap + prerendered shells) ---------------------
+// Pehle sitemap sirf static routes se banta tha, isliye admin portal se publish
+// hone wale blog posts Google ko kabhi nahi milte the. Ab build ke waqt public
+// API se published posts fetch hote hain:
+//   • har post ka `/blog/<slug>` URL sitemap me add hota hai (uski asli date ke
+//     saath), aur
+//   • har post ka apna `dist/blog/<slug>/index.html` shell banta hai jisme us
+//     post ka title/description/og:image + BlogPosting JSON-LD pehle se hota hai.
+//
+// API base `VITE_API_BASE_URL` se aata hai. Vite ise build ke liye .env se
+// uthata hai, par ye script alag node process hai — isliye .env files khud
+// padhte hain. Fetch fail ho (Render cold start / down) toh build fail nahi
+// hota; bas static routes wala sitemap ban jaata hai.
+function readDotEnv(file, key) {
+  try {
+    if (!fs.existsSync(file)) return "";
+    const match = fs
+      .readFileSync(file, "utf8")
+      .match(new RegExp(`^\\s*${key}\\s*=\\s*(.*)\\s*$`, "m"));
+    return match ? match[1].replace(/^["']|["']$/g, "").trim() : "";
+  } catch {
+    return "";
+  }
+}
+
+function readEnvValue(key) {
+  const candidates = [
+    process.env[key],
+    readDotEnv(path.join(WEBSITE, ".env.production"), key),
+    readDotEnv(path.join(WEBSITE, ".env.local"), key),
+    readDotEnv(path.join(WEBSITE, ".env"), key),
+  ];
+  return candidates.find((v) => typeof v === "string" && v.trim())?.trim() ?? "";
+}
+
+const API_BASE = (
+  readEnvValue("VITE_API_BASE_URL") || "https://bvps-school-1.onrender.com"
+).replace(/\/+$/, "");
+
+const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+async function fetchPublishedPosts() {
+  if (typeof fetch !== "function") {
+    console.warn("[prerender] fetch available nahi hai — blog posts skip");
+    return [];
+  }
+
+  const url = `${API_BASE}/api/blog`;
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const res = await fetch(url, {
+        headers: { accept: "application/json" },
+        signal: AbortSignal.timeout(25_000),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      const rows = Array.isArray(json?.data) ? json.data : Array.isArray(json) ? json : [];
+      const posts = rows.filter(
+        (p) => p && p.status === "published" && SLUG_PATTERN.test(String(p.slug ?? "")),
+      );
+      console.log(`[prerender] ${posts.length} published blog post(s) mile (${API_BASE})`);
+      return posts;
+    } catch (err) {
+      console.warn(
+        `[prerender] blog fetch attempt ${attempt} fail (${err?.message ?? err})`,
+      );
+      if (attempt < 2) await new Promise((r) => setTimeout(r, 2000));
+    }
+  }
+
+  console.warn(`[prerender] blog API reachable nahi (${API_BASE}) — sirf static routes sitemap me`);
+  return [];
+}
+
 const SCHOOL = {
   name: "Bal Vikas Public School",
   shortName: "BVPS",
@@ -196,7 +270,15 @@ function pageHead({ title, description, canonical, robots, schema }) {
   ].join("\n    ");
 }
 
-function renderPage({ title, description, canonical, robots, schema }) {
+function renderPage({
+  title,
+  description,
+  canonical,
+  robots,
+  schema,
+  image = OG_IMAGE,
+  ogType = "website",
+}) {
   let html = indexHtml;
 
   html = upsertTag(html, /<title>[\s\S]*?<\/title>/, `<title>${esc(title)}</title>`);
@@ -213,13 +295,14 @@ function renderPage({ title, description, canonical, robots, schema }) {
   // code ko overwrite kar deta tha, isliye Search Console verify hi nahi hota tha.)
 
   html = upsertTag(html, /<meta\s+property="og:title"[\s\S]*?\/>/, `<meta property="og:title" content="${esc(title)}" />`);
+  html = upsertTag(html, /<meta\s+property="og:type"[\s\S]*?\/>/, `<meta property="og:type" content="${esc(ogType)}" />`);
   html = upsertTag(html, /<meta\s+property="og:description"[\s\S]*?\/>/, `<meta property="og:description" content="${esc(description)}" />`);
   html = upsertTag(html, /<meta\s+property="og:url"[\s\S]*?\/>/, `<meta property="og:url" content="${SITE_URL}${canonical}" />`);
-  html = upsertTag(html, /<meta\s+property="og:image"[\s\S]*?\/>/, `<meta property="og:image" content="${OG_IMAGE}" />`);
+  html = upsertTag(html, /<meta\s+property="og:image"[\s\S]*?\/>/, `<meta property="og:image" content="${esc(image)}" />`);
 
   html = upsertTag(html, /<meta\s+name="twitter:title"[\s\S]*?\/>/, `<meta name="twitter:title" content="${esc(title)}" />`);
   html = upsertTag(html, /<meta\s+name="twitter:description"[\s\S]*?\/>/, `<meta name="twitter:description" content="${esc(description)}" />`);
-  html = upsertTag(html, /<meta\s+name="twitter:image"[\s\S]*?\/>/, `<meta name="twitter:image" content="${OG_IMAGE}" />`);
+  html = upsertTag(html, /<meta\s+name="twitter:image"[\s\S]*?\/>/, `<meta name="twitter:image" content="${esc(image)}" />`);
 
   html = html.replace(
     /<script type="application\/ld\+json">[\s\S]*?<\/script>/g,
@@ -234,6 +317,7 @@ function renderPage({ title, description, canonical, robots, schema }) {
 }
 
 let written = 0;
+const today = new Date().toISOString().slice(0, 10);
 
 for (const route of routes) {
   const html = renderPage({
@@ -256,6 +340,79 @@ for (const route of routes) {
   written++;
 }
 
+// ---- blog posts ------------------------------------------------------------
+// Har published post ka apna static shell + sitemap entry (dekho upar wala
+// `fetchPublishedPosts` comment). Slug valid nahi hai toh us post ko skip karte
+// hain — warna path traversal / broken canonical URL ban sakta hai.
+const posts = await fetchPublishedPosts();
+let blogWritten = 0;
+
+for (const post of posts) {
+  const slug = String(post.slug).trim();
+  const canonical = `/blog/${slug}`;
+  const postUrl = `${SITE_URL}${canonical}`;
+
+  const description =
+    String(post.excerpt ?? "").replace(/\s+/g, " ").trim() ||
+    `${post.title} — news and updates from Bal Vikas Public School, Kalayat.`;
+  // coverImage upload se data URL (base64) bhi ho sakta hai — og:image me sirf
+  // real HTTP URL chalta hai, isliye warna default OG image use hoti hai.
+  const image = /^https?:\/\//i.test(String(post.coverImage ?? ""))
+    ? String(post.coverImage)
+    : OG_IMAGE;
+
+  const published = post.publishedAt ? new Date(post.publishedAt) : null;
+  const updated = post.updatedAt ? new Date(post.updatedAt) : published;
+  const datePublished =
+    published && !Number.isNaN(published.getTime()) ? published.toISOString() : undefined;
+  const dateModified =
+    updated && !Number.isNaN(updated.getTime()) ? updated.toISOString() : datePublished;
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      ...schoolSchema["@graph"],
+      {
+        "@type": "BlogPosting",
+        headline: post.title,
+        description,
+        url: postUrl,
+        mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
+        image: [image],
+        ...(datePublished ? { datePublished } : {}),
+        ...(dateModified ? { dateModified } : {}),
+        inLanguage: "en-IN",
+        author: { "@type": "Organization", name: SITE_NAME },
+        publisher: {
+          "@type": "Organization",
+          name: SITE_NAME,
+          logo: { "@type": "ImageObject", url: LOGO_URL },
+        },
+      },
+      breadcrumbSchema([
+        { label: "Home", path: "/" },
+        { label: "Blog", path: "/blog" },
+        { label: post.title, path: canonical },
+      ]),
+    ],
+  };
+
+  const html = renderPage({
+    title: `${post.title} — BVPS Blog`,
+    description,
+    canonical,
+    robots: "index, follow, max-image-preview:large, max-snippet:-1",
+    schema,
+    image,
+    ogType: "article",
+  });
+
+  const dir = path.join(DIST, "blog", slug);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, "index.html"), html, "utf8");
+  blogWritten++;
+}
+
 // ---- 404 ------------------------------------------------------------------
 // Vercel static output me `404.html` ko real 404 status ke saath serve karta
 // hai. Isse adhoore URL Google ke "soft 404" log me ghusne se bach jate hain.
@@ -273,14 +430,32 @@ fs.writeFileSync(
 );
 
 // ---- sitemap --------------------------------------------------------------
-const today = new Date().toISOString().slice(0, 10);
-const urls = routes
+const sitemapEntries = [
+  ...routes.map((r) => ({
+    loc: `${SITE_URL}${r.path === "/" ? "/" : r.path}`,
+    lastmod: today,
+    changefreq: r.changefreq,
+    priority: r.priority,
+  })),
+  ...posts.map((post) => {
+    const stamp = post.updatedAt || post.publishedAt;
+    const date = stamp ? new Date(stamp) : null;
+    return {
+      loc: `${SITE_URL}/blog/${String(post.slug).trim()}`,
+      lastmod: date && !Number.isNaN(date.getTime()) ? date.toISOString().slice(0, 10) : today,
+      changefreq: "monthly",
+      priority: "0.6",
+    };
+  }),
+];
+
+const urls = sitemapEntries
   .map(
-    (r) => `  <url>
-    <loc>${SITE_URL}${r.path === "/" ? "/" : r.path}</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>${r.changefreq}</changefreq>
-    <priority>${r.priority}</priority>
+    (entry) => `  <url>
+    <loc>${entry.loc}</loc>
+    <lastmod>${entry.lastmod}</lastmod>
+    <changefreq>${entry.changefreq}</changefreq>
+    <priority>${entry.priority}</priority>
   </url>`,
   )
   .join("\n");
@@ -288,9 +463,9 @@ const urls = routes
 fs.writeFileSync(
   path.join(DIST, "sitemap.xml"),
   `<?xml version="1.0" encoding="UTF-8"?>
-<!-- Build time par generate hota hai (scripts/prerender-seo.mjs) — isliye
-     har <lastmod> asli build date hai. Naye page add karne ke liye
-     src/lib/public-routes.json update karo. -->
+<!-- Build time par generate hota hai (scripts/prerender-seo.mjs).
+     Static pages ki list: src/lib/public-routes.json
+     Blog posts build ke waqt API se aate hain (published posts only). -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls}
 </urlset>
@@ -302,4 +477,6 @@ ${urls}
 fs.mkdirSync(path.join(WEBSITE, "public"), { recursive: true });
 fs.copyFileSync(path.join(DIST, "sitemap.xml"), path.join(WEBSITE, "public/sitemap.xml"));
 
-console.log(`[prerender] ${written} route shell(s) + 404.html + sitemap.xml likhe (lastmod ${today})`);
+console.log(
+  `[prerender] ${written} static shell(s) + ${blogWritten} blog shell(s) + 404.html + sitemap.xml (${sitemapEntries.length} URLs) likhe`,
+);
