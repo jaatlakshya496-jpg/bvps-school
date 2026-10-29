@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import {
   Save, Loader2, Images, EyeOff, Eye, Upload, RotateCcw, Trash2, Plus, Check, ImagePlus,
 } from 'lucide-react';
-import { apiGet, apiSend, extractApiError } from '@/lib/api';
+import { apiGet, apiSend, extractApiError, isAuthError } from '@/lib/api';
 import { compressImageFile } from '@/lib/image-utils';
 import { baseGalleryImages, type GalleryItem } from '@/lib/gallery-data';
 import { baseHeroSlides } from '@/lib/hero-data';
@@ -151,7 +151,7 @@ function HeroCard({
   );
 }
 
-export function AdminImages({ token, onExpired }: { token: string; onExpired: () => void }) {
+export function AdminImages({ onExpired }: { onExpired: () => void }) {
   const queryClient = useQueryClient();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -187,7 +187,7 @@ export function AdminImages({ token, onExpired }: { token: string; onExpired: ()
   useEffect(() => {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+  }, []);
 
   const dirty = useMemo(() => {
     const heroDirty = JSON.stringify(hero) !== JSON.stringify(server.hero);
@@ -206,8 +206,7 @@ export function AdminImages({ token, onExpired }: { token: string; onExpired: ()
   const payloadTooBig = payloadChars > 15_000_000;
 
   function handleError(err: unknown) {
-    const m = String((err as { error?: unknown })?.error ?? '').toLowerCase();
-    if (m.includes('forbidden') || m.includes('invalid')) onExpired();
+    if (isAuthError(err)) onExpired();
     else setMsg({ text: extractApiError(err), ok: false });
   }
 
@@ -262,12 +261,12 @@ export function AdminImages({ token, onExpired }: { token: string; onExpired: ()
       const items: Record<string, unknown> = {};
       if (dirty.heroDirty) items[IMAGE_KEYS.homeHero] = hero;
       if (dirty.galleryDirty) items[IMAGE_KEYS.gallery] = gallery;
-      await apiSend('PUT', '/content', { items }, token);
+      await apiSend('PUT', '/content', { items });
       if (dirty.heroImageDirty) {
         if (galleryHero) {
-          await apiSend('PUT', '/content', { items: { [IMAGE_KEYS.galleryHero]: galleryHero } }, token);
+          await apiSend('PUT', '/content', { items: { [IMAGE_KEYS.galleryHero]: galleryHero } });
         } else {
-          await apiSend('DELETE', `/content/${encodeURIComponent(IMAGE_KEYS.galleryHero)}`, {}, token);
+          await apiSend('DELETE', `/content/${encodeURIComponent(IMAGE_KEYS.galleryHero)}`, {});
         }
       }
       await load(true);
@@ -288,7 +287,7 @@ export function AdminImages({ token, onExpired }: { token: string; onExpired: ()
     setBusyIndex(`reset:${section}`);
     setMsg(null);
     try {
-      await apiSend('DELETE', `/content/${encodeURIComponent(key)}`, {}, token);
+      await apiSend('DELETE', `/content/${encodeURIComponent(key)}`, {});
       await load(true);
       queryClient.invalidateQueries({ queryKey: ['site-images'] });
       setMsg({ text: `"${key}" default par reset ho gaya.`, ok: true });

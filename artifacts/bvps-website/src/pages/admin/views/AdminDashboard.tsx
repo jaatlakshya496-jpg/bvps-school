@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
 import { Newspaper, IndianRupee, Mail, UserRound, Star, TrendingUp, Loader2 } from 'lucide-react';
-import { apiGetAdmin } from '@/lib/api';
+import { apiGetAdmin, isAuthError } from '@/lib/api';
 import type { BlogPost } from '../types';
 import { formatDate } from '../types';
 
 interface Stats { blog: number; contact: number; admissions: number; feedback: number; }
 
-function useAdminCounts(token: string, onExpired: () => void): Stats & { latest: BlogPost[]; loading: boolean } {
+function useAdminCounts(onExpired: () => void): Stats & { latest: BlogPost[]; loading: boolean } {
   const [stats, setStats] = useState<Stats>({ blog: 0, contact: 0, admissions: 0, feedback: 0 });
   const [latest, setLatest] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -18,10 +18,10 @@ function useAdminCounts(token: string, onExpired: () => void): Stats & { latest:
     const fetchCounts = async () => {
       try {
         const [blogRes, contactRes, admissionRes, feedRes] = await Promise.all([
-          apiGetAdmin<{ success: boolean; data: BlogPost[] }>('/blog/admin', token),
-          apiGetAdmin<{ success: boolean; data: unknown[] }>('/admin/contact', token),
-          apiGetAdmin<{ success: boolean; data: unknown[] }>('/admin/admissions', token),
-          apiGetAdmin<{ success: boolean; data: unknown[] }>('/admin/feedback', token),
+          apiGetAdmin<{ success: boolean; data: BlogPost[] }>('/blog/admin'),
+          apiGetAdmin<{ success: boolean; data: unknown[] }>('/admin/contact'),
+          apiGetAdmin<{ success: boolean; data: unknown[] }>('/admin/admissions'),
+          apiGetAdmin<{ success: boolean; data: unknown[] }>('/admin/feedback'),
         ]);
         if (!active) return;
         setStats({
@@ -32,8 +32,7 @@ function useAdminCounts(token: string, onExpired: () => void): Stats & { latest:
         });
         setLatest((blogRes?.data ?? []).slice(0, 3));
       } catch (err: any) {
-        const msg = String(err?.error ?? '').toLowerCase();
-        if (msg.includes('forbidden') || msg.includes('invalid')) onExpired();
+        if (isAuthError(err)) onExpired();
       } finally {
         if (active) setLoading(false);
       }
@@ -41,14 +40,14 @@ function useAdminCounts(token: string, onExpired: () => void): Stats & { latest:
     fetchCounts();
     return () => { active = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+  }, []);
 
   return { ...stats, latest, loading };
 }
 
-export function AdminDashboard({ token, onExpired }: { token: string; onExpired: () => void }) {
+export function AdminDashboard({ onExpired }: { onExpired: () => void }) {
   const [, navigate] = useLocation();
-  const { blog, contact, admissions, feedback, latest, loading } = useAdminCounts(token, onExpired);
+  const { blog, contact, admissions, feedback, latest, loading } = useAdminCounts(onExpired);
 
   const cards = [
     { label: 'Blog Posts', value: blog, icon: Newspaper, color: 'bg-blue-600', view: '/admin/blog' },

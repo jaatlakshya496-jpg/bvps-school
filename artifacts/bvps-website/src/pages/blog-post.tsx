@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useRoute } from 'wouter';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
-import { Newspaper, ArrowLeft, Calendar, Tag, User, Loader2 } from 'lucide-react';
+import { Newspaper, ArrowLeft, Calendar, Tag, User, Loader2, RefreshCw } from 'lucide-react';
 import { apiGet } from '@/lib/api';
 import type { BlogPost } from '@/pages/admin/types';
 import { formatDate } from '@/pages/admin/types';
+import { Button } from '@/components/ui/button';
 
 function renderContent(content: string) {
   return content
@@ -30,16 +31,28 @@ export default function BlogPostPage() {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [loadError, setLoadError] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     if (!slug) { setNotFound(true); setLoading(false); return; }
     let active = true;
-    apiGet<{ success: boolean; data: BlogPost }>(`/blog/${slug}`)
+    setLoading(true);
+    setLoadError(false);
+    setNotFound(false);
+    setPost(null);
+    apiGet<{ success: boolean; data: BlogPost }>(`/blog/${encodeURIComponent(slug)}`)
       .then(res => { if (active) { if (res?.data) setPost(res.data); else setNotFound(true); } })
-      .catch(() => { if (active) setNotFound(true); })
+      .catch((err: unknown) => {
+        if (!active) return;
+        const status =
+          err && typeof err === 'object' && 'status' in err ? err.status : undefined;
+        if (status === 404) setNotFound(true);
+        else setLoadError(true);
+      })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [slug]);
+  }, [slug, reloadKey]);
 
   if (loading) {
     return (
@@ -50,6 +63,31 @@ export default function BlogPostPage() {
         </Helmet>
         <div className="flex items-center gap-2 text-muted-foreground">
           <Loader2 className="w-5 h-5 animate-spin" /> Loading post…
+        </div>
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center px-4 text-center">
+        <Helmet>
+          <title>Blog temporarily unavailable — BVPS</title>
+          <meta name="robots" content="noindex, follow" />
+        </Helmet>
+        <Newspaper className="w-12 h-12 text-muted-foreground mb-4" />
+        <h1 className="text-2xl font-serif font-bold text-black">Post abhi load nahi ho paya</h1>
+        <p className="text-muted-foreground text-sm mt-2 mb-6 max-w-md">
+          Blog temporarily unavailable hai. Thodi der baad dobara try karein.
+        </p>
+        <div className="flex flex-wrap justify-center gap-3">
+          <Button type="button" variant="outline" onClick={() => setReloadKey(key => key + 1)}>
+            <RefreshCw className="w-4 h-4" />
+            Dobara try karein
+          </Button>
+          <Link href="/blog" className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-medium">
+            <ArrowLeft className="w-4 h-4" /> Back to Blog
+          </Link>
         </div>
       </div>
     );

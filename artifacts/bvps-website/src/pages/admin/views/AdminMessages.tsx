@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Mail, UserRound, Star, Trash2, Loader2, Inbox, Crown } from 'lucide-react';
-import { apiGetAdmin, apiSend, extractApiError } from '@/lib/api';
+import { apiGetAdmin, apiSend, extractApiError, isAuthError } from '@/lib/api';
 import type { ContactRow, AdmissionRow, FeedbackRow, PrincipalRow } from '../types';
 import { formatDate } from '../types';
 
@@ -13,7 +13,7 @@ const TABS: { key: Tab; label: string; icon: typeof Mail }[] = [
   { key: 'feedback', label: 'Feedback', icon: Star },
 ];
 
-export function AdminMessages({ token, onExpired }: { token: string; onExpired: () => void }) {
+export function AdminMessages({ onExpired }: { onExpired: () => void }) {
   const [tab, setTab] = useState<Tab>('admissions');
   const [contact, setContact] = useState<ContactRow[]>([]);
   const [admissions, setAdmissions] = useState<AdmissionRow[]>([]);
@@ -33,7 +33,7 @@ export function AdminMessages({ token, onExpired }: { token: string; onExpired: 
       contact: '/admin/contact',
       feedback: '/admin/feedback',
     };
-    apiGetAdmin<{ success: boolean; data: ContactRow[] | AdmissionRow[] | FeedbackRow[] | PrincipalRow[] }>(paths[tab], token)
+    apiGetAdmin<{ success: boolean; data: ContactRow[] | AdmissionRow[] | FeedbackRow[] | PrincipalRow[] }>(paths[tab])
       .then(res => {
         if (!active) return;
         const data = res?.data ?? [];
@@ -44,26 +44,24 @@ export function AdminMessages({ token, onExpired }: { token: string; onExpired: 
       })
       .catch((err: any) => {
         if (!active) return;
-        const m = String(err?.error ?? '').toLowerCase();
-        if (m.includes('forbidden') || m.includes('invalid')) onExpired();
+        if (isAuthError(err)) onExpired();
         else setError(extractApiError(err));
       })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab, token]);
+  }, [tab]);
 
   async function handleDelete(kind: Tab, id: number) {
     setDeleting(id);
     try {
-      await apiSend<{ success: boolean }>('DELETE', `/admin/${kind}/${id}`, null, token);
+      await apiSend<{ success: boolean }>('DELETE', `/admin/${kind}/${id}`, null);
       if (kind === 'contact') setContact(prev => prev.filter(r => r.id !== id));
       else if (kind === 'admissions') setAdmissions(prev => prev.filter(r => r.id !== id));
       else if (kind === 'principal') setPrincipal(prev => prev.filter(r => r.id !== id));
       else setFeedback(prev => prev.filter(r => r.id !== id));
     } catch (err: any) {
-      const m = String(err?.error ?? '').toLowerCase();
-      if (m.includes('forbidden') || m.includes('invalid')) onExpired();
+      if (isAuthError(err)) onExpired();
       else window.alert(extractApiError(err));
     } finally {
       setDeleting(null);

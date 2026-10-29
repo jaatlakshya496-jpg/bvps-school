@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ImagePlus, Loader2, Newspaper, Save, Trash2 } from 'lucide-react';
-import { apiGetAdmin, apiSend, extractApiError } from '@/lib/api';
+import { apiGetAdmin, apiSend, extractApiError, isAuthError } from '@/lib/api';
 import { compressImageFile, readFileAsDataUrl } from '@/lib/image-utils';
 import type { BlogPost } from '../types';
 import { slugify } from '../types';
@@ -9,8 +9,8 @@ const inputCls =
   'w-full border-2 border-primary/30 focus:border-primary rounded-xl px-4 py-3 text-sm text-black bg-white outline-none';
 
 export function AdminBlogEditor({
-  token, postId, onDone, onCancel, onExpired,
-}: { token: string; postId: number; onDone: () => void; onCancel: () => void; onExpired?: () => void }) {
+  postId, onDone, onCancel, onExpired,
+}: { postId: number; onDone: () => void; onCancel: () => void; onExpired?: () => void }) {
   const [title, setTitle] = useState('');
   const [slug, setSlug] = useState('');
   const [category, setCategory] = useState('General');
@@ -49,7 +49,7 @@ export function AdminBlogEditor({
   useEffect(() => {
     if (postId <= 0) return;
     let active = true;
-    apiGetAdmin<{ success: boolean; data: BlogPost[] }>('/blog/admin', token)
+    apiGetAdmin<{ success: boolean; data: BlogPost[] }>('/blog/admin')
       .then(res => {
         if (!active) return;
         const post = (res?.data ?? []).find(p => p.id === postId);
@@ -66,14 +66,13 @@ export function AdminBlogEditor({
       })
       .catch((err: any) => {
         if (active) {
-          const m = String(err?.error ?? '').toLowerCase();
-          if (m.includes('forbidden') || m.includes('invalid')) onExpired?.();
+          if (isAuthError(err)) onExpired?.();
           else setError(extractApiError(err));
         }
       })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, [postId, token]);
+  }, [postId]);
 
   async function handleSave() {
     if (!title.trim()) { setError('Title daalein.'); return; }
@@ -98,14 +97,13 @@ export function AdminBlogEditor({
 
     try {
       if (postId > 0) {
-        await apiSend<{ success: boolean }>('PUT', `/blog/admin/${postId}`, body, token);
+        await apiSend<{ success: boolean }>('PUT', `/blog/admin/${postId}`, body);
       } else {
-        await apiSend<{ success: boolean }>('POST', '/blog/admin', body, token);
+        await apiSend<{ success: boolean }>('POST', '/blog/admin', body);
       }
       onDone();
     } catch (err: any) {
-      const m = String(err?.error ?? '').toLowerCase();
-      if (m.includes('forbidden') || m.includes('invalid')) onExpired?.();
+      if (isAuthError(err)) onExpired?.();
       else setError(extractApiError(err));
     } finally {
       setSaving(false);

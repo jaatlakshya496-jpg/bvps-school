@@ -3,7 +3,7 @@ import { Link, useLocation } from 'wouter';
 import { MapPin, Phone, Mail, Clock, GraduationCap, Info } from 'lucide-react';
 import schoolLogo from '/school-logo.png';
 import { useSiteContent } from '@/lib/site-content';
-import { getAdminToken } from '@/lib/admin-store';
+import { apiAdminStatus, isAuthError } from '@/lib/api';
 
 const ADMIN_TAPS_NEEDED = 5;
 
@@ -15,15 +15,22 @@ export function Footer() {
   const [isAdmin, setIsAdmin] = useState(false);
   const resetTimer = useRef<number | null>(null);
 
-  // Admin Portal link SIRF owner (logged-in admin) ko dikhta hai — baaki koi
-  // visitor ise nahi dekhta. Login ke baad /admin se wapas site par aane par
-  // footer remount hoke link dikha deta hai. Login na hone par hidden raasta:
-  // footer ki copyright line par 5 tap, ya URL me #admin.
+  // Admin link tabhi dikhayein jab server current HttpOnly session verify kare.
+  // localStorage hint ko authorization ya visibility ka proof nahi maana jaata.
   useEffect(() => {
-    setIsAdmin(!!getAdminToken());
-    const sync = () => setIsAdmin(!!getAdminToken());
-    window.addEventListener('storage', sync);
-    return () => window.removeEventListener('storage', sync);
+    let active = true;
+    apiAdminStatus()
+      .then(info => {
+        if (active) setIsAdmin(Boolean(info.email));
+      })
+      .catch(err => {
+        if (!active) return;
+        setIsAdmin(false);
+        if (!isAuthError(err)) {
+          console.error('Admin session could not be verified for the footer link.', err);
+        }
+      });
+    return () => { active = false; };
   }, []);
 
   useEffect(() => {

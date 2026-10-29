@@ -5,8 +5,8 @@ import {
   LayoutDashboard, Newspaper, IndianRupee, MessageSquare, LogOut, ExternalLink,
   GraduationCap, Mail, Globe2, Images,
 } from 'lucide-react';
-import { apiGetAdmin } from '@/lib/api';
-import { getAdminToken, getAdminEmail, clearAdminSession } from '@/lib/admin-store';
+import { apiAdminStatus, apiLogout, isAuthError, setCsrfToken } from '@/lib/api';
+import { getAdminEmail, clearAdminSession, setAdminSession } from '@/lib/admin-store';
 import { AdminLogin } from './AdminLogin';
 import { AdminDashboard } from './views/AdminDashboard';
 import { AdminBlog } from './views/AdminBlog';
@@ -42,50 +42,48 @@ function parseView(pathname: string): View {
 
 export default function AdminPortal() {
   const [location, navigate] = useLocation();
-  const [token, setToken] = useState<string>(() => getAdminToken());
+  const [authenticated, setAuthenticated] = useState(false);
   const [email, setEmail] = useState<string>(() => getAdminEmail());
-  const [checking, setChecking] = useState<boolean>(() => Boolean(getAdminToken()));
+  const [checking, setChecking] = useState(true);
   const [sessionError, setSessionError] = useState('');
 
-  // Token se ek baar session verify karo — taaki invalid/expired token par
-  // dobara email+password na maange jaaye nahi, balki login screen dikhe.
+  // HttpOnly cookie hai, isliye localStorage se "logged in" guess nahi kar
+  // sakte. Har mount par server se status poochte hain — 200 par session valid
+  // hai aur wahi response naya CSRF token deta hai.
   useEffect(() => {
-    if (!token) return;
     let active = true;
     setChecking(true);
-    apiGetAdmin<{ success: boolean; data?: { email?: string } }>('/admin/status', token)
-      .then(res => {
+    apiAdminStatus()
+      .then(info => {
         if (!active) return;
-        if (res?.success) {
-          setEmail(res.data?.email ?? getAdminEmail());
-        } else {
-          clearAdminSession();
-          setToken('');
-        }
+        setCsrfToken(info.csrfToken);
+        setEmail(info.email || getAdminEmail());
+        if (info.email) setAdminSession(info.email);
+        setAuthenticated(true);
+        setSessionError('');
       })
       .catch((err: any) => {
         if (!active) return;
-        const msg = String(err?.error ?? '').toLowerCase();
-        if (msg.includes('forbidden') || msg.includes('not configured') || msg.includes('invalid')) {
-          clearAdminSession();
-          setToken('');
-          setSessionError(msg.includes('forbidden')
-            ? 'Session expire ho gaya. Dobara login karein.'
-            : msg.includes('not configured')
-            ? 'Server par admin set nahi hai (ADMIN_EMAIL / ADMIN_PASSWORD / ADMIN_SECRET).'
-            : '');
-        } else {
-          // network failure — token ko preserve rakhte hain; views retry karenge
+        clearAdminSession();
+        setCsrfToken('');
+        setAuthenticated(false);
+        if (isAuthError(err)) {
+          setSessionError('');
+        } else if (err?.status === 500) {
+          setSessionError('Server par admin set nahi hai (ADMIN_EMAIL / ADMIN_PASSWORD / ADMIN_SECRET).');
+        } else if (err?.status === 0) {
+          setSessionError('Server se connect nahi ho paya. Internet/server check karein.');
         }
+        // DB/other server errors: login screen dikhao, lekin login try karne do.
       })
       .finally(() => { if (active) setChecking(false); });
     return () => { active = false; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function logout() {
+  async function logout() {
+    await apiLogout();
     clearAdminSession();
-    setToken('');
+    setAuthenticated(false);
     setEmail('');
     setSessionError('');
     navigate('/admin');
@@ -105,7 +103,7 @@ export default function AdminPortal() {
     </Helmet>
   );
 
-  if (!token) {
+  if (!authenticated) {
     if (checking) {
       return (
         <div className="min-h-[100dvh] bg-slate-950 flex items-center justify-center text-white text-sm">
@@ -118,7 +116,7 @@ export default function AdminPortal() {
       <>
         {noindexHelmet}
         <AdminLogin
-          onSuccess={() => { setToken(getAdminToken()); setEmail(getAdminEmail()); setSessionError(''); }}
+          onSuccess={() => { setAuthenticated(true); setEmail(getAdminEmail()); setSessionError(''); }}
           initialError={sessionError || undefined}
         />
       </>
@@ -213,21 +211,20 @@ export default function AdminPortal() {
         </header>
 
         <main className="flex-1 p-4 sm:p-5 overflow-x-auto">
-          {view === 'dashboard' && <AdminDashboard token={token} onExpired={onExpired} />}
-          {view === 'site' && <AdminSite token={token} onExpired={onExpired} />}
-          {view === 'images' && <AdminImages token={token} onExpired={onExpired} />}
-          {view === 'blog' && <AdminBlog token={token} onExpired={onExpired} />}
+          {view === 'dashboard' && <AdminDashboard onExpired={onExpired} />}
+          {view === 'site' && <AdminSite onExpired={onExpired} />}
+          {view === 'images' && <AdminImages onExpired={onExpired} />}
+          {view === 'blog' && <AdminBlog onExpired={onExpired} />}
           {(view === 'blog-new' || view === 'blog-edit') && (
             <AdminBlogEditor
-              token={token}
               postId={view === 'blog-edit' ? Number(location.match(/\/blog\/(\d+)\/edit/)?.[1] ?? 0) : 0}
               onDone={() => navigate('/admin/blog')}
               onCancel={() => navigate('/admin/blog')}
               onExpired={onExpired}
             />
           )}
-          {view === 'fees' && <AdminFees token={token} onExpired={onExpired} />}
-          {view === 'messages' && <AdminMessages token={token} onExpired={onExpired} />}
+          {view === 'fees' && <AdminFees onExpired={onExpired} />}
+          {view === 'messages' && <AdminMessages onExpired={onExpired} />}
         </main>
       </div>
     </div>

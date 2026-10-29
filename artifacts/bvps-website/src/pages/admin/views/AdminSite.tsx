@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Save, Loader2, Globe2, RotateCcw, Check } from 'lucide-react';
-import { apiGetAdmin, apiSend, extractApiError } from '@/lib/api';
+import { apiGetAdmin, apiSend, extractApiError, isAuthError } from '@/lib/api';
 import { CONTENT_SECTIONS, DEFAULT_CONTENT, useSiteContent } from '@/lib/site-content';
 
 /**
@@ -11,7 +11,7 @@ import { CONTENT_SECTIONS, DEFAULT_CONTENT, useSiteContent } from '@/lib/site-co
  * - Save karte hi `PUT /api/content` chala jaata hai aur public site ka
  *   `GET /api/content` agle render se nayi value dikhata hai (cache 1 min).
  */
-export function AdminSite({ token, onExpired }: { token: string; onExpired: () => void }) {
+export function AdminSite({ onExpired }: { onExpired: () => void }) {
   const { get } = useSiteContent();
   const [server, setServer] = useState<Record<string, string>>({});
   const [draft, setDraft] = useState<Record<string, string>>({});
@@ -25,7 +25,6 @@ export function AdminSite({ token, onExpired }: { token: string; onExpired: () =
     try {
       const res = await apiGetAdmin<{ success: boolean; data?: Record<string, unknown> }>(
         '/content/admin',
-        token,
       );
       const raw = res?.data ?? {};
       const overrides: Record<string, string> = {};
@@ -36,8 +35,7 @@ export function AdminSite({ token, onExpired }: { token: string; onExpired: () =
       setServer(overrides);
       setDraft({ ...DEFAULT_CONTENT, ...overrides });
     } catch (err: any) {
-      const m = String(err?.error ?? '').toLowerCase();
-      if (m.includes('forbidden') || m.includes('invalid')) onExpired();
+      if (isAuthError(err)) onExpired();
       else setMsg({ text: extractApiError(err), ok: false });
       setDraft({ ...DEFAULT_CONTENT });
     } finally {
@@ -48,7 +46,7 @@ export function AdminSite({ token, onExpired }: { token: string; onExpired: () =
   useEffect(() => {
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+  }, []);
 
   const effective = useMemo(
     () => (key: string) => server[key] ?? DEFAULT_CONTENT[key] ?? '',
@@ -74,7 +72,6 @@ export function AdminSite({ token, onExpired }: { token: string; onExpired: () =
         'DELETE',
         `/content/${encodeURIComponent(key)}`,
         {},
-        token,
       );
       const raw = res?.data ?? {};
       const overrides: Record<string, string> = {};
@@ -86,8 +83,7 @@ export function AdminSite({ token, onExpired }: { token: string; onExpired: () =
       setDraft(d => ({ ...d, [key]: DEFAULT_CONTENT[key] ?? '' }));
       setMsg({ text: `"${key}" default par reset ho gaya.`, ok: true });
     } catch (err: any) {
-      const m = String(err?.error ?? '').toLowerCase();
-      if (m.includes('forbidden') || m.includes('invalid')) onExpired();
+      if (isAuthError(err)) onExpired();
       else setMsg({ text: extractApiError(err), ok: false });
     }
   }
@@ -106,7 +102,6 @@ export function AdminSite({ token, onExpired }: { token: string; onExpired: () =
         'PUT',
         '/content',
         { items },
-        token,
       );
       const raw = res?.data ?? {};
       const overrides: Record<string, string> = {};
@@ -121,8 +116,7 @@ export function AdminSite({ token, onExpired }: { token: string; onExpired: () =
         ok: true,
       });
     } catch (err: any) {
-      const m = String(err?.error ?? '').toLowerCase();
-      if (m.includes('forbidden') || m.includes('invalid')) onExpired();
+      if (isAuthError(err)) onExpired();
       else setMsg({ text: extractApiError(err), ok: false });
     } finally {
       setSaving(false);

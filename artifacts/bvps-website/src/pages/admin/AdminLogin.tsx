@@ -19,8 +19,10 @@ export function AdminLogin({ onSuccess, initialError }: { onSuccess: () => void;
     setError('');
     try {
       const res = await apiLogin(email.trim(), password);
-      if (res.success && res.data?.token) {
-        setAdminSession(res.data.token, res.data.email);
+      if (res.success && res.data?.csrfToken) {
+        // Session HttpOnly cookie me hai; yahan sirf non-sensitive email hint
+        // aur CSRF token (API helper ke memory me) set hota hai.
+        setAdminSession(res.data.email);
         onSuccess();
       } else {
         setError(res.error ?? 'Login failed. Email/password check karein.');

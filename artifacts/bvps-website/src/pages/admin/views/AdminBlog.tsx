@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'wouter';
 import { Plus, Pencil, Trash2, Eye, Loader2, Newspaper } from 'lucide-react';
-import { apiGetAdmin, apiSend, extractApiError } from '@/lib/api';
+import { apiGetAdmin, apiSend, extractApiError, isAuthError } from '@/lib/api';
 import type { BlogPost } from '../types';
 import { formatDate } from '../types';
 
-export function AdminBlog({ token, onExpired }: { token: string; onExpired: () => void }) {
+export function AdminBlog({ onExpired }: { onExpired: () => void }) {
   const [, navigate] = useLocation();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -15,27 +15,25 @@ export function AdminBlog({ token, onExpired }: { token: string; onExpired: () =
   const load = () => {
     setLoading(true);
     setError('');
-    apiGetAdmin<{ success: boolean; data: BlogPost[] }>('/blog/admin', token)
+    apiGetAdmin<{ success: boolean; data: BlogPost[] }>('/blog/admin')
       .then(res => setPosts(res?.data ?? []))
       .catch((err: any) => {
-        const msg = String(err?.error ?? '').toLowerCase();
-        if (msg.includes('forbidden') || msg.includes('invalid')) onExpired();
+        if (isAuthError(err)) onExpired();
         else setError(extractApiError(err));
       })
       .finally(() => setLoading(false));
   };
 
-  useEffect(load, [token]);
+  useEffect(load, []);
 
   async function handleDelete(post: BlogPost) {
     if (!window.confirm(`Delete "${post.title}"? Ye hamesha ke liye remove ho jayega.`)) return;
     setDeletingId(post.id);
     try {
-      await apiSend<{ success: boolean }>('DELETE', `/blog/admin/${post.id}`, null, token);
+      await apiSend<{ success: boolean }>('DELETE', `/blog/admin/${post.id}`, null);
       setPosts(prev => prev.filter(p => p.id !== post.id));
     } catch (err: any) {
-      const msg = String(err?.error ?? '').toLowerCase();
-      if (msg.includes('forbidden') || msg.includes('invalid')) onExpired();
+      if (isAuthError(err)) onExpired();
       else window.alert(extractApiError(err));
     } finally {
       setDeletingId(null);

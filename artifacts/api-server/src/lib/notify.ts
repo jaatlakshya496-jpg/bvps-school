@@ -1,6 +1,11 @@
-const ADMIN_EMAIL = "jaatlakshya496@gmail.com";
-const ADMIN_WHATSAPP = "+919671772205";
-const SITE_ORIGIN = "https://bvps-school.vercel.app";
+const ADMIN_EMAIL = process.env.NOTIFY_EMAIL || "jaatlakshya496@gmail.com";
+const ADMIN_WHATSAPP = process.env.NOTIFY_WHATSAPP || "+919671772205";
+const SITE_ORIGIN = (process.env.SITE_ORIGIN || "https://bvps-school.vercel.app").replace(/\/+$/, "");
+const NOTIFY_TIMEOUT_MS = 10_000;
+
+function fetchWithTimeout(url: string, init: RequestInit = {}) {
+  return fetch(url, { ...init, signal: AbortSignal.timeout(NOTIFY_TIMEOUT_MS) });
+}
 
 export interface Notification {
 	subject: string;
@@ -31,7 +36,7 @@ async function sendViaResend(n: Notification): Promise<boolean> {
 	const apikey = process.env.RESEND_API_KEY;
 	if (!apikey) return false;
 
-	const res = await fetch("https://api.resend.com/emails", {
+	const res = await fetchWithTimeout("https://api.resend.com/emails", {
 		method: "POST",
 		headers: {
 			Authorization: `Bearer ${apikey}`,
@@ -55,7 +60,7 @@ async function sendViaResend(n: Notification): Promise<boolean> {
 }
 
 async function sendViaFormSubmit(n: Notification): Promise<boolean> {
-	const res = await fetch(`https://formsubmit.co/ajax/${ADMIN_EMAIL}`, {
+	const res = await fetchWithTimeout(`https://formsubmit.co/ajax/${ADMIN_EMAIL}`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
@@ -121,11 +126,13 @@ export async function sendWhatsApp(n: Notification): Promise<boolean> {
 	}
 
 	try {
-		const url = `https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(ADMIN_WHATSAPP)}&apikey=${encodeURIComponent(apikey)}&text=${encodeURIComponent(formatBody(n))}`;
-		const res = await fetch(url);
-		const text = await res.text();
-		if (!res.ok || /error|not allowed|invalid|not activated/i.test(text)) {
-			throw new Error(`WhatsApp delivery failed: ${text.slice(0, 120)}`);
+		// CallMeBot URL bahut lambi na ho — message ko reasonable length tak trim.
+		const text = formatBody(n).slice(0, 1200);
+		const url = `https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(ADMIN_WHATSAPP)}&apikey=${encodeURIComponent(apikey)}&text=${encodeURIComponent(text)}`;
+		const res = await fetchWithTimeout(url);
+		const textBody = await res.text();
+		if (!res.ok || /error|not allowed|invalid|not activated/i.test(textBody)) {
+			throw new Error(`WhatsApp delivery failed: ${textBody.slice(0, 120)}`);
 		}
 		return true;
 	} catch (err) {
@@ -140,5 +147,6 @@ export async function notify(n: Notification) {
 }
 
 export function whatsAppClickLink(n: Notification) {
-	return `https://wa.me/919671772205?text=${encodeURIComponent(formatBody(n))}`;
+	const text = formatBody(n).slice(0, 1800);
+	return `https://wa.me/${ADMIN_WHATSAPP.replace(/[^\d]/g, "")}?text=${encodeURIComponent(text)}`;
 }

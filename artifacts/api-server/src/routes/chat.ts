@@ -1,4 +1,5 @@
 import { Router, type IRouter } from "express";
+import { chatLimiter } from "../lib/rate-limit";
 
 const router: IRouter = Router();
 
@@ -8,7 +9,9 @@ const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 const GROQ_MODELS = ["openai/gpt-oss-20b", "llama-3.3-70b-versatile"];
 const GROQ_TIMEOUT_MS = 25_000;
 const MAX_MESSAGE_LENGTH = 2000;
-const MAX_HISTORY_MESSAGES = 12;
+const MAX_HISTORY_MESSAGES = 10;
+const MAX_HISTORY_CHARS = 24_000;
+const MAX_REPLY_CHARS = 4000;
 
 type ImageId = "campus" | "students" | "facilities";
 
@@ -47,7 +50,7 @@ Confirmed BVPS facts:
 - Location: Railway Road, Kalayat, District Kaithal, Haryana – 136117.
 - Established in 2004.
 - Co-educational school offering Classes 1 to 12.
-- The website currently says admissions are open for Classes 1 to 12. Its admissions pages are labelled Session 2025–26, so direct visitors to the office to confirm the active session or seat availability.
+- The website currently says admissions are open for Classes 1 to 12 for the 2026–27 session. Do not claim any other session. Always advise visitors to confirm seat availability and dates with the school office.
 - Board/curriculum: Haryana Board of School Education (HBSE/BSEH), as stated in the school's website metadata and contact page.
 - School hours: Monday to Saturday, 8:00 AM–3:00 PM. Sunday is closed.
 - Admission office: Monday to Saturday, 9:00 AM–2:00 PM. The site recommends visiting between 10:00 AM and 12:00 PM.
@@ -83,11 +86,18 @@ function isChatMessage(value: unknown): value is ChatMessage {
   return (
     (message.role === "user" || message.role === "assistant") &&
     typeof message.content === "string" &&
-    message.content.trim().length > 0
+    message.content.trim().length > 0 &&
+    message.content.length <= MAX_MESSAGE_LENGTH
   );
 }
 
-router.post("/chat", async (req, res) => {
+router.post("/chat", chatLimiter, async (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+
+  if (!req.body || typeof req.body !== "object" || Array.isArray(req.body)) {
+    return res.status(400).json({ error: "Invalid chat request." });
+  }
+
   const message =
     typeof req.body?.message === "string" ? req.body.message.trim() : "";
 
@@ -101,8 +111,18 @@ router.post("/chat", async (req, res) => {
     });
   }
 
+  // History ko size aur content dono par cap karo — warna koi bahut bada
+  // payload bhej kar Groq ka token budget khatam kar sakta hai.
+  let historyChars = 0;
   const history = Array.isArray(req.body?.history)
-    ? req.body.history.filter(isChatMessage).slice(-MAX_HISTORY_MESSAGES)
+    ? req.body.history
+        .filter(isChatMessage)
+        .slice(-MAX_HISTORY_MESSAGES)
+        .map((entry: ChatMessage) => ({ role: entry.role, content: entry.content.trim().slice(0, MAX_MESSAGE_LENGTH) }))
+        .filter((entry: ChatMessage) => {
+          historyChars += entry.content.length;
+          return historyChars <= MAX_HISTORY_CHARS;
+        })
     : [];
   const requestedImages = getRequestedImages(message);
 
@@ -142,11 +162,9 @@ router.post("/chat", async (req, res) => {
         });
 
         if (!groqResponse.ok) {
-          const providerBody = await groqResponse.text();
           console.error("Groq chat request failed", {
             model,
             status: groqResponse.status,
-            body: providerBody.slice(0, 500),
           });
           lastError = `${model} -> ${groqResponse.status}`;
           continue;
@@ -155,7 +173,7 @@ router.post("/chat", async (req, res) => {
         const payload = (await groqResponse.json()) as {
           choices?: Array<{ message?: { content?: string } }>;
         };
-        reply = payload.choices?.[0]?.message?.content?.trim() ?? "";
+        reply = payload.choices?.[0]?.message?.content?.trim().slice(0, MAX_REPLY_CHARS) ?? "";
         if (reply) break;
 
         lastError = `${model} -> empty reply`;

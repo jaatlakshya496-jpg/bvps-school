@@ -9,6 +9,8 @@ export const contactSubmissionsTable = pgTable("contact_submissions", {
 	phone: text("phone").notNull(),
 	subject: text("subject").notNull(),
 	message: text("message").notNull(),
+	// Client-generated idempotency key — retry/double-click se duplicate row na bane.
+	submissionKey: text("submission_key").unique(),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -30,6 +32,7 @@ export const admissionEnquiriesTable = pgTable("admission_enquiries", {
 	address: text("address").notNull(),
 	previousSchool: text("previous_school"),
 	message: text("message"),
+	submissionKey: text("submission_key").unique(),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -45,6 +48,7 @@ export const feedbackSubmissionsTable = pgTable("feedback_submissions", {
 	category: text("category").notNull().default(""),
 	message: text("message").notNull(),
 	rating: integer("rating").notNull(),
+	submissionKey: text("submission_key").unique(),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -64,6 +68,7 @@ export const principalMessagesTable = pgTable("principal_messages", {
 	subject: text("subject").notNull(),
 	message: text("message").notNull(),
 	status: text("status").notNull().default("new"),
+	submissionKey: text("submission_key").unique(),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

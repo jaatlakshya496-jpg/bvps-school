@@ -50,7 +50,7 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - **DB:** nayi table `fee_structure` (`lib/db/src/schema/index.ts` + migration `0003_fee_structure.sql`). Classes + 3 streams ke admission/monthly/annualFund numeric store hote hain. Total/year auto = monthly×12 + annualFund.
   - **API:** `GET /api/fees` (public, empty ho toh built-in defaults), `GET /api/fees/admin` (verify passcode), `PUT /api/fees/admin` (save; `x-admin-key` header). Naya `lib/admin-auth.ts` shared `requireAdmin`, `admin.ts` usi ko use karta hai.
   - **Fallback:** API/DB down ho toh page built-in default fees dikhata hai (site kabhi na toote).
-  - ⚠️ **Live (18-Sep):** Render pe `ADMIN_SECRET='BVPS@2026'` set kiya + migration startup par chalti hai (`index.ts` mein `migrate()` se `lib/db/drizzle` — Render ke `preDeployCommand` se reliable nahi tha). Deploy trigger hua, `PUT /api/fees/admin` verified OK. Frontend Vercel live. 🔑 Site pe passcode: **BVPS@2026** (badalna ho toh Render → service → Env Vars → `ADMIN_SECRET`).
+  - ⚠️ **Live (18-Sep):** Admin passcode Render ke private environment variables mein set kiya tha; passcode ya secret values documentation/repository mein store nahi karne chahiye. Migrations startup par chalti hain (`index.ts` mein `migrate()` se `lib/db/drizzle`).
 - **[2026-09-21]** 🕶️ **Owner-only fee editor (hidden access)** — fee-structure page par "Manage Fees" button public ke liye **hidden** kar diya. Ab admin access 3 tarikon se milta hai:
   - **Secret URL:** site pe `?admin=1` ya `#admin` lagao (e.g. `https://bvps-school.vercel.app/fee-structure?admin=1`) — page khulte hi admin modal khul jayega.
   - **5 tap trick:** hero heading "Fee Structure" par mobile pe 5 quick taps — admin modal khulta hai.
@@ -59,13 +59,13 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - Admin modal khulte waqt `GET /api/fees/admin` se latest DB fees auto-load hoti hain (agar key pehle se hai).
 - **[2026-09-24]** 🗂️ **Admin Portal + Blog system** (code push ho gaya, deploy baaki):
   - **`/admin` portal** (website layout se alag, apna login): Dashboard (counts + recent), Blog (list + editor), Fee Structure (wahi fee editor admin view mein), Messages (contact / admission / feedback + delete). Footer me "🔒 Admin Login" link.
-  - **Auth:** `POST /api/admin/login` email+password (`ADMIN_EMAIL`, `ADMIN_PASSWORD` env) → wahi `ADMIN_SECRET` token return karta hai jo baaki admin endpoints ke `x-admin-key` header me use hota hai. `GET /api/admin/status` se token verify. Token browser me `localStorage` (`bvps_admin_key` / `bvps_admin_email`).
+  - **Auth (original implementation, since replaced):** Login used `ADMIN_EMAIL`/`ADMIN_PASSWORD` env vars and a browser-stored token. Current authentication uses a short-lived HttpOnly session cookie; secrets stay in server environment variables.
   - **Blog:** nayi table `blog_posts` (`lib/db/src/schema/index.ts` + migration `0004_blog_posts.sql`). Public `GET /api/blog` + `GET /api/blog/:slug` (sirf `published`), admin CRUD `GET/POST /api/blog/admin`, `PUT/DELETE /api/blog/admin/:id`. Public pages `/blog` (list) + `/blog/:slug` (post), Navbar + Footer + 3 languages (EN/HI/Punjabi) me link.
   - **Fee page fix:** "Manage Fees" button ab owner-only nahi — hero ke **top-right hamesha visible** (`top-24 right-4`), passcode hi asli gate hai.
   - ⚠️ **Deploy baaki hai:** Render par `ADMIN_EMAIL` + `ADMIN_PASSWORD` env vars set karne hain (warna login 500 dega) + deploy (migration `0004` startup par chalti hai), phir Vercel frontend deploy.
 - **[2026-09-30]** ✅ **Admin portal + blog DEPLOY ho gaya** (Render auto-deploy on commit + Vercel auto-deploy dono trigger hue):
   - Render par `ADMIN_EMAIL=jaatlakshya496@gmail.com` aur naya random `ADMIN_PASSWORD` set kiya (Render API se, purane leaked key se). `POST /api/admin/login` → 200 verified, `GET /api/admin/status` + `GET /api/fees/admin` bhi OK.
-  - ⚠️ **`ADMIN_SECRET` Render par `LAXYAMALIK` hai** (AGENTS.md me likha `BVPS@2026` galat tha) — yahi fee editor ka passcode hai.
+  - ⚠️ Admin login/passcode settings are private Render environment variables; never record their values in source or documentation.
   - **Blog route-order bug fix:** `GET /:slug` route `/admin` se pehle declare tha → `GET /api/blog/admin` 404 de raha tha. Ab admin routes pehle, wildcard `/:slug` sabse last.
   - ⚠️ **`GROQ_API_KEY` Render par set NAHI hai** → `POST /api/chat` 503 de raha hai (chatbot kaam nahi kar raha). Key console.groq.com se lekar Render dashboard me daalni hogi.
 - **[2026-09-30]** 🤖 **Chatbot fix + contact form me DB save** (dono deploy ho gaye):
@@ -73,10 +73,9 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - **Contact form ka bada bug fix:** `POST /contact-email` sirf email/WhatsApp bhejta tha, **DB me save hi nahi karta tha** — to email fail hone par enquiry puri tarah gum ho jati thi (admin portal me dikhti bhi nahi). Ab `contact-email.ts` pehle `contact_submissions` me insert karta hai (admission/feedback jaisa resilient pattern), phir notify karta hai. Response me `savedToDb` flag bhi aa gaya.
   - **Message channel decision (user ne 30-Sep ko chuna): email (FormSubmit) primary rahega** — WhatsApp ka CallMeBot path deactivate (key nahi mili). `sendWhatsApp` ab key na hone par chup chap skip karta hai. Form me "Send on WhatsApp" manual link phir bhi kaam karta hai.
   - ⚠️ **Email abhi bhi nahi chal rahi:** FormSubmit activation pending (`formsubmit.co/ajax/...` → 500). Tab tak **sabhi enquiries DB me safe hain** aur admin portal → Messages me dikhengi — koi data loss nahi.
-- **[2026-09-30]** 🔑 **Admin password = `LAXYAMALIK`** (user ne khud set karwaya, `ADMIN_SECRET` ke barabar):
-  - Render par `ADMIN_PASSWORD=LAXYAMALIK` set kiya + deploy. `POST /api/admin/login` (jaatlakshya496@gmail.com / LAXYAMALIK) → 200 verified.
-  - Site ka admin portal: **https://bvps-school.vercel.app/admin** — footer ke **sabse neeche** "Administration & Management → Admin Login" (pehle bahut chhota/dim link tha, isliye dikhta nahi tha; ab full-width visible bar me hai).
-  - Fee editor ka passcode bhi yahi `LAXYAMALIK` hai ( dono ek hi value).
+- **[2026-09-30]** 🔑 Admin login deployed; credentials are private Render environment variables and must not be stored in this file or any source-controlled document.
+  - Admin portal URL: `https://bvps-school.vercel.app/admin`.
+  - Fee editor access is protected by server-side authentication.
 - **[2026-09-30]** 🐛 **Admin portal ka 404 fix + footer me Admin link**:
   - **Root cause:** wouter me wildcard `:rest*` kaam nahi karta — `regexparam` usay literal param naam samajhta hai. `parse('/admin/:rest*')` sirf `/admin/blog` (ek segment) match karta tha; `/admin/blog/new` aur `/admin/blog/:id/edit` match **hi nahi** hote the → wahan se `PublicRouter` ka `NotFound` page ("404 Page Not Found") aa raha tha. Fix: `path="/admin/*"` (regexparam v3 ka sahi wildcard).
   - **NotFound page ab user-friendly:** dev message hata ke "Page Not Found" + Home/Contact buttons.
@@ -88,7 +87,7 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - **API:** public `POST /api/principal-messages` (pehle DB insert, phir email notify — `savedToDb`/`emailSent` flags). Admin `GET /api/admin/principal` + `DELETE /api/admin/principal/:id`.
   - **Admin Messages tabs ab 4:** **Admission Contact** | **Principal Message** | Contact Messages | Feedback. Principal ka message "Principal Message" tab me, admission ka "Admission Contact" tab me.
   - **🔒 Admin portal PRIVATE kar diya:** footer se **saare admin links hata diye** (Quick Links list + neeche ka amber ADMIN LOGIN bar) — ab koi visitor ko admin dikhai nahi deta. Admin sirf secret URL se khulta hai: `https://bvps-school.vercel.app/admin`, aur login ke liye email+password zaroori hai. Page par `<meta name="robots" content="noindex, nofollow, noarchive">`.
-  - ⭐ **Admin khud ke liye yaad rakho:** URL `https://bvps-school.vercel.app/admin` · email `jaatlakshya496@gmail.com` · password `LAXYAMALIK` (ye `ADMIN_SECRET` ke barabar hai, isi liye fee editor ka "Manage Fees" passcode bhi yahi chalta hai).
+  - ⭐ Admin access: `https://bvps-school.vercel.app/admin`. Login credentials must be retrieved/configured only in the private Render environment; do not store them in the repository.
   - ⚠️ `principal-message-store.ts` ka `savePrincipalMessage()` ab use nahi hota (sirf type rakha gaya hai) — naye form me localStorage fallback nahi hai, kyunki wahi thi jiski wajah se message gum ho jata tha.
 
 - **[2026-09-27]** 💬 **Groq-backed receptionist chatbot add kiya** — purane hardcoded voice assistant ko replace karke `ChatbotWidget.tsx` global floating chat widget add kiya. Widget recent history ke saath existing Render API ke `POST /api/chat` route ko call karta hai; browser kabhi Groq ko direct call nahi karta. Backend `openai/gpt-oss-20b` use karta hai, `GROQ_API_KEY` environment variable se read hota hai, aur verified BVPS site facts ke saath short multilingual receptionist prompt use karta hai. `render.yaml` mein key `sync: false` hai. `.gitignore` mein `.ENV` bhi add kiya gaya hai.
@@ -162,7 +161,7 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - ✅ **Deploy ho gaya (09-Oct):** commit `1290ebb` push → Render auto-deploy live (`/api/content/images` → 200) + Vercel auto-deploy live (`index-D58sg37K.js` serve ho raha hai). Render `preDeployCommand`/startup migration OK.
   - ⚠️ Vercel CLI se manual `vercel --prod` "Not authorized" deta hai (CLI personal account `jaatlakshya496-7056` ko team `bal-vikas` project par access nahi). Isliye deploy hamesha **git push → GitHub integration auto-deploy** se hi karo.
 
-- **[2026-10-09]** 🔓 **Admin Portal link wapas footer me (public)** — user ne kaha website par admin portal link dikhna chahiye aur wo **Principal Message ke neeche** ho. `Footer.tsx` Quick Links me "🔒 Admin Portal" (`/admin`) link add kiya, bilkul **"Write to Principal" ke neeche** (wahi style, `before:content-['›']`). Ye [2026-09-30] ke "admin private" decision ko override karta hai — ab admin link footer me visible hai (5-tap + `#admin` wale hidden shortcuts bhi abhi bhi chalte hain). Portal khud email+password (`jaatlakshya496@gmail.com` / `LAXYAMALIK`) se protected hai.
+- **[2026-10-09]** 🔓 Admin Portal link footer me temporarily public kiya tha; [2026-10-10] decision ne isse override karke owner-only visibility rakhi. Portal `/admin` par server-side authentication se protected hai.
 
 - **[2026-10-09]** 🚨 **SITE DOWN fix — `/admin` aur blog posts 404 de rahe the** (user ne report kiya "website chal nahi rahi"):
   - **Root cause:** `vercel.json` me `cleanUrls: true` tha aur rewrites ka destination `"/index.html"` tha. Vercel par `cleanUrls` ki wajah se `/index.html` pehle `/` par 308 redirect hota hai — isliye rewrite `destination: "/index.html"` resolve nahi hota aur request **404** deti hai. Isse `/admin`, `/admin/blog`, `/admin/*` aur **`/blog/:slug` (blog posts)** — sab live Vercel par 404 the. Footer ka naya "Admin Portal" link bhi isi liye 404 de raha tha.
@@ -181,7 +180,7 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
 - **[2026-10-10]** 🔒 **Admin Portal link ab sirf owner ko dikhta hai** — [2026-10-09] wala public footer link override kiya. User ne kaha admin portal link **sirf usi ko** dikhna chahiye, kisi visitor ko nahi.
   - **Fix (`Footer.tsx`):** `getAdminToken()` (`bvps_admin_key` legacy key, `setAdminSession()` login par set karti hai) se `isAdmin` state initialize hoti hai + `storage` event par sync. Quick Links me Admin Portal entry ab **conditional spread** hai: `...(isAdmin ? [{ name: '🔒 Admin Portal', path: '/admin' }] : [])` — bilkul "Write to Principal" ke neeche, par **sirf logged-in admin ko**.
   - **Visitor ke liye:** footer me admin link **kahin nahi** dikhta (prerendered static HTML me bhi nahi — verify kiya). Login ke baad site par wapas aane par (footer remount) link dikh jaata hai.
-  - **Owner ke hidden entry points (jab tak login na ho):** footer copyright line par **5 tap** (3 tap ke baad hint), ya URL me **`#admin`**. Login: `/admin` par `jaatlakshya496@gmail.com` / `LAXYAMALIK`.
+  - **Owner ke hidden entry points (jab tak login na ho):** footer copyright line par **5 tap** (3 tap ke baad hint), ya URL me **`#admin`**. Login credentials sirf private hosting environment mein rakhein.
   - ✅ Verify: `npm run lint` clean · `npm run build` OK (17 shells + 404 + sitemap) · `dist/index.html`/`about`/`principal-message` me "Admin Portal" string **absent**.
 
 - **[2026-10-14]** 🔍 **Google Search Console verify nahi ho raha tha — THEEK ho gaya (local commit, push pending):**
@@ -234,6 +233,19 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - ⚠️ **DB SUSPENDED (17-Oct):** Render free Postgres `bvps-db` (`dpg-dalq8j3l550s73c5dmmg-a`) expire ho gaya (`expiresAt: 2026-10-17`, `suspenders: ["billing"]`). Isliye `/api/blog`, `/api/fees`, admin messages sab **500** de rahe hain — blog page khaali/error aur sitemap me blog posts tab tak nahi aayenge jab tak DB restore/upgrade na ho. Render API se resume try kiya par expired free DB resume nahi hota. **User action:** Render dashboard → `bvps-db` upgrade/restore karein (data bachane ke liye) ya naya Postgres banakar `DATABASE_URL` update + migrations.
   - ✅ Verify: website `tsc --noEmit` clean · build OK (build log me blog fetch fail hua kyunki DB suspended hai, par build successfully complete) · 17 static shells + 404 + sitemap.
 
+- **[2026-10-29]** 📰 **Blog API failure now shown clearly (local change):**
+  - Public `/blog` aur `/blog/:slug` pages par API failure ko “no posts”/“post not found” ke roop mein dikhane ke bajay temporary-unavailable message aur retry button dikhaya jata hai.
+  - Live check: public website ke 17 static routes render hote hain; live `GET /api/blog` abhi 500 deta hai, jabki `/health`, `/api/fees` aur content endpoints respond karte hain. Blog query/table issue ko Render logs/migrations se diagnose karna baaki hai; blog URLs sitemap mein tab tak nahi aayenge jab tak API recover karke naya build deploy na ho.
+  - ✅ Verify: `npm run lint`, website build, aur API esbuild bundle clean; sab 17 prerendered route shells me title/description/canonical/structured data aur sitemap entries verify kiye. Browser route check me H1/main present, missing-alt/broken images ya uncaught JS errors nahi; mocked session check me visitor ko Admin link nahi aur valid session ko link dikha.
+
+- **[2026-10-29]** 🔐 **Owner-only Admin link + Vercel same-origin API + browser security headers (local changes):**
+  - Public footer ka normal content sab visitors ko dikhta rahega; Admin Portal link sirf tab dikhega jab `/api/admin/status` current server-side HttpOnly session ko verify kare. LocalStorage email ab link visibility ka proof nahi hai. `/admin` login password-protected rehta hai.
+  - Production frontend API calls ab same-origin `/api/*` use karti hain. `vercel.json` unhe Render API par proxy karta hai, taaki browsers third-party cookies block karne par bhi admin session cookie bhej saken.
+  - Vercel responses par `nosniff`, frame denial, referrer, microphone/camera/geolocation aur HSTS headers set hain. Microphone same-origin ke liye allowed hai, taaki site voice feature block na ho.
+  - SEO: per-route titles/descriptions, canonical, structured data, robots aur sitemap pehle se configured hain. Search ranking ka #1/top result guarantee code se nahi di ja sakti; Search Console, Google Business Profile, accurate school details, real reviews aur useful updated content bhi zaroori hain.
+  - Repository guide se plaintext admin credentials aur exposed API credential hata diye. Credentials sirf private hosting environment variables/password manager mein rakhein; pehle expose hue credentials ko provider dashboard se rotate/revoke karein.
+  - ⚠️ Changes abhi local hain; owner-session footer behavior aur same-origin API proxy live Vercel par verify karne ke liye GitHub push/auto-deploy baaki hai.
+
 ## To-Do Notes
 - ✅ **Email ab FormSubmit primary** (2026-10-10) — user ne bataya FormSubmit activation pehle hi ho chuka hai, isliye `notify.ts` me `sendEmail()` ab **FormSubmit pehle** try karta hai (seedha `jaatlakshya496@gmail.com` par relay — koi key/domain nahi chahiye, spam risk kam), firbhi fail ho toh **Resend fallback** (`RESEND_API_KEY` set hai). ❗ Deploy ke baad ek form bhej kar verify karna (Inbox/Spam dono check).
 - ⭐ **Chatbot ab "hamesha working":** Render API fail/lag par bhi website ka local knowledge base (`src/lib/school-kb.ts`) jawab de deta hai — user ko dead-end "unavailable" message nahi milta. Server theek ho jaye toh Groq wala reply aata hai. Offline reply me Retry + Call office buttons aate hain.
@@ -241,4 +253,4 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
 - ⚠️ **CallMeBot activation (ABHI SABSE ZAROORI)** — user ne CallMeBot chun liya; code ready hai, sirf `CALLMEBOT_APIKEY` chahiye. Steps upar [2026-10-07] entry me hain: CallMeBot number ko WhatsApp par `I allow callmebot to send me messages` bhejo → key milti hai → Render me `CALLMEBOT_APIKEY` set + Deploy. Uske baad website ke saare messages +91 9671772205 par automatic aayenge. Key milte hi ek test message bhej kar verify karna hai.
 - ⚠️ **FormSubmit activation** — jaatlakshya496@gmail.com par FormSubmit ka "Activate Form" email aaya hai; uska link click karna baaki hai. Ab **Resend primary** hai (2026-10-08) — FormSubmit sirf fallback hai, activate kar do toh backup mil jayega.
 - ⚠️ **naya Gmail app password** abhi bhi rotate karna hai (purana compromised tha; Render free par SMTP block hai isliye abhi zaroorat nahi, par rotate kar lo).
-- ⚠️ Render API key (`rnd_fj9gv5IMZwG2RhiuCnS2w3pzBZuJ`) user ne chat mein share ki thi — kaam khatam hone ke baad revoke kar dena (Render → Account Settings → API Keys → Revoke).
+- ⚠️ A Render API credential was previously shared in chat. Revoke any previously exposed credential in Render → Account Settings → API Keys, then issue a new private key only if needed. Never store API keys in chat notes or repository files.

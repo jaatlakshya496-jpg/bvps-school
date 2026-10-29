@@ -9,7 +9,18 @@ let pool: any;
 
 try {
   if (process.env.DATABASE_URL) {
-    pool = new Pool({ connectionString: process.env.DATABASE_URL });
+    pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      max: 10,
+      idleTimeoutMillis: 30_000,
+      connectionTimeoutMillis: 10_000,
+      statement_timeout: 20_000,
+      application_name: "bvps-api",
+    });
+    // Idle client errors process ko crash na karein (Render par important).
+    pool.on("error", (err: Error) => {
+      console.error("[@workspace/db] idle client error:", err.message);
+    });
     db = drizzle(pool, { schema });
   } else {
     throw new Error("No DATABASE_URL provided");
@@ -27,6 +38,7 @@ try {
     connect: async () => {
       throw new Error(message);
     },
+    on: () => undefined,
   };
 }
 

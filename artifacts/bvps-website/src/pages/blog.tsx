@@ -1,27 +1,37 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'wouter';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
-import { Newspaper, ArrowLeft, ArrowRight, Calendar, Tag, Loader2 } from 'lucide-react';
+import { Newspaper, ArrowLeft, ArrowRight, Calendar, Tag, Loader2, RefreshCw } from 'lucide-react';
 import { PageSeo } from '@/lib/seo';
 import { useSiteContent } from '@/lib/site-content';
 import { apiGet } from '@/lib/api';
 import type { BlogPost } from '@/pages/admin/types';
 import { formatDate } from '@/pages/admin/types';
+import { Button } from '@/components/ui/button';
 import heroImg from '@assets/bal-vikas-public-school-kalayat-kaithal-schools-3t6w6qk_1784611430223.webp';
 
 export default function Blog() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
   const { get } = useSiteContent();
 
   useEffect(() => {
     let active = true;
+    setLoading(true);
+    setLoadError(false);
     apiGet<{ success: boolean; data: BlogPost[] }>('/blog')
       .then(res => { if (active) setPosts(res?.data ?? []); })
-      .catch(() => { /* blog down → empty list */ })
+      .catch(() => {
+        if (active) {
+          setPosts([]);
+          setLoadError(true);
+        }
+      })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
-  }, []);
+  }, [reloadKey]);
 
   return (
     <div className="flex flex-col">
@@ -55,6 +65,25 @@ export default function Blog() {
           {loading ? (
             <div className="flex items-center justify-center py-16 text-muted-foreground gap-2">
               <Loader2 className="w-5 h-5 animate-spin" /> Loading posts…
+            </div>
+          ) : loadError ? (
+            <div className="text-center py-16" role="alert">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-destructive/10 text-destructive mb-4">
+                <Newspaper className="w-8 h-8" />
+              </div>
+              <h2 className="text-xl font-serif font-bold text-black">Posts load nahi ho paye</h2>
+              <p className="text-muted-foreground text-sm mt-2 max-w-md mx-auto">
+                Blog abhi temporarily unavailable hai. Thodi der baad dobara try karein.
+              </p>
+              <Button
+                type="button"
+                variant="outline"
+                className="mt-5"
+                onClick={() => setReloadKey(key => key + 1)}
+              >
+                <RefreshCw className="w-4 h-4" />
+                Dobara try karein
+              </Button>
             </div>
           ) : posts.length === 0 ? (
             <div className="text-center py-16">

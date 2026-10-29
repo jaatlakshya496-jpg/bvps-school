@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Save, Loader2, IndianRupee, RotateCcw } from 'lucide-react';
-import { apiGetAdmin, apiSend, extractApiError } from '@/lib/api';
+import { apiGetAdmin, apiSend, extractApiError, isAuthError } from '@/lib/api';
 import type { FeeConfig } from '../types';
 import { DEFAULT_FEES, normalizeFees } from '../types';
 
 const rupee = (n: number) => `₹ ${n.toLocaleString('en-IN')}`;
 const yearTotal = (f: { monthly: number; annualFund: number }) => f.monthly * 12 + f.annualFund;
 
-export function AdminFees({ token, onExpired }: { token: string; onExpired: () => void }) {
+export function AdminFees({ onExpired }: { onExpired: () => void }) {
   const [draft, setDraft] = useState<FeeConfig>(DEFAULT_FEES);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -15,17 +15,16 @@ export function AdminFees({ token, onExpired }: { token: string; onExpired: () =
 
   useEffect(() => {
     let active = true;
-    apiGetAdmin<{ success: boolean; data: FeeConfig }>('/fees/admin', token)
+    apiGetAdmin<{ success: boolean; data: FeeConfig }>('/fees/admin')
       .then(res => { if (active) setDraft(normalizeFees(res?.data ?? DEFAULT_FEES)); })
       .catch((err: any) => {
-        const m = String(err?.error ?? '').toLowerCase();
-        if (m.includes('forbidden') || m.includes('invalid')) onExpired();
+        if (isAuthError(err)) onExpired();
         else setMsg({ text: extractApiError(err), ok: false });
       })
       .finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+  }, []);
 
   function updateDraft(kind: 'classes' | 'streams', index: number, field: 'admission' | 'monthly' | 'annualFund', value: string) {
     const num = Math.max(0, Math.floor(Number(value) || 0));
@@ -41,12 +40,11 @@ export function AdminFees({ token, onExpired }: { token: string; onExpired: () =
     setSaving(true);
     setMsg(null);
     try {
-      const res = await apiSend<{ success: boolean; data: FeeConfig }>('PUT', '/fees/admin', draft, token);
+      const res = await apiSend<{ success: boolean; data: FeeConfig }>('PUT', '/fees/admin', draft);
       if (res?.data) setDraft(normalizeFees(res.data));
       setMsg({ text: 'Fees save ho gayi ✅ Website par live update ho gayi.', ok: true });
     } catch (err: any) {
-      const m = String(err?.error ?? '').toLowerCase();
-      if (m.includes('forbidden') || m.includes('invalid')) onExpired();
+      if (isAuthError(err)) onExpired();
       else setMsg({ text: extractApiError(err), ok: false });
     } finally {
       setSaving(false);
