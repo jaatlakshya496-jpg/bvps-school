@@ -8,7 +8,7 @@ import {
   Shield, BookOpen, Award, HeartHandshake, Compass, Star
 } from 'lucide-react';
 import principalImg from '@assets/principal-ramphal-sharma.webp';
-import { apiPost, extractApiError } from '@/lib/api';
+import { apiPost, extractApiError, generateSubmissionKey } from '@/lib/api';
 import type { PrincipalDirectMessage } from '@/lib/principal-message-store';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/lib/language-context';
@@ -52,6 +52,7 @@ export default function PrincipalMessage() {
         category,
         subject: finalSubject,
         message: message.trim(),
+        submissionKey: generateSubmissionKey(),
       });
 
       const receipt: PrincipalDirectMessage = {

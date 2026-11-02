@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { apiPost } from '@/lib/api';
+import { apiPost, generateSubmissionKey } from '@/lib/api';
 
 export default function Application() {
   const [submitted, setSubmitted] = useState(false);
@@ -63,6 +63,7 @@ export default function Application() {
       address: form.address,
       previousSchool: form.previousSchool,
       message: form.message,
+      submissionKey: generateSubmissionKey(),
     })
       .then(() => {
         setSubmitted(true);

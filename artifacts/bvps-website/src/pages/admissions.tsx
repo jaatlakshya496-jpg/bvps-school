@@ -113,7 +113,7 @@ export default function Admissions() {
 
   useEffect(() => { setFeedbacks(getFeedbacks()); }, []);
 
-  function handleFbSubmit(e: React.FormEvent) {
+  async function handleFbSubmit(e: React.FormEvent) {
     e.preventDefault();
     const errs: Record<string, string> = {};
     if (!fbName.trim() || fbName.length < 2) errs.name = 'Name is required';
@@ -122,10 +122,14 @@ export default function Admissions() {
     if (!fbMessage.trim() || fbMessage.length < 5) errs.message = 'Please write your feedback';
     setFbErrors(errs);
     if (Object.keys(errs).length > 0) return;
-    const entry = saveFeedback({ name: fbName, role: fbRole as FeedbackEntry['role'], category: 'overall', rating: fbRating, feedback: fbMessage });
-    setFeedbacks([entry, ...feedbacks]);
-    setFbSubmitted(true);
-    setFbName(''); setFbRole(''); setFbRating(0); setFbMessage('');
+    try {
+      const entry = await saveFeedback({ name: fbName, role: fbRole as FeedbackEntry['role'], category: 'overall', rating: fbRating, feedback: fbMessage, email: '' as any });
+      setFeedbacks([entry, ...feedbacks]);
+      setFbSubmitted(true);
+      setFbName(''); setFbRole(''); setFbRating(0); setFbMessage('');
+    } catch (err: any) {
+      setFbErrors({ message: err?.error || err?.message || 'Failed to submit feedback. Please try again.' });
+    }
   }
 
   return (

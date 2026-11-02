@@ -6,6 +6,7 @@ import { LanguageProvider } from '@/lib/language-context';
 import { SiteContentProvider } from '@/lib/site-content';
 import { HelmetProvider } from 'react-helmet-async';
 import NotFound from '@/pages/not-found';
+
 import { Route, Switch, Router as WouterRouter, useLocation } from 'wouter';
 
 // Layout & Pages
@@ -33,6 +34,7 @@ const Enrollment = lazy(() => import('@/pages/enrollment'));
 const Streams = lazy(() => import('@/pages/streams'));
 const PrincipalMessage = lazy(() => import('@/pages/principal-message'));
 const Academics = lazy(() => import('@/pages/academics'));
+const PrivacyPolicy = lazy(() => import('@/pages/privacy-policy'));
 
 // Blog (public)
 const Blog = lazy(() => import('@/pages/blog'));
@@ -40,6 +42,7 @@ const BlogPostPage = lazy(() => import('@/pages/blog-post'));
 
 // Admin portal (website ki layout se alag, apna alag page)
 const AdminPortal = lazy(() => import('@/pages/admin/AdminPortal'));
+
 
 // Loading flash fix: lazy loading se har pehle navigation par "Loading…"
 // aata tha. App khulne ke baad idle time me ye saare chunks background me
@@ -133,6 +136,7 @@ function PublicRouter() {
           <Route path="/streams" component={Streams} />
           <Route path="/principal-message" component={PrincipalMessage} />
           <Route path="/results" component={Results} />
+          <Route path="/privacy-policy" component={PrivacyPolicy} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>

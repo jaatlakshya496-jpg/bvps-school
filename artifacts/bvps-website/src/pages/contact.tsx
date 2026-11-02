@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { apiPost } from '@/lib/api';
+import { apiPost, generateSubmissionKey } from '@/lib/api';
 import { PageSeo } from '@/lib/seo';
 import { useSiteContent } from '@/lib/site-content';
 
@@ -45,20 +45,23 @@ export default function Contact() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     if (isLoading) return; // double-click se duplicate submission na ho
     setIsLoading(true);
     setError(null);
-    apiPost("/contact-email", values)
-      .then((res: any) => {
-        setIsSubmitted(true);
-        setIsLoading(false);
-        form.reset();
-      })
-      .catch((err: any) => {
-        setError(err.error || "Failed to submit. Please try again.");
-        setIsLoading(false);
+    try {
+      const res = await apiPost<{ success: boolean }>("/contact-email", {
+        ...values,
+        submissionKey: generateSubmissionKey(),
       });
+      if (!res?.success) throw new Error("Your message could not be saved right now. Please try again.");
+      setIsSubmitted(true);
+      setIsLoading(false);
+      form.reset();
+    } catch (err: any) {
+      setError(err.error || "Failed to submit. Please try again.");
+      setIsLoading(false);
+    }
   }
 
   return (

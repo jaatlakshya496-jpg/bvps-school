@@ -1,6 +1,9 @@
+import { apiPost, generateSubmissionKey } from '@/lib/api';
+
 export interface FeedbackEntry {
   id: string;
   name: string;
+  email?: string;
   role: 'parent' | 'student' | 'alumni' | 'visitor';
   category: 'academics' | 'facilities' | 'staff' | 'overall' | 'other';
   rating: number;
@@ -8,16 +11,35 @@ export interface FeedbackEntry {
   submittedAt: string;
 }
 
-export function saveFeedback(entry: Omit<FeedbackEntry, 'id' | 'submittedAt'>): FeedbackEntry {
-  console.log("Feedback saved to server via API", entry);
+export async function saveFeedback(entry: Omit<FeedbackEntry, 'id' | 'submittedAt'>): Promise<FeedbackEntry> {
+  const res = await apiPost<{ success: boolean; id?: number | string }>(
+    '/feedback',
+    {
+      name: entry.name,
+      email: (entry as any).email ?? '',
+      role: entry.role,
+      category: entry.category,
+      message: entry.feedback,
+      rating: entry.rating,
+      submissionKey: generateSubmissionKey(),
+    },
+  );
+
+  if (!res?.success) {
+    throw new Error((res as any)?.error || 'Failed to save feedback');
+  }
+
   return {
     ...entry,
-    id: crypto.randomUUID(),
+    id: String(res.id ?? crypto.randomUUID()),
     submittedAt: new Date().toISOString(),
   };
 }
 
 export function getFeedbacks(): FeedbackEntry[] {
+  // Feedbacks are fetched from DB via admin/API where needed; client-side listing
+  // of all feedbacks requires authenticated/admin access. Return empty array
+  // to avoid showing unverified/stale local data.
   return [];
 }
 

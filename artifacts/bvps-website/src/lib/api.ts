@@ -23,6 +23,19 @@ export function getCsrfToken(): string {
   return csrfToken;
 }
 
+/**
+ * Form submissions ke liye client-side idempotency key generator. Retry /
+ * double-click par wahi key bhejne se DB me duplicate row na bane (unique index
+ * + onConflictDoNothing). `crypto.randomUUID()` ka fallback bhi rakha hai taaki
+ * sab browsers me kaam kare.
+ */
+export function generateSubmissionKey(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  return `bvps-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
 export type ApiError = {
   status: number;
   error: string;

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { ScrollReveal } from '@/components/ui/scroll-reveal';
 import { Link } from 'wouter';
-import { IndianRupee, CheckCircle2, Phone, ArrowLeft, Info, BookOpen, FlaskConical, TrendingUp, Palette, ChevronDown, Copy, Check, QrCode, Smartphone, Lock, X, Save, RotateCcw, Loader2, Pencil } from 'lucide-react';
+import { IndianRupee, CheckCircle2, Phone, ArrowLeft, Info, BookOpen, FlaskConical, TrendingUp, Palette, ChevronDown, Copy, Check, QrCode, Smartphone, Lock, X, Save, RotateCcw, Loader2, Pencil, RefreshCw } from 'lucide-react';
 import QRCode from 'react-qr-code';
 import { apiGet, apiGetAdmin, apiSend } from '@/lib/api';
 import { PageSeo } from '@/lib/seo';
@@ -168,6 +168,9 @@ const upiApps = [
 export default function FeeStructure() {
   const { get } = useSiteContent();
   const [fees, setFees]                     = useState<FeeConfig>(DEFAULT_FEES);
+  const [feesLoadError, setFeesLoadError]   = useState(false);
+  const [feesLoading, setFeesLoading]       = useState(true);
+  const [feesReloadKey, setFeesReloadKey]   = useState(0);
   const [selectedClass, setSelectedClass]   = useState<string>('Class 1');
   const [copied, setCopied]                 = useState(false);
   const [payTab, setPayTab]                 = useState<'qr' | 'apps'>('qr');
@@ -189,11 +192,20 @@ export default function FeeStructure() {
 
   useEffect(() => {
     let active = true;
+    setFeesLoading(true);
     apiGet<{ success: boolean; data: FeeConfig }>('/fees')
-      .then(res => { if (active && res?.data) setFees(normalize(res.data)); })
-      .catch(() => { /* API down → keep built-in defaults */ });
+      .then(res => {
+        if (active && res?.data) {
+          setFees(normalize(res.data));
+          setFeesLoadError(false);
+        }
+      })
+      .catch(() => {
+        if (active) setFeesLoadError(true);
+      })
+      .finally(() => { if (active) setFeesLoading(false); });
     return () => { active = false; };
-  }, []);
+  }, [feesReloadKey]);
 
   // Owner-only access: secret URL (?admin=1 or #admin) or 5 quick taps on the title
   useEffect(() => {
@@ -343,6 +355,31 @@ export default function FeeStructure() {
           </ScrollReveal>
         </div>
       </div>
+
+      {feesLoadError && (
+        <div className="bg-red-50 border-b border-red-200 px-4 py-4" role="alert">
+          <div className="container mx-auto max-w-5xl flex flex-col sm:flex-row sm:items-center gap-3">
+            <Info className="w-5 h-5 text-red-700 shrink-0" />
+            <div className="flex-1">
+              <p className="text-sm text-red-900 font-semibold">
+                Fee information could not be loaded from the server.
+              </p>
+              <p className="text-xs text-red-800 mt-1">
+                Fees are not displayed here because the source data is unavailable. Please confirm the latest fee details directly with the school office before making any payment. Do not rely on cached/default figures.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setFeesReloadKey(key => key + 1)}
+              disabled={feesLoading}
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-red-300 bg-white px-4 py-2 text-sm font-semibold text-red-900 hover:bg-red-100 disabled:opacity-60"
+            >
+              <RefreshCw className={`w-4 h-4 ${feesLoading ? 'animate-spin' : ''}`} />
+              Retry
+            </button>
+          </div>
+        </div>
+      )}
 
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4 md:px-6 max-w-5xl space-y-14">

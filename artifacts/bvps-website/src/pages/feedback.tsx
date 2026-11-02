@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Star, CheckCircle2 } from 'lucide-react';
-import { apiPost } from '@/lib/api';
+import { apiPost, generateSubmissionKey } from '@/lib/api';
 import { PageSeo } from '@/lib/seo';
 import { useSiteContent } from '@/lib/site-content';
 
@@ -85,6 +85,8 @@ export default function Feedback() {
       email: '',
       rating: 0,
       feedback: '',
+      role: 'parent',
+      category: 'overall',
     },
   });
 
@@ -102,6 +104,7 @@ export default function Feedback() {
         category: values.category,
         message: values.feedback,
         rating: values.rating,
+        submissionKey: generateSubmissionKey(),
       });
       setIsSubmitted(true);
       form.reset();
