@@ -362,10 +362,10 @@ export default function FeeStructure() {
             <Info className="w-5 h-5 text-red-700 shrink-0" />
             <div className="flex-1">
               <p className="text-sm text-red-900 font-semibold">
-                Fee information could not be loaded from the server.
+                Live fee information could not be loaded from the server.
               </p>
               <p className="text-xs text-red-800 mt-1">
-                Fees are not displayed here because the source data is unavailable. Please confirm the latest fee details directly with the school office before making any payment. Do not rely on cached/default figures.
+                The figures shown below are the last saved/default values and may be outdated. Please confirm the latest fees directly with the school office before making any payment.
               </p>
             </div>
             <button

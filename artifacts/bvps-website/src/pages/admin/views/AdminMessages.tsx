@@ -228,7 +228,7 @@ export function AdminMessages({ onExpired }: { onExpired: () => void }) {
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="font-bold text-black">{row.name}</p>
-                    <p className="text-xs text-muted-foreground">{row.email} · {row.role || 'N/A'}</p>
+                    <p className="text-xs text-muted-foreground">{row.email || 'No email'} · {row.role || 'N/A'}</p>
                     <div className="flex items-center gap-0.5 mt-2">
                       {Array.from({ length: 5 }).map((_, i) => (
                         <Star key={i} className={`w-3.5 h-3.5 ${i < (row.rating ?? 0) ? 'text-amber-400 fill-amber-400' : 'text-slate-300'}`} />

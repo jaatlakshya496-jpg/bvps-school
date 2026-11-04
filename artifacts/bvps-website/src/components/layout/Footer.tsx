@@ -199,6 +199,10 @@ export function Footer() {
           </button>
           <p className="text-primary-foreground/60 text-sm text-center md:text-right">
             Affiliated to BSEH | Est. 2004 | School Code: 06050300920
+            <span className="mx-2 text-primary-foreground/30">|</span>
+            <Link href="/privacy-policy" className="hover:text-secondary underline-offset-2 hover:underline">
+              Privacy Policy
+            </Link>
           </p>
         </div>
       </div>

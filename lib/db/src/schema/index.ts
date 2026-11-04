@@ -43,7 +43,9 @@ export type AdmissionEnquiries = z.infer<typeof admissionEnquiriesTable>;
 export const feedbackSubmissionsTable = pgTable("feedback_submissions", {
 	id: serial("id").primaryKey(),
 	name: text("name").notNull(),
-	email: text("email").notNull(),
+	// Email optional hai: admissions page ka chhota feedback form email nahi
+	// maangta, isliye NOT NULL constraint hata di gayi (migration 0008).
+	email: text("email"),
 	role: text("role").notNull().default(""),
 	category: text("category").notNull().default(""),
 	message: text("message").notNull(),

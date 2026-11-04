@@ -134,5 +134,13 @@
     "changefreq": "yearly",
     "title": "Parent Feedback & Reviews — Bal Vikas Public School Kalayat",
     "description": "Share your feedback and read parent reviews about Bal Vikas Public School Kalayat, Kaithal. Your opinion helps us improve quality education and student experience."
+  },
+  {
+    "path": "/privacy-policy",
+    "label": "Privacy Policy",
+    "priority": "0.3",
+    "changefreq": "yearly",
+    "title": "Privacy Policy — Bal Vikas Public School Kalayat",
+    "description": "How Bal Vikas Public School Kalayat collects, uses and protects the personal information submitted through its admission, contact and feedback forms."
   }
 ]

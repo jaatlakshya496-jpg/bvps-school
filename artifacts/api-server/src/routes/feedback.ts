@@ -6,10 +6,10 @@ import { z } from "zod";
 import { notify, whatsAppClickLink, type Notification } from "../lib/notify";
 import { formLimiter } from "../lib/rate-limit";
 import {
-  emailField,
   honeypotField,
   messageField,
   nameField,
+  optionalEmailField,
   readSubmissionKey,
   submissionKeyField,
 } from "../lib/validation";
@@ -18,7 +18,8 @@ const router = Router();
 
 const insertSchema = z.object({
   name: nameField,
-  email: emailField,
+  // Admissions page ka inline feedback form email nahi maangta.
+  email: optionalEmailField,
   role: z.enum(["parent", "student", "alumni", "visitor"]),
   category: z.enum(["academics", "facilities", "staff", "overall", "other"]),
   message: messageField,
@@ -46,7 +47,7 @@ router.post("/", formLimiter, async (req: Request, res: Response) => {
     replyTo: validated.email,
     lines: [
       `Name: ${validated.name}`,
-      `Email: ${validated.email}`,
+      `Email: ${validated.email ?? "Not provided"}`,
       `Role: ${validated.role}`,
       `Category: ${validated.category}`,
       `Rating: ${validated.rating}/5`,
@@ -63,7 +64,7 @@ router.post("/", formLimiter, async (req: Request, res: Response) => {
       .insert(feedbackSubmissionsTable)
       .values({
         name: validated.name,
-        email: validated.email,
+        email: validated.email ?? null,
         role: validated.role,
         category: validated.category,
         message: validated.message,

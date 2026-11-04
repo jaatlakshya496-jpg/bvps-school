@@ -64,7 +64,7 @@ export interface AdmissionRow {
 export interface FeedbackRow {
   id: number;
   name: string;
-  email: string;
+  email: string | null;
   role: string;
   category: string;
   message: string;

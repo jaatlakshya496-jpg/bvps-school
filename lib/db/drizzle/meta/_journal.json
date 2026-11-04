@@ -57,6 +57,13 @@
       "when": 1791000000000,
       "tag": "0007_idempotency_and_indexes",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793800000000,
+      "tag": "0008_feedback_email_optional",
+      "breakpoints": true
     }
   ]
 }

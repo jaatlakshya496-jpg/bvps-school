@@ -119,11 +119,11 @@ export default function Admissions() {
     if (!fbName.trim() || fbName.length < 2) errs.name = 'Name is required';
     if (!fbRole) errs.role = 'Please select your role';
     if (fbRating === 0) errs.rating = 'Please select a rating';
-    if (!fbMessage.trim() || fbMessage.length < 5) errs.message = 'Please write your feedback';
+    if (!fbMessage.trim() || fbMessage.trim().length < 10) errs.message = 'Please write at least 10 characters';
     setFbErrors(errs);
     if (Object.keys(errs).length > 0) return;
     try {
-      const entry = await saveFeedback({ name: fbName, role: fbRole as FeedbackEntry['role'], category: 'overall', rating: fbRating, feedback: fbMessage, email: '' as any });
+      const entry = await saveFeedback({ name: fbName, role: fbRole as FeedbackEntry['role'], category: 'overall', rating: fbRating, feedback: fbMessage });
       setFeedbacks([entry, ...feedbacks]);
       setFbSubmitted(true);
       setFbName(''); setFbRole(''); setFbRating(0); setFbMessage('');

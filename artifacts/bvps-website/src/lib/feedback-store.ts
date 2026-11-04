@@ -16,7 +16,7 @@ export async function saveFeedback(entry: Omit<FeedbackEntry, 'id' | 'submittedA
     '/feedback',
     {
       name: entry.name,
-      email: (entry as any).email ?? '',
+      email: entry.email ?? '',
       role: entry.role,
       category: entry.category,
       message: entry.feedback,
