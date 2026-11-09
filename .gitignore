@@ -38,7 +38,7 @@ testem.log
 /typings
 
 # env
-*.env
+.env*
 .ENV
 !.env.example
 

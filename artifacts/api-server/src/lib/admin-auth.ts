@@ -34,6 +34,14 @@ export function requireAdmin(req: Request, res: Response, next: NextFunction) {
   const key = Array.isArray(rawKey) ? rawKey[0] : rawKey;
   const secret = process.env.ADMIN_SECRET;
 
+  // Legacy `x-admin-key` header sirf is flag true hone par hi enable hota hai.
+  // Abhi session cookie hi primary hai — ye strictly opt-in hai.
+  const legacyEnabled = process.env.ALLOW_LEGACY_ADMIN_KEY === "true";
+  if (!legacyEnabled) {
+    res.status(401).json({ success: false, error: "Unauthorized. Please log in again." });
+    return;
+  }
+
   if (!secret) {
     res.status(500).json({ success: false, error: "Admin not configured" });
     return;

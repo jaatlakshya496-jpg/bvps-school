@@ -61,7 +61,7 @@ app.use(
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "x-admin-key", "x-csrf-token"],
+    allowedHeaders: ["Content-Type", "x-csrf-token", ...(process.env.ALLOW_LEGACY_ADMIN_KEY === "true" ? ["x-admin-key"] : [])],
     exposedHeaders: ["Retry-After", "X-RateLimit-Limit", "X-RateLimit-Remaining", "X-RateLimit-Reset"],
     maxAge: 86_400,
     optionsSuccessStatus: 204,
@@ -70,12 +70,10 @@ app.use(
 
 app.use(cookieParser());
 
-// Blog admin me base64 image (data URL) body jaata hai, jo default 100kb
-// express limit se bada hota hai — isliye sirf blog routes ke liye limit badhi
-// hai. Content editor me `image.*` keys (hero/gallery photo data URLs) save
-// hoti hain, unke liye 16mb. Baaki endpoints par chhota limit rehta hai.
-app.use("/api/blog", express.json({ limit: "8mb" }));
-app.use("/api/content", express.json({ limit: "16mb" }));
+// Blog admin me base64 image (data URL) body jaata hai — isko global `app.use`
+// me 8mb set karna zaroor nahi tha, kyunki wahi global parser public read routes
+// ke liye tight (128kb) hoti. Ab isko sirf admin write routes me, unke baad
+// `requireAdmin` ke baad, per-route lagta hai (see routes/blog.ts + routes/content.ts).
 app.use(express.json({ limit: "128kb" }));
 app.use(express.urlencoded({ extended: true, limit: "32kb" }));
 

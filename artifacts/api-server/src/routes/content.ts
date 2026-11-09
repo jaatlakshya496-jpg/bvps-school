@@ -1,4 +1,5 @@
 import { Router, type Request, type Response } from "express";
+import express from "express";
 import { db } from "@workspace/db";
 import { siteContentTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
@@ -134,7 +135,9 @@ router.get("/admin", requireAdmin, async (_req: Request, res: Response) => {
 });
 
 /** Admin — ek saath bahut saare keys upsert karo. */
-router.put("/", requireAdmin, async (req: Request, res: Response) => {
+// Parser admin auth ke baad hi 16mb par chalta hai (base64 image data URLs jitne
+// `image.*` keys me bhejne hote hain).
+router.put("/", requireAdmin, express.json({ limit: "16mb" }), async (req: Request, res: Response) => {
   try {
     const { items } = putSchema.parse(req.body);
     const entries = Object.entries(items as Record<string, unknown>);
@@ -186,7 +189,7 @@ router.put("/", requireAdmin, async (req: Request, res: Response) => {
     res.json({ success: true, data: await getContentMap(), message: "Website content updated." });
   } catch (err) {
     if (err instanceof z.ZodError) {
-      res.status(400).json({ success: false, error: err.errors });
+      res.status(400).json({ success: false, error: err.issues });
       return;
     }
     console.error("site_content save error:", err);

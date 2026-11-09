@@ -17,7 +17,15 @@ services:
         value: production
       - key: PORT
         value: 10000
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
       - key: ADMIN_SECRET
+        sync: false
+      - key: ADMIN_SESSION_SECRET
+        sync: false
+      - key: CORS_ORIGINS
         sync: false
       - key: DATABASE_URL
         fromDatabase:
@@ -29,6 +37,10 @@ services:
         sync: false
       - key: GROQ_API_KEY
         sync: false
+      - key: NOTIFY_EMAIL
+        sync: false
+      - key: NOTIFY_WHATSAPP
+        sync: false
       # Website ke har form (contact/admission/feedback/principal) ka alert
       # owner ke WhatsApp par bhejne ke liye. Key sirf usi phone se milti hai
       # jo CallMeBot ko "I allow callmebot to send me messages" bhejta hai.
@@ -36,4 +48,6 @@ services:
         sync: false
       # Resend se owner ko email (FormSubmit fallback rahega).
       - key: RESEND_API_KEY
+        sync: false
+      - key: SITE_ORIGIN
         sync: false

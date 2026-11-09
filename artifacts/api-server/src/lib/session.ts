@@ -29,7 +29,12 @@ export type AdminSession = {
 const revoked = new Map<string, number>();
 
 function sessionSecret(): string {
-  return process.env.ADMIN_SESSION_SECRET || process.env.ADMIN_SECRET || "";
+  const secret = process.env.ADMIN_SESSION_SECRET;
+  // Production me fallback nahi — sirf ADMIN_SESSION_SECRET hi session signing
+  // ke liye use hota hai. Dev/local me ADMIN_SECRET bhi allowed hai.
+  if (secret) return secret;
+  if (process.env.NODE_ENV !== "production") return process.env.ADMIN_SECRET ?? "";
+  return "";
 }
 
 function b64url(input: Buffer | string): string {
