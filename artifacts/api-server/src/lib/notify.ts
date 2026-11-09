@@ -1,5 +1,5 @@
-const ADMIN_EMAIL = process.env.NOTIFY_EMAIL || "jaatlakshya496@gmail.com";
-const ADMIN_WHATSAPP = process.env.NOTIFY_WHATSAPP || "+919671772205";
+const ADMIN_EMAIL = process.env.NOTIFY_EMAIL ?? "";
+const ADMIN_WHATSAPP = process.env.NOTIFY_WHATSAPP ?? "";
 const SITE_ORIGIN = (process.env.SITE_ORIGIN || "https://bvps-school.vercel.app").replace(/\/+$/, "");
 const NOTIFY_TIMEOUT_MS = 10_000;
 
