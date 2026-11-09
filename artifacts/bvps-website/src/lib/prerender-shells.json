@@ -1,0 +1,387 @@
+{
+  "/": {
+    "h1": "Bal Vikas Public School, Kalayat",
+    "lede": "Empowering Young Minds, Building Bright Futures.",
+    "paragraphs": [
+      "Bal Vikas Public School (BVPS) is a private, co-educational school on Railway Road, Kalayat, District Kaithal, Haryana. Established in 2004, the school is affiliated to the Haryana Board of School Education (BSEH / HBSE) and offers Classes 1 to 12, including Medical, Non-Medical, Commerce and Arts streams in the senior secondary section.",
+      "Around 945 students learn here with more than 29 teachers across 31 classrooms, including 12 interactive smart classrooms, a library, a computer lab, a spacious playground and a CCTV-monitored campus. Instruction is in Hindi with English integrated across subjects."
+    ],
+    "facts": [
+      "Board: Haryana Board of School Education (BSEH / HBSE)",
+      "Classes: 1 to 12, co-educational (boys and girls)",
+      "School hours: Monday to Saturday, 8:00 AM to 3:00 PM",
+      "Address: Railway Road, Kalayat, District Kaithal, Haryana - 136117",
+      "Phone: +91 98125 50200 / +91 98125 50202"
+    ],
+    "links": [
+      ["About the school", "/about"],
+      ["Admissions 2026-27", "/admissions"],
+      ["Fee structure", "/fee-structure"],
+      ["Facilities", "/facilities"],
+      ["Results and achievements", "/results"],
+      ["Photo gallery", "/gallery"],
+      ["Contact us", "/contact"]
+    ]
+  },
+  "/about": {
+    "h1": "About Bal Vikas Public School Kalayat",
+    "lede": "Nurturing minds and shaping futures in Kalayat since 2004.",
+    "paragraphs": [
+      "BVPS began in 2004 with a simple promise: to bring meaningful, quality education closer to the families of Kalayat. What started as a small school has grown into a trusted community of more than 945 students, 29 teachers and 31 classrooms.",
+      "The school is a private, co-educational institution covering Class 1 to Class 12, affiliated to the Haryana Board of School Education (BSEH). Instruction is delivered in Hindi, with English integrated across subjects so that students build confidence in both languages.",
+      "Alongside academics, BVPS encourages sports, cultural activities and value education. Students take part in football, cricket, karate, athletics and wrestling, and the school celebrates achievements at district and state level."
+    ],
+    "facts": [
+      "School type: private, co-educational",
+      "Academic level: senior secondary, Classes 1 to 12",
+      "Medium: Hindi instruction with English integration",
+      "Established: 2004",
+      "Principal and Founder: Sh. Ramphal Sharma",
+      "School code: 06050300920"
+    ],
+    "links": [
+      ["Admissions 2026-27", "/admissions"],
+      ["Academics", "/academics"],
+      ["Streams and curriculum", "/streams"],
+      ["Principal's message", "/principal-message"],
+      ["Contact us", "/contact"]
+    ]
+  },
+  "/admissions": {
+    "h1": "Admissions 2026-27",
+    "lede": "Join the BVPS family. Admissions open for Classes 1 to 12.",
+    "paragraphs": [
+      "Admission at Bal Vikas Public School Kalayat is a simple, four-step process: submit the online application form, bring the required documents to the school office, attend a short and friendly interaction, and complete enrollment by paying the admission fee.",
+      "Admissions are open for Classes 1 to 12 for the 2026-27 session. The admission office is open Monday to Saturday from 9:00 AM to 2:00 PM, and the team can be reached on +91 98125 50200 or +91 98125 50202.",
+      "Parents are welcome to visit the campus on Railway Road, Kalayat before applying. A campus visit is the easiest way to see the classrooms, library, computer lab and playground."
+    ],
+    "facts": [
+      "Classes open: 1 to 12",
+      "Session: 2026-27",
+      "Admission office: Monday to Saturday, 9:00 AM to 2:00 PM",
+      "Documents: birth certificate, Aadhaar card, previous school TC and report card, 4 passport photos, residence proof, caste certificate if applicable",
+      "Contact: +91 98125 50200 / admissions@bvpskalayat.edu.in"
+    ],
+    "links": [
+      ["Online application form", "/application"],
+      ["Interview and interaction", "/interview"],
+      ["Enrollment process", "/enrollment"],
+      ["Fee structure", "/fee-structure"],
+      ["Contact us", "/contact"]
+    ]
+  },
+  "/application": {
+    "h1": "Application Submission",
+    "lede": "Fill this form to register your admission enquiry for session 2026-27.",
+    "paragraphs": [
+      "The online application form registers your child's admission enquiry with Bal Vikas Public School Kalayat. It takes about two minutes and asks for the student's name, class applied for, parent or guardian details and a contact number.",
+      "After the form is submitted, the school office calls back to confirm details and to schedule a short interaction. Submitting the form does not reserve a seat; the seat is confirmed only after documents are verified and the admission fee is paid.",
+      "If you would rather apply in person, visit the school office on Railway Road, Kalayat, Monday to Saturday between 9:00 AM and 2:00 PM."
+    ],
+    "facts": [
+      "Time needed: about 2 minutes",
+      "Session: 2026-27",
+      "Classes: 1 to 12",
+      "Next step after applying: a short interaction, then enrollment"
+    ],
+    "links": [
+      ["Admissions overview", "/admissions"],
+      ["Interview and interaction", "/interview"],
+      ["Fee structure", "/fee-structure"],
+      ["Enrollment process", "/enrollment"]
+    ]
+  },
+  "/enrollment": {
+    "h1": "Enrollment",
+    "lede": "Final step: complete the formalities and officially join the BVPS family.",
+    "paragraphs": [
+      "Enrollment is the last step of admission at BVPS. Once the application and interaction are complete, parents submit the original documents along with two photocopies of each, pay the admission fee and receive the enrollment confirmation.",
+      "The enrollment checklist covers the birth certificate, Aadhaar card, transfer certificate from the previous school, the last report card, four recent passport photographs, residence proof and a caste certificate where applicable.",
+      "The admission office is open Monday to Saturday, 9:00 AM to 2:00 PM, and the fee counter accepts UPI along with the usual payment options."
+    ],
+    "facts": [
+      "Bring originals plus two photocopies of every document",
+      "Admission fee can be paid by UPI at the school office",
+      "Office hours: Monday to Saturday, 9:00 AM to 2:00 PM",
+      "Address: Railway Road, Kalayat, District Kaithal, Haryana - 136117"
+    ],
+    "links": [
+      ["Admissions overview", "/admissions"],
+      ["Fee structure", "/fee-structure"],
+      ["School timings", "/school-timing"],
+      ["Contact us", "/contact"]
+    ]
+  },
+  "/academics": {
+    "h1": "Academics - Bal Vikas Public School Kalayat",
+    "lede": "A structured, well-rounded curriculum designed to nurture every student from Class 1 to 12.",
+    "paragraphs": [
+      "Academics at BVPS follow the Haryana Board of School Education (HBSE / BSEH) syllabus. The curriculum is organised in four stages: primary (Classes 1 to 5), middle (Classes 6 to 8), secondary (Classes 9 and 10) and senior secondary (Classes 11 and 12).",
+      "The primary and middle years focus on language, mathematics, environmental studies, science and social science, while the secondary years prepare students for the HBSE board examinations. In senior secondary, students choose a stream and study the subjects that lead to their higher education goals.",
+      "Teaching is delivered in Hindi with English integrated across subjects. Classroom learning is supported by 12 interactive smart classrooms, a library and a computer lab, and progress is shared with parents through regular assessments and report cards."
+    ],
+    "facts": [
+      "Board: Haryana Board of School Education (BSEH / HBSE)",
+      "Stages: primary, middle, secondary, senior secondary",
+      "Medium: Hindi instruction with English integration",
+      "Support: 12 smart classrooms, library, computer lab"
+    ],
+    "links": [
+      ["Streams and curriculum", "/streams"],
+      ["Results and achievements", "/results"],
+      ["Facilities", "/facilities"],
+      ["School timings", "/school-timing"]
+    ]
+  },
+  "/streams": {
+    "h1": "Streams & Curriculum",
+    "lede": "Subject breakdown for every class: primary, middle, secondary and senior secondary.",
+    "paragraphs": [
+      "Bal Vikas Public School Kalayat covers the full school journey from Class 1 to Class 12. The primary section builds reading, writing and numeracy, the middle section adds science and social science, and the secondary section prepares students for the HBSE Class 10 examinations.",
+      "In Classes 11 and 12 students choose one of four streams: Medical with Physics, Chemistry and Biology (PCB); Non-Medical with Physics, Chemistry and Mathematics (PCM); Commerce; or Arts. Each stream is taught by subject teachers and supported by the school library and smart classrooms.",
+      "Stream selection is discussed with students and parents before the session begins so that the choice matches the student's interests and career plans."
+    ],
+    "facts": [
+      "Primary: Classes 1 to 5",
+      "Middle: Classes 6 to 8",
+      "Secondary: Classes 9 and 10 (HBSE)",
+      "Senior secondary: Medical (PCB), Non-Medical (PCM), Commerce, Arts"
+    ],
+    "links": [
+      ["Academics", "/academics"],
+      ["Admissions 2026-27", "/admissions"],
+      ["Results and achievements", "/results"],
+      ["Fee structure", "/fee-structure"]
+    ]
+  },
+  "/facilities": {
+    "h1": "Our Facilities",
+    "lede": "Modern amenities blending with traditional values to create the perfect learning environment in Kalayat.",
+    "paragraphs": [
+      "The BVPS campus on Railway Road, Kalayat has 31 spacious classrooms, of which 12 are interactive smart classrooms. A well-stocked library and a computer lab support classroom learning, and a large playground gives students space for daily sports and physical activity.",
+      "The campus is monitored by CCTV, drinking water is filtered through an RO system, and separate arrangements are made for boys and girls. A morning assembly starts each day and helps build discipline and a sense of community.",
+      "Parents are welcome to visit and see the classrooms, library, computer lab and playground during school hours. Call +91 98125 50200 to arrange a visit."
+    ],
+    "facts": [
+      "31 spacious classrooms, including 12 interactive smart classrooms",
+      "Library and computer lab",
+      "Large playground for football, cricket, athletics and more",
+      "CCTV-monitored campus and RO drinking water",
+      "Address: Railway Road, Kalayat, District Kaithal, Haryana - 136117"
+    ],
+    "links": [
+      ["About the school", "/about"],
+      ["Photo gallery", "/gallery"],
+      ["Academics", "/academics"],
+      ["Contact us", "/contact"]
+    ]
+  },
+  "/fee-structure": {
+    "h1": "Fee Structure",
+    "lede": "Complete, transparent fee details for Class 1 to 12, session 2026-27.",
+    "paragraphs": [
+      "This page lists the class-wise fee structure for Bal Vikas Public School Kalayat for the 2026-27 session, including the one-time admission fee, the monthly tuition fee and the annual fund for Classes 1 to 10.",
+      "For Classes 11 and 12 the fees are shown stream-wise for Medical (PCB), Non-Medical (PCM), Commerce and Arts. The yearly total is calculated as the monthly tuition fee multiplied by twelve, plus the annual fund.",
+      "Admission fees can be paid online by UPI through the payment section on this page, or in person at the school office. The office is open Monday to Saturday, 9:00 AM to 2:00 PM. Please confirm the latest amount with the office before making any payment."
+    ],
+    "facts": [
+      "Session: 2026-27",
+      "Covers: admission fee, monthly tuition, annual fund",
+      "Classes 11 and 12: fees differ by stream",
+      "Online payment: UPI",
+      "Office: Monday to Saturday, 9:00 AM to 2:00 PM"
+    ],
+    "links": [
+      ["Admissions 2026-27", "/admissions"],
+      ["Enrollment process", "/enrollment"],
+      ["Contact us", "/contact"],
+      ["School timings", "/school-timing"]
+    ]
+  },
+  "/gallery": {
+    "h1": "School Moments at Bal Vikas Public School",
+    "lede": "Explore the people, places and celebrations that make Bal Vikas Public School a special part of Kalayat.",
+    "paragraphs": [
+      "The BVPS photo gallery collects moments from school life in Kalayat: the campus and classrooms, morning assembly, sports days, cultural programmes, festivals and the students who make the school what it is.",
+      "Photos are grouped by campus life, events and achievements so that parents and visitors can quickly find what they are looking for. New photographs are added through the school's admin portal as events happen through the year.",
+      "For a campus visit, call +91 98125 50200 or write to info@bvpskalayat.edu.in."
+    ],
+    "facts": [
+      "Galleries: campus life, events, achievements",
+      "Location: Railway Road, Kalayat, District Kaithal, Haryana",
+      "Updated through the school year"
+    ],
+    "links": [
+      ["About the school", "/about"],
+      ["Facilities", "/facilities"],
+      ["Results and achievements", "/results"],
+      ["Contact us", "/contact"]
+    ]
+  },
+  "/results": {
+    "h1": "Our Achievers",
+    "lede": "Celebrating every champion of Bal Vikas Public School: football, cricket, karate and athletics.",
+    "paragraphs": [
+      "BVPS students compete and win in sport and academics. The school celebrates district and state level champions in karate, football, athletics, wrestling and cricket, along with students who do well in the HBSE board examinations.",
+      "Sport is part of the regular timetable rather than an afterthought, and the playground on campus gives teams space to practise every day. Coaches work with students through the year and the school felicitates achievers at its annual function.",
+      "The results page records these achievements so that parents and prospective families can see what BVPS students go on to do."
+    ],
+    "facts": [
+      "Sports: football, cricket, karate, athletics, wrestling",
+      "Participation at district and state level",
+      "Board examinations: HBSE (BSEH)"
+    ],
+    "links": [
+      ["Gallery", "/gallery"],
+      ["Academics", "/academics"],
+      ["Streams and curriculum", "/streams"],
+      ["Admissions 2026-27", "/admissions"]
+    ]
+  },
+  "/interview": {
+    "h1": "Interview & Interaction",
+    "lede": "A brief, friendly interaction with the student and parents - not a test.",
+    "paragraphs": [
+      "The admission interaction at BVPS is a short, friendly conversation with the student and parents. It is not an entrance test: the aim is to understand the child's current level, interests and any support they may need.",
+      "The interaction usually takes 10 to 15 minutes and is held at the school office on Railway Road, Kalayat. Parents can bring the last report card and any previous school records to help the teacher understand the student's background.",
+      "Once the interaction is complete, the office confirms the next step, which is enrollment and fee payment."
+    ],
+    "facts": [
+      "Format: short conversation, not a written test",
+      "Duration: about 10 to 15 minutes",
+      "Attendees: student and parents or guardians",
+      "Location: school office, Railway Road, Kalayat"
+    ],
+    "links": [
+      ["Admissions overview", "/admissions"],
+      ["Enrollment process", "/enrollment"],
+      ["Fee structure", "/fee-structure"],
+      ["Contact us", "/contact"]
+    ]
+  },
+  "/blog": {
+    "h1": "BVPS Blog & News",
+    "lede": "School ki taaza khabarein, events aur updates - ek jagah par.",
+    "paragraphs": [
+      "The BVPS blog is where Bal Vikas Public School Kalayat shares news, events and updates: admissions announcements, examination notices, sports results, cultural programmes and everyday moments from the campus.",
+      "Posts are managed by the school office through its admin portal, so the information here comes directly from the school rather than from third parties. Older posts stay online and can be browsed below.",
+      "If you are looking for admission details for the 2026-27 session, the admissions and fee structure pages have the most up-to-date information."
+    ],
+    "facts": [
+      "Published by the school office",
+      "Topics: admissions, exams, events, results, campus life",
+      "Language: English and Hindi"
+    ],
+    "links": [
+      ["Admissions 2026-27", "/admissions"],
+      ["Fee structure", "/fee-structure"],
+      ["Results and achievements", "/results"],
+      ["Contact us", "/contact"]
+    ]
+  },
+  "/school-timing": {
+    "h1": "School Timings",
+    "lede": "Office hours, school schedule and visit guidelines.",
+    "paragraphs": [
+      "Bal Vikas Public School Kalayat runs six days a week, Monday to Saturday, from 8:00 AM to 3:00 PM. The day begins with a morning assembly. The school is closed on Sundays and on public holidays announced by the school.",
+      "The admission and accounts office is open Monday to Saturday from 9:00 AM to 2:00 PM. Parents visiting for admission or fee payment should come within these hours.",
+      "During board examinations and summer months the school issues a revised timetable, which is shared with parents in advance."
+    ],
+    "facts": [
+      "School hours: Monday to Saturday, 8:00 AM to 3:00 PM",
+      "Office hours: Monday to Saturday, 9:00 AM to 2:00 PM",
+      "Sunday: closed",
+      "Address: Railway Road, Kalayat, District Kaithal, Haryana - 136117"
+    ],
+    "links": [
+      ["Contact us", "/contact"],
+      ["Admissions 2026-27", "/admissions"],
+      ["Fee structure", "/fee-structure"],
+      ["About the school", "/about"]
+    ]
+  },
+  "/contact": {
+    "h1": "Contact Bal Vikas Public School Kalayat",
+    "lede": "We are here to help. Reach out for admissions, queries, or just to say hello.",
+    "paragraphs": [
+      "Bal Vikas Public School is located on Railway Road, Kalayat, District Kaithal, Haryana - 136117. The campus is easy to reach from the main town and a map is available on this page.",
+      "For admissions, call +91 98125 50200 or +91 98125 50202, or write to admissions@bvpskalayat.edu.in. For general queries use info@bvpskalayat.edu.in. The office is open Monday to Saturday, 9:00 AM to 2:00 PM.",
+      "You can also send a message through the contact form on this page. The message is saved securely and the school office is notified."
+    ],
+    "facts": [
+      "Address: Railway Road, Kalayat, District Kaithal, Haryana - 136117",
+      "Phone: +91 98125 50200 / +91 98125 50202",
+      "Email: admissions@bvpskalayat.edu.in / info@bvpskalayat.edu.in",
+      "Office hours: Monday to Saturday, 9:00 AM to 2:00 PM"
+    ],
+    "links": [
+      ["Admissions 2026-27", "/admissions"],
+      ["School timings", "/school-timing"],
+      ["Fee structure", "/fee-structure"],
+      ["Write to the Principal", "/principal-message"]
+    ]
+  },
+  "/principal-message": {
+    "h1": "Message from the Principal",
+    "lede": "A vision for disciplined, value-based quality education at Bal Vikas Public School Kalayat.",
+    "paragraphs": [
+      "Sh. Ramphal Sharma, Principal and Founder of Bal Vikas Public School, writes about the school's vision: a disciplined, value-based education that helps every child in Kalayat grow into a confident and responsible person.",
+      "The message reflects the school's approach since 2004, where academic work is balanced with sports, culture and character building. Teachers are encouraged to know each student individually and to work closely with parents.",
+      "Parents who wish to share a concern, suggestion or appreciation can use the form on this page to write directly to the Principal. Messages are received by the school office."
+    ],
+    "facts": [
+      "Principal and Founder: Sh. Ramphal Sharma",
+      "Established: 2004",
+      "Focus: discipline, values, academics and sport",
+      "Write directly to the Principal using the form on this page"
+    ],
+    "links": [
+      ["About the school", "/about"],
+      ["Admissions 2026-27", "/admissions"],
+      ["Contact us", "/contact"],
+      ["Feedback", "/feedback"]
+    ]
+  },
+  "/feedback": {
+    "h1": "Share Your Feedback",
+    "lede": "Your thoughts help us grow. We value feedback from parents, students and visitors.",
+    "paragraphs": [
+      "Bal Vikas Public School welcomes feedback from parents, students and visitors. Suggestions about teaching, transport, facilities, events or communication help the school improve.",
+      "The form on this page asks for a name, an optional email address and your message. Feedback is delivered to the school office and reviewed by the Principal. Complaints are followed up individually.",
+      "If the matter is urgent, please call the office on +91 98125 50200 instead of using the form."
+    ],
+    "facts": [
+      "Who can send feedback: parents, students, visitors",
+      "Email address is optional",
+      "Messages go to the school office and Principal",
+      "Urgent queries: +91 98125 50200"
+    ],
+    "links": [
+      ["Contact us", "/contact"],
+      ["Write to the Principal", "/principal-message"],
+      ["About the school", "/about"],
+      ["Admissions 2026-27", "/admissions"]
+    ]
+  },
+  "/privacy-policy": {
+    "h1": "Privacy Policy",
+    "lede": "How Bal Vikas Public School Kalayat collects, uses and protects your personal information.",
+    "paragraphs": [
+      "This privacy policy explains what information Bal Vikas Public School Kalayat collects through its website forms and how that information is used.",
+      "The admission, contact, feedback and principal-message forms ask for details such as name, phone number, email address and the student's class. These details are used only to respond to the enquiry and to process admission, and are stored securely on the school's servers.",
+      "Information is not sold or shared with third parties for marketing. Parents may ask the school office to correct or delete their submitted details by writing to info@bvpskalayat.edu.in."
+    ],
+    "facts": [
+      "Data collected: name, phone, email, class and message",
+      "Used only for admission and enquiry follow-up",
+      "Not sold or shared for marketing",
+      "Contact: info@bvpskalayat.edu.in"
+    ],
+    "links": [
+      ["Contact us", "/contact"],
+      ["Admissions 2026-27", "/admissions"],
+      ["Feedback", "/feedback"],
+      ["About the school", "/about"]
+    ]
+  }
+}

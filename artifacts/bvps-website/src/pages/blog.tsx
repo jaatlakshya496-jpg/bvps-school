@@ -67,23 +67,69 @@ export default function Blog() {
               <Loader2 className="w-5 h-5 animate-spin" /> Loading posts…
             </div>
           ) : loadError ? (
-            <div className="text-center py-16" role="alert">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-destructive/10 text-destructive mb-4">
-                <Newspaper className="w-8 h-8" />
+            <div className="py-10" role="alert">
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-destructive/10 text-destructive mb-4">
+                  <Newspaper className="w-8 h-8" />
+                </div>
+                <h2 className="text-xl font-serif font-bold text-black">Blog posts abhi load nahi ho paye</h2>
+                <p className="text-muted-foreground text-sm mt-2 max-w-md mx-auto">
+                  Server se posts fetch nahi ho sake. Aap neeche diye page se school ki
+                  poori jaankari dekh sakte hain, ya thodi der baad dobara try karein.
+                </p>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="mt-5"
+                  onClick={() => setReloadKey(key => key + 1)}
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Dobara try karein
+                </Button>
               </div>
-              <h2 className="text-xl font-serif font-bold text-black">Posts load nahi ho paye</h2>
-              <p className="text-muted-foreground text-sm mt-2 max-w-md mx-auto">
-                Blog abhi temporarily unavailable hai. Thodi der baad dobara try karein.
+
+              {/* API down hone par bhi page par asli, kaam ki content rahe —
+                  warna Google render karne par sirf ek error message dikhta hai. */}
+              <div className="grid sm:grid-cols-3 gap-4 mt-12">
+                {[
+                  {
+                    title: 'Admissions 2026-27',
+                    body: 'Classes 1 to 12 ke liye admission open hai. Application, documents aur interaction ki poori process dekhein.',
+                    href: '/admissions',
+                    cta: 'Admission process',
+                  },
+                  {
+                    title: 'Fee Structure',
+                    body: 'Class 1 se 12 tak admission fee, monthly tuition aur annual fund — stream-wise detail ke saath.',
+                    href: '/fee-structure',
+                    cta: 'Fees dekhein',
+                  },
+                  {
+                    title: 'Contact the school',
+                    body: 'Railway Road, Kalayat, District Kaithal, Haryana 136117. Phone +91 98125 50200 / +91 98125 50202.',
+                    href: '/contact',
+                    cta: 'Contact page',
+                  },
+                ].map(card => (
+                  <Link
+                    key={card.href}
+                    href={card.href}
+                    className="block bg-white rounded-2xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <h3 className="font-serif font-bold text-black text-lg">{card.title}</h3>
+                    <p className="text-sm text-muted-foreground mt-2">{card.body}</p>
+                    <span className="inline-flex items-center gap-1.5 mt-4 text-sm font-bold text-secondary">
+                      {card.cta} <ArrowRight className="w-4 h-4" />
+                    </span>
+                  </Link>
+                ))}
+              </div>
+
+              <p className="text-sm text-muted-foreground mt-10 max-w-2xl mx-auto text-center">
+                Bal Vikas Public School (BVPS) Kalayat ek private, co-educational school hai jo
+                2004 se Haryana Board of School Education (BSEH / HBSE) se affiliated hai.
+                School hours Monday to Saturday, 8:00 AM se 3:00 PM tak hain.
               </p>
-              <Button
-                type="button"
-                variant="outline"
-                className="mt-5"
-                onClick={() => setReloadKey(key => key + 1)}
-              >
-                <RefreshCw className="w-4 h-4" />
-                Dobara try karein
-              </Button>
             </div>
           ) : posts.length === 0 ? (
             <div className="text-center py-16">

@@ -36,6 +36,19 @@ const routes = JSON.parse(
   fs.readFileSync(path.join(WEBSITE, "src/lib/public-routes.json"), "utf8"),
 );
 
+// Har route ka asli content (H1 + paragraphs + facts + internal links).
+// Ye HTML seedha `<div id="root">` ke andar inject hota hai. Browser me React
+// mount hote hi `createRoot` usay clear kar deta hai, isliye normal user ko
+// wahi app dikhti hai — par **crawler ko pehli request par hi poora unique
+// content mil jata hai** (JS render ka intezaar nahi karna padta).
+const SHELLS = JSON.parse(
+  fs.readFileSync(path.join(WEBSITE, "src/lib/prerender-shells.json"), "utf8"),
+);
+
+// Sitemap ka `lastmod` har build par "aaj" nahi hona chahiye — warna Google
+// usay ignore kar deta hai. Site content badalne par ye date update karo.
+const SITE_CONTENT_UPDATED = "2026-11-09";
+
 // ---- Blog posts (dynamic sitemap + prerendered shells) ---------------------
 // Pehle sitemap sirf static routes se banta tha, isliye admin portal se publish
 // hone wale blog posts Google ko kabhi nahi milte the. Ab build ke waqt public
@@ -72,7 +85,7 @@ function readEnvValue(key) {
 }
 
 const API_BASE = (
-  readEnvValue("VITE_API_BASE_URL") || "https://bvps-school-1.onrender.com"
+  readEnvValue("VITE_API_BASE_URL") || "https://school-website-jxxh.onrender.com"
 ).replace(/\/+$/, "");
 
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -231,6 +244,61 @@ function esc(value) {
     .replace(/"/g, "&quot;");
 }
 
+// ---- Static shell (crawlable content) --------------------------------------
+// Inline styles isliye ki ye HTML Tailwind ke scan se bahar hai aur React mount
+// se pehle sirf kuch milliseconds ke liye dikhta hai.
+const SHELL_STYLE = {
+  wrap: "max-width:56rem;margin:0 auto;padding:2.5rem 1.25rem 3rem;font-family:Outfit,system-ui,-apple-system,'Segoe UI',sans-serif;color:#111c2e;line-height:1.65",
+  h1: "font-size:clamp(1.6rem,4vw,2.4rem);line-height:1.15;margin:0 0 .6rem;font-weight:800",
+  lede: "font-size:1.05rem;color:#475569;margin:0 0 1.5rem",
+  p: "margin:0 0 1rem;color:#334155",
+  h2: "font-size:1.1rem;margin:1.75rem 0 .6rem;font-weight:700",
+  ul: "margin:0 0 1rem;padding-left:1.2rem;color:#334155",
+  li: "margin:.25rem 0",
+  a: "color:#0f5ea8;text-decoration:underline",
+  links: "list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:.5rem 1rem;margin:0",
+  card: "margin-top:1.5rem;padding:1rem 1.25rem;border:1px solid #e2e8f0;border-radius:.75rem;background:#f8fafc;font-size:.9rem;color:#475569",
+};
+
+function shellMarkup(shell, extraHtml = "") {
+  if (!shell) return "";
+  const paragraphs = (shell.paragraphs ?? [])
+    .map((p) => `<p style="${SHELL_STYLE.p}">${esc(p)}</p>`)
+    .join("");
+  const facts = (shell.facts ?? []).length
+    ? `<h2 style="${SHELL_STYLE.h2}">Key details</h2><ul style="${SHELL_STYLE.ul}">${shell.facts
+        .map((f) => `<li style="${SHELL_STYLE.li}">${esc(f)}</li>`)
+        .join("")}</ul>`
+    : "";
+  const links = (shell.links ?? []).length
+    ? `<h2 style="${SHELL_STYLE.h2}">Explore more</h2><ul style="${SHELL_STYLE.links}">${shell.links
+        .map(
+          ([label, href]) =>
+            `<li><a href="${esc(href)}" style="${SHELL_STYLE.a}">${esc(label)}</a></li>`,
+        )
+        .join("")}</ul>`
+    : "";
+
+  return `<div data-prerender="shell" style="min-height:100vh;background:#ffffff">
+    <div style="background:#111c2e;color:#ffffff;padding:0.9rem 1.25rem">
+      <div style="max-width:56rem;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+        <span style="font-family:Outfit,system-ui,sans-serif;font-weight:700;font-size:1.02rem">Bal Vikas Public School, Kalayat</span>
+        <a href="tel:+919812550200" style="font-family:Outfit,system-ui,sans-serif;color:#f4c150;text-decoration:none;font-weight:600;font-size:0.95rem">+91 98125 50200</a>
+      </div>
+    </div>
+    <article style="${SHELL_STYLE.wrap}">
+      <h1 style="${SHELL_STYLE.h1}">${esc(shell.h1)}</h1>
+      ${shell.lede ? `<p style="${SHELL_STYLE.lede}">${esc(shell.lede)}</p>` : ""}
+      ${paragraphs}
+      ${facts}
+      ${extraHtml}
+      ${links}
+      <p style="${SHELL_STYLE.card}">Bal Vikas Public School, Railway Road, Kalayat, District Kaithal, Haryana - 136117. Phone +91 98125 50200 / +91 98125 50202. Office hours: Monday to Saturday, 9:00 AM to 2:00 PM.</p>
+    </article>
+  </div>`;
+}
+
+
 const indexHtml = fs.readFileSync(path.join(DIST, "index.html"), "utf8");
 if (!indexHtml.includes("<head>")) {
   console.error("[prerender] dist/index.html me <head> nahi mila — build check karo");
@@ -278,6 +346,7 @@ function renderPage({
   schema,
   image = OG_IMAGE,
   ogType = "website",
+  shell = "",
 }) {
   let html = indexHtml;
 
@@ -313,11 +382,31 @@ function renderPage({
     `    <script type="application/ld+json">${JSON.stringify(schema)}</script>\n  </head>`,
   );
 
+  // Crawler ke liye asli content `#root` ke andar. React mount par isay clear
+  // kar deta hai (dekho SHELLS ke paas wala comment).
+  if (shell) {
+    html = html.replace('<div id="root"></div>', `<div id="root">${shell}</div>`);
+  }
+
   return html;
 }
 
+// Blog posts build ke waqt fetch hote hain — `/blog` shell me latest post links
+// aur har post ke shell me uska asli content daalne ke liye.
+const posts = await fetchPublishedPosts();
+
 let written = 0;
 const today = new Date().toISOString().slice(0, 10);
+
+function blogLinksMarkup(list) {
+  if (!list.length) return "";
+  return `<h2 style="${SHELL_STYLE.h2}">Latest posts</h2><ul style="${SHELL_STYLE.ul}">${list
+    .map(
+      (post) =>
+        `<li style="${SHELL_STYLE.li}"><a href="/blog/${esc(String(post.slug).trim())}" style="${SHELL_STYLE.a}">${esc(post.title)}</a></li>`,
+    )
+    .join("")}</ul>`;
+}
 
 for (const route of routes) {
   const html = renderPage({
@@ -325,6 +414,10 @@ for (const route of routes) {
     description: route.description,
     canonical: route.path,
     robots: "index, follow, max-image-preview:large, max-snippet:-1",
+    shell: shellMarkup(
+      SHELLS[route.path],
+      route.path === "/blog" ? blogLinksMarkup(posts.slice(0, 10)) : "",
+    ),
     schema: {
       "@context": "https://schema.org",
       "@graph": [
@@ -344,9 +437,8 @@ for (const route of routes) {
 // Har published post ka apna static shell + sitemap entry (dekho upar wala
 // `fetchPublishedPosts` comment). Slug valid nahi hai toh us post ko skip karte
 // hain — warna path traversal / broken canonical URL ban sakta hai.
-const posts = await fetchPublishedPosts();
+// `posts` upar fetch ho chuke hain (blog listing shell ke liye).
 let blogWritten = 0;
-
 for (const post of posts) {
   const slug = String(post.slug).trim();
   const canonical = `/blog/${slug}`;
@@ -397,6 +489,16 @@ for (const post of posts) {
     ],
   };
 
+  // Post ka asli text bhi shell me — blog API down ho ya crawler JS na chalaye,
+  // phir bhi poora article HTML me mile.
+  const postParagraphs = String(post.content ?? "")
+    .split(/\n{2,}/)
+    .map((block) => block.replace(/\s+/g, " ").trim())
+    .filter(Boolean)
+    .slice(0, 60)
+    .map((para) => `<p style="${SHELL_STYLE.p}">${esc(para)}</p>`)
+    .join("");
+
   const html = renderPage({
     title: `${post.title} — BVPS Blog`,
     description,
@@ -405,6 +507,20 @@ for (const post of posts) {
     schema,
     image,
     ogType: "article",
+    shell: shellMarkup(
+      {
+        h1: post.title,
+        lede: description,
+        paragraphs: [],
+        facts: [],
+        links: [
+          ["All blog posts", "/blog"],
+          ["Admissions 2026-27", "/admissions"],
+          ["Contact us", "/contact"],
+        ],
+      },
+      postParagraphs,
+    ),
   });
 
   const dir = path.join(DIST, "blog", slug);
@@ -433,7 +549,9 @@ fs.writeFileSync(
 const sitemapEntries = [
   ...routes.map((r) => ({
     loc: `${SITE_URL}${r.path === "/" ? "/" : r.path}`,
-    lastmod: today,
+    // Per-route `lastmod` public-routes.json se aa sakta hai; warna site-wide
+    // content update date. Har build par "aaj" likhna Google ke liye useless hai.
+    lastmod: r.lastmod || SITE_CONTENT_UPDATED,
     changefreq: r.changefreq,
     priority: r.priority,
   })),

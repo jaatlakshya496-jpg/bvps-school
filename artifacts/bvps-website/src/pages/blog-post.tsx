@@ -73,12 +73,15 @@ export default function BlogPostPage() {
       <div className="min-h-[60vh] flex flex-col items-center justify-center px-4 text-center">
         <Helmet>
           <title>Blog temporarily unavailable — BVPS</title>
-          <meta name="robots" content="noindex, follow" />
+          {/* Yahan `noindex` nahi — API down hona post ke exist na karne ka proof
+              nahi hai. Static shell me post ka asli content pehle se hai, isliye
+              page ko indexable rehna chahiye. Sirf `notFound` par noindex lagta hai. */}
         </Helmet>
         <Newspaper className="w-12 h-12 text-muted-foreground mb-4" />
         <h1 className="text-2xl font-serif font-bold text-black">Post abhi load nahi ho paya</h1>
         <p className="text-muted-foreground text-sm mt-2 mb-6 max-w-md">
-          Blog temporarily unavailable hai. Thodi der baad dobara try karein.
+          Server se post fetch nahi ho saka. Neeche diye page se school ki jaankari
+          dekh sakte hain, ya thodi der baad dobara try karein.
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <Button type="button" variant="outline" onClick={() => setReloadKey(key => key + 1)}>
@@ -87,6 +90,12 @@ export default function BlogPostPage() {
           </Button>
           <Link href="/blog" className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-medium">
             <ArrowLeft className="w-4 h-4" /> Back to Blog
+          </Link>
+          <Link href="/admissions" className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-medium">
+            Admissions 2026-27
+          </Link>
+          <Link href="/contact" className="inline-flex items-center gap-2 rounded-md border border-border px-4 py-2 text-sm font-medium">
+            Contact the school
           </Link>
         </div>
       </div>
