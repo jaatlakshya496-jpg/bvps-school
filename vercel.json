@@ -4,7 +4,7 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://bvps-school-1.onrender.com/api/:path*" },
+    { "source": "/api/:path*", "destination": "https://school-website-jxxh.onrender.com/api/:path*" },
     { "source": "/admin", "destination": "/" },
     { "source": "/admin/:path*", "destination": "/" },
     { "source": "/blog/:slug", "destination": "/" }

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'wouter';
-import { MapPin, Phone, Mail, Clock, GraduationCap, Info } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, GraduationCap, Info, Facebook, Instagram } from 'lucide-react';
 import schoolLogo from '/school-logo.png';
 import { useSiteContent } from '@/lib/site-content';
 import { apiAdminStatus, isAuthError } from '@/lib/api';
@@ -178,6 +178,29 @@ export function Footer() {
                 </div>
               </li>
             </ul>
+            <div className="mt-6">
+              <p className="font-medium text-white mb-3 text-sm">Follow Us</p>
+              <div className="flex items-center gap-3">
+                <a
+                  href={get('site.facebookUrl', 'https://www.facebook.com/share/1DD64nJRwi/')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="BVPS on Facebook"
+                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-[#1877F2] text-white flex items-center justify-center transition-colors"
+                >
+                  <Facebook className="w-5 h-5" />
+                </a>
+                <a
+                  href={get('site.instagramUrl', 'https://www.instagram.com/bvpskalayat')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="BVPS on Instagram"
+                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-[#DD2A7B] text-white flex items-center justify-center transition-colors"
+                >
+                  <Instagram className="w-5 h-5" />
+                </a>
+              </div>
+            </div>
           </div>
 
         </div>

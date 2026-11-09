@@ -53,6 +53,8 @@ export const SCHOOL = {
   principal: 'Sh. Ramphal Sharma',
   principalRole: 'Principal & Founder',
   grades: 'Classes 1 to 12',
+  facebookUrl: 'https://www.facebook.com/share/1DD64nJRwi/',
+  instagramUrl: 'https://www.instagram.com/bvpskalayat',
 } as const;
 
 /** Site ke saare public pages — sitemap, prerender aur breadcrumb data ke liye. */
@@ -153,6 +155,7 @@ export function buildSchoolSchema() {
             availableLanguage: ['en', 'hi', 'pa'],
           },
         ],
+        sameAs: [SCHOOL.facebookUrl, SCHOOL.instagramUrl],
       },
       {
         '@type': 'WebSite',

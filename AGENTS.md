@@ -279,6 +279,14 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - ⚠️ **Deploy baaki:** commit + push nahi hua (GitHub reachability check karna hai). Deploy ke baad Search Console me Pages report → Sitemap re-submit → top pages Request Indexing.
   - ⚠️ **DB abhi bhi suspended** hai — blog/fees API tab tak 503 rahenge jab tak Render `bvps-db` restore/upgrade na ho.
 
+- **[2026-11-09]** 📣 **Facebook + Instagram links site-wide add kiye** — user ne diye links jode: https://www.facebook.com/share/1DD64nJRwi/ aur https://www.instagram.com/bvpskalayat
+  - **Floating social stack (`WhatsAppButton.tsx`, bottom-right):** WhatsApp ke upar Instagram (gradient) + Facebook (blue) ke **circle icon** buttons (same floating stack). Labels WhatsApp par hover pe hi dikhte hain, social icons always visible.
+  - **Footer (`Footer.tsx`):** “School Hours” ke neeche “Follow Us” section + Facebook/Instagram round icons.
+  - **Admin-editable:** `site.facebookUrl` / `site.instagramUrl` `site-content.tsx` defaults + Admin portal → School Information me URL fields add kiye.
+  - **SEO structured data:** `seo.tsx` + `scripts/prerender-seo.mjs` ke School JSON-LD me verified `sameAs` (Facebook, Instagram). `dist/index.html` me `sameAs` verified.
+  - ✅ **Verify:** `npm run typecheck --workspace=@workspace/bvps-website` clean · `npm run build` OK (18 static shells + 0 blog shells + 404 + sitemap 18 URLs) · prerender JSON-LD me `sameAs` present. (Blog API fetch 503 due to DB suspended — build successful.)
+  - ⚠️ **Deploy baaki:** changes local hain — GitHub push/Vercel auto-deploy ke baad live verify karein.
+
 ## To-Do Notes
 
 - ✅ **Email ab FormSubmit primary** (2026-10-10) — user ne bataya FormSubmit activation pehle hi ho chuka hai, isliye `notify.ts` me `sendEmail()` ab **FormSubmit pehle** try karta hai (seedha `jaatlakshya496@gmail.com` par relay — koi key/domain nahi chahiye, spam risk kam), firbhi fail ho toh **Resend fallback** (`RESEND_API_KEY` set hai). ❗ Deploy ke baad ek form bhej kar verify karna (Inbox/Spam dono check).

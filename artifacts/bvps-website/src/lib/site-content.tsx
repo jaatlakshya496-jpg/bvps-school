@@ -50,6 +50,8 @@ const SITE_DEFAULTS: Record<string, string> = {
   'site.emailGeneral': 'info@bvpskalayat.edu.in',
   'site.address': 'Railway Road, Kalayat, District Kaithal, Haryana – 136117',
   'site.whatsappNumber': '919812550200',
+  'site.facebookUrl': 'https://www.facebook.com/share/1DD64nJRwi/',
+  'site.instagramUrl': 'https://www.instagram.com/bvpskalayat',
   'site.principal': 'Sh. Ramphal Sharma',
   'site.established': '2004',
   'site.schoolCode': '06050300920',
@@ -183,6 +185,8 @@ export const CONTENT_SECTIONS: ContentSection[] = [
           f('site.emailAdmissions', 'Admissions email', 'email'),
           f('site.address', 'Full address', 'textarea'),
           f('site.whatsappNumber', 'WhatsApp number (with 91, no +)', 'tel', 'Example: 919812550200'),
+          f('site.facebookUrl', 'Facebook page/profile URL', 'url'),
+          f('site.instagramUrl', 'Instagram profile URL', 'url'),
         ],
       },
       {
