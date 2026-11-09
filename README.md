@@ -55,6 +55,41 @@ Admin portal: `/admin` (private — login required). Email/password configured v
 - Structured data (School + BreadcrumbList)
 - Open Graph + Twitter Cards
 - Canonical URLs per page
+- Crawlable static shell per page (`src/lib/prerender-shells.json` → `scripts/prerender-seo.mjs`)
+
+## Architecture
+- Monorepo: `artifacts/api-server` (Express + TS API), `artifacts/bvps-website` (Vite + React + Tailwind), `lib/db` (Drizzle + Postgres), `lib/api-zod` (zod schemas).
+- Frontend calls backend via `/api/*`; Vercel rewrites them to the Render API.
+- DB schema/migrations: `lib/db/drizzle`.
+
+## Environment Variables
+
+### Backend (`artifacts/api-server` — Render, private env only)
+| Key | Purpose | Example / note |
+|---|---|---|
+| `NODE_ENV` | production | `production` |
+| `PORT` | listen port | `10000` |
+| `DATABASE_URL` | Postgres (from Render DB) | `postgres://…` |
+| `ADMIN_EMAIL` | admin login email | owner Gmail |
+| `ADMIN_PASSWORD` | admin login password | strong password |
+| `ADMIN_SECRET` | admin passcode / legacy key | strong secret |
+| `ADMIN_SESSION_SECRET` | session signing secret | strong secret (preferred) |
+| `ALLOW_LEGACY_ADMIN_KEY` | legacy `x-admin-key` on/off | `true` only if needed |
+| `CORS_ORIGINS` | allowed origins (comma list) | `https://bvps-school.vercel.app` |
+| `NOTIFY_EMAIL` | owner email (notify) | owner Gmail |
+| `NOTIFY_WHATSAPP` | owner WhatsApp (callmebot) | `+91…` |
+| `RESEND_API_KEY` | email fallback | key |
+| `CALLMEBOT_APIKEY` | WhatsApp alerts | key |
+| `SITE_ORIGIN` | public site origin | `https://bvps-school.vercel.app` |
+| `GROQ_API_KEY` | chatbot | key |
+| `GMAIL_USER` / `GMAIL_APP_PASSWORD` | legacy notify | not used for primary now |
+
+### Frontend (`artifacts/bvps-website` — Vercel build env)
+| Key | Purpose |
+|---|---|
+| `VITE_API_BASE_URL` | Backend base URL (default `https://bvps-school-1.onrender.com`) |
+
+Secrets: `.env.example` me empty placeholders hain; real values sirf private hosting env me.
 
 ## Development
 ```bash
@@ -63,6 +98,11 @@ npm run dev
 npm run build
 npm run lint
 ```
+
+## Deploy
+- Frontend: Vercel (`bvps-school`) — build `npm run build`, output `dist`, rewrites `/api/*` → Render.
+- Backend: Render (`bvps-api`) — build `npm install && npm run build --workspace=@workspace/api-server`, migrate, start `cd artifacts/api-server && node ./dist/index.mjs`.
+- Health: `https://bvps-school-1.onrender.com/health` (cron/uptime monitor ke liye).
 
 ## Contact
 Bal Vikas Public School
