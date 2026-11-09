@@ -186,7 +186,7 @@ router.put("/", requireAdmin, async (req: Request, res: Response) => {
     res.json({ success: true, data: await getContentMap(), message: "Website content updated." });
   } catch (err) {
     if (err instanceof z.ZodError) {
-      res.status(400).json({ success: false, error: err.errors });
+      res.status(400).json({ success: false, error: err.issues });
       return;
     }
     console.error("site_content save error:", err);

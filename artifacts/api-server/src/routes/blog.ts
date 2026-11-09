@@ -114,7 +114,7 @@ router.post("/admin", requireAdmin, async (req: Request, res: Response) => {
     res.json({ success: true, data: row, message: "Post created" });
   } catch (err) {
     if (err instanceof z.ZodError) {
-      res.status(400).json({ success: false, error: err.errors });
+      res.status(400).json({ success: false, error: err.issues });
       return;
     }
     if (isUniqueViolation(err)) {
@@ -158,7 +158,7 @@ router.put("/admin/:id", requireAdmin, async (req: Request, res: Response) => {
     res.json({ success: true, data: row, message: "Post updated" });
   } catch (err) {
     if (err instanceof z.ZodError) {
-      res.status(400).json({ success: false, error: err.errors });
+      res.status(400).json({ success: false, error: err.issues });
       return;
     }
     if (isUniqueViolation(err)) {

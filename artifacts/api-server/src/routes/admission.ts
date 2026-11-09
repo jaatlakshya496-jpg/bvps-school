@@ -62,7 +62,7 @@ router.post("/", formLimiter, async (req: Request, res: Response) => {
     parsed = insertSchema.parse(req.body ?? {});
   } catch (err) {
     if (err instanceof z.ZodError) {
-      res.status(400).json({ success: false, error: err.errors });
+      res.status(400).json({ success: false, error: err.issues });
       return;
     }
     res.status(400).json({ success: false, error: "Invalid submission" });

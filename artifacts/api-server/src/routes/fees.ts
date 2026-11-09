@@ -179,7 +179,7 @@ router.put("/admin", requireAdmin, async (req: Request, res: Response) => {
     validated = feeConfigSchema.parse(req.body) as FeeConfig;
   } catch (err) {
     if (err instanceof z.ZodError) {
-      res.status(400).json({ success: false, error: err.errors });
+      res.status(400).json({ success: false, error: err.issues });
       return;
     }
     res.status(400).json({ success: false, error: "Invalid fee data" });
