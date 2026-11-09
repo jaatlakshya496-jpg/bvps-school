@@ -1,4 +1,5 @@
 import { Router, type Request, type Response } from "express";
+import express from "express";
 import { eq, desc } from "drizzle-orm";
 import { db } from "@workspace/db";
 import { blogPostsTable } from "@workspace/db";
@@ -98,7 +99,10 @@ router.get("/admin", requireAdmin, async (req: Request, res: Response) => {
 });
 
 // ── Admin: create ──
-router.post("/admin", requireAdmin, async (req: Request, res: Response) => {
+// Parser sirf is jagah pe (admin auth ke baad) lagta hai — isliye unauthenticated
+// ko bhi 8mb body ek private endpoint par nahi ghusne de. Public GET tight global
+// 128kb parser use karta hai.
+router.post("/admin", requireAdmin, express.json({ limit: "8mb" }), async (req: Request, res: Response) => {
   try {
     const body = blogPostSchema.parse(req.body ?? {});
     const now = new Date();
@@ -127,7 +131,7 @@ router.post("/admin", requireAdmin, async (req: Request, res: Response) => {
 });
 
 // ── Admin: update ──
-router.put("/admin/:id", requireAdmin, async (req: Request, res: Response) => {
+router.put("/admin/:id", requireAdmin, express.json({ limit: "8mb" }), async (req: Request, res: Response) => {
   const id = Number(req.params.id);
   if (!Number.isInteger(id) || id <= 0) {
     res.status(400).json({ success: false, error: "Invalid post id" });
