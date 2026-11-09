@@ -97,11 +97,21 @@ async function fetchPublishedPosts() {
   }
 
   const url = `${API_BASE}/api/blog`;
-  for (let attempt = 1; attempt <= 2; attempt++) {
+
+  // Render free service cold start ke baad slow ho sakta hai — isliye 5 retries,
+  // 45s timeout (bada) aur ek wake-up request (cold start jhelne ke liye).
+  for (let attempt = 1; attempt <= 5; attempt++) {
+    // Wake-up ping — Render cold start (30–60s) ko jhelne ke liye.
+    try {
+      await fetch(`${API_BASE}/health`, { signal: AbortSignal.timeout(20_000) });
+    } catch {
+      /* ignore — next real fetch hi retry hoga */
+    }
+
     try {
       const res = await fetch(url, {
         headers: { accept: "application/json" },
-        signal: AbortSignal.timeout(25_000),
+        signal: AbortSignal.timeout(45_000),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
@@ -113,13 +123,17 @@ async function fetchPublishedPosts() {
       return posts;
     } catch (err) {
       console.warn(
-        `[prerender] blog fetch attempt ${attempt} fail (${err?.message ?? err})`,
+        `[prerender] blog fetch attempt ${attempt}/5 fail (${err?.message ?? err})`,
       );
-      if (attempt < 2) await new Promise((r) => setTimeout(r, 2000));
+      if (attempt < 5) await new Promise((r) => setTimeout(r, 5000));
     }
   }
 
-  console.warn(`[prerender] blog API reachable nahi (${API_BASE}) — sirf static routes sitemap me`);
+  // Retry fail par bhi silent drop nahi — log clearly aur static routes wala
+  // sitemap rakho (blog URLs tab tak na aayenge jab tak API recover na kare).
+  console.warn(
+    `[prerender] blog API reachable nahi (${API_BASE}) — sirf static routes sitemap me`,
+  );
   return [];
 }
 
