@@ -1,7 +1,7 @@
-import { Facebook, Instagram } from 'lucide-react';
+import { Bot, Facebook, Instagram } from 'lucide-react';
 import { useSiteContent } from '@/lib/site-content';
 
-export function WhatsAppButton() {
+export function WhatsAppButton({ onOpenChatbot }: { onOpenChatbot?: () => void }) {
   const { get } = useSiteContent();
   // Admin portal → School Information se badla ja sakta hai (91XXXXXXXXXX format).
   const number = get('site.whatsappNumber', '919812550200').replace(/\D/g, '');
@@ -53,6 +53,20 @@ export function WhatsAppButton() {
           </svg>
         </span>
       </a>
+
+      {/* Chatbot — WhatsApp/Facebook/Instagram ke saath same floating stack me,
+          neeche hi (WhatsApp ke neeche) round circle button. Launcher abhi tak
+          mount nahi hua tha, isliye yahan fresh round circle add kiya. */}
+      {onOpenChatbot ? (
+        <button
+          type="button"
+          onClick={onOpenChatbot}
+          aria-label="Ask BVPS Assistant"
+          className="w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center text-white bg-secondary text-primary hover:scale-105"
+        >
+          <Bot className="w-6 h-6" />
+        </button>
+      ) : null}
     </div>
   );
 }

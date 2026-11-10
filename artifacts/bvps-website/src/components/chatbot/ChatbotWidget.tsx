@@ -121,8 +121,26 @@ async function askAssistant(message: string, history: ChatMessage[]): Promise<Ch
   }
 }
 
-export function ChatbotWidget() {
-  const [isOpen, setIsOpen] = useState(false);
+type ChatbotWidgetProps = {
+  /** Controlled mode — floating social stack (WhatsApp/Facebook/Instagram) se
+   *  integrate karne ke liye RootLayout me use hota hai. */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  /** Panel side — launcher right side me hai toh panel bhi right anchored se
+   *  open hoga (default left). */
+  side?: "left" | "right";
+};
+
+export function ChatbotWidget({ open: openProp, onOpenChange, side = "left" }: ChatbotWidgetProps = {}) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isOpen = openProp ?? internalOpen;
+  const setIsOpen = useCallback(
+    (next: boolean) => {
+      if (onOpenChange) onOpenChange(next);
+      else setInternalOpen(next);
+    },
+    [onOpenChange],
+  );
   const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_MESSAGE]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -234,7 +252,9 @@ export function ChatbotWidget() {
     <>
       {isOpen && (
         <section
-          className="fixed inset-x-0 bottom-0 z-[60] flex h-[min(78dvh,640px)] flex-col overflow-hidden rounded-t-3xl border border-slate-200 bg-white shadow-2xl sm:inset-x-auto sm:bottom-[5.5rem] sm:left-5 sm:h-[min(620px,calc(100dvh-9rem))] sm:max-h-[calc(100dvh-9rem)] sm:w-[380px] sm:rounded-3xl"
+          className={`fixed inset-x-0 bottom-0 z-[60] flex h-[min(78dvh,640px)] flex-col overflow-hidden rounded-t-3xl border border-slate-200 bg-white shadow-2xl sm:inset-x-auto sm:bottom-[5.5rem] ${
+            side === "right" ? "sm:right-5" : "sm:left-5"
+          } sm:h-[min(620px,calc(100dvh-9rem))] sm:max-h-[calc(100dvh-9rem)] sm:w-[380px] sm:rounded-3xl`}
           aria-label="BVPS school assistant"
         >
           <header className="flex items-center justify-between gap-2 bg-primary px-4 py-3.5 text-white sm:px-5 sm:py-4">
@@ -403,8 +423,9 @@ export function ChatbotWidget() {
         </section>
       )}
 
-      {/* Launcher — bottom LEFT corner. Mobile par panel khulne ke waqt sheet
-          neeche tak cover kar leti hai, isliye launcher chhup jaata hai. */}
+      {/* Launcher — only in uncontrolled mode. Controlled mode me parent (floating
+          social stack me render hua wala launcher) hi dikhata hai. */}
+      {openProp === undefined && (
       <div
         className={`fixed bottom-5 left-4 z-[60] items-center gap-2 sm:left-5 ${
           isOpen ? "hidden sm:flex" : "flex"
@@ -417,7 +438,7 @@ export function ChatbotWidget() {
         )}
         <button
           type="button"
-          onClick={() => setIsOpen((current) => !current)}
+          onClick={() => setIsOpen(!isOpen)}
           className="relative flex h-14 w-14 items-center justify-center rounded-full bg-secondary text-primary shadow-xl shadow-secondary/30 transition-all hover:scale-105 hover:bg-secondary/90 focus:outline-none focus:ring-4 focus:ring-secondary/30"
           aria-label={isOpen ? "Close BVPS Assistant" : "Open BVPS Assistant"}
           aria-expanded={isOpen}
@@ -431,6 +452,7 @@ export function ChatbotWidget() {
           {isOpen ? <X className="h-6 w-6" /> : <Bot className="h-6 w-6" />}
         </button>
       </div>
+      )}
     </>
   );
 }

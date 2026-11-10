@@ -1,8 +1,9 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { FloatingContact } from './FloatingContact';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { WhatsAppButton } from './WhatsAppButton';
+import { ChatbotWidget } from '@/components/chatbot/ChatbotWidget';
 import { VoiceBot } from '@/components/voice-bot/VoiceBot';
 import { SeoBase, SchoolStructuredData } from '@/lib/seo';
 import { useSiteContent } from '@/lib/site-content';
@@ -11,6 +12,7 @@ import { useLocation } from 'wouter';
 
 export function RootLayout({ children }: { children: ReactNode }) {
   const [location] = useLocation();
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const { get } = useSiteContent();
   // Admin portal → School Information se set hota hai. Khaali ho toh bar hi nahi
   // dikhta — isliye owner "notice" ko kabhi bhi band kar sakta hai.
@@ -64,7 +66,8 @@ export function RootLayout({ children }: { children: ReactNode }) {
       </main>
       <Footer />
       <VoiceBot />
-      <WhatsAppButton />
+      <WhatsAppButton onOpenChatbot={() => setIsChatbotOpen(true)} />
+      <ChatbotWidget open={isChatbotOpen} onOpenChange={setIsChatbotOpen} side="right" />
     </div>
   );
 }

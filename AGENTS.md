@@ -287,6 +287,16 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - ✅ **Verify:** `npm run typecheck --workspace=@workspace/bvps-website` clean · `npm run build` OK (18 static shells + 0 blog shells + 404 + sitemap 18 URLs) · prerender JSON-LD me `sameAs` present. (Blog API fetch 503 due to DB suspended — build successful.)
   - ⚠️ **Deploy baaki:** changes local hain — GitHub push/Vercel auto-deploy ke baad live verify karein.
 
+- **[2026-11-10]** 🤖 **Floating social stack me chatbot add kiya (round circle) + chatbot ab mount hua**:
+
+  - **Bada finding:** `ChatbotWidget` ab tak **kahin mount nahi tha** (orphan component tha — sirf apni file me exist karti thi, koi import/render nahi). Isliye "chatbot add karo" ka kaam pehle se hi tha.
+  - **Fix:** `ChatbotWidget` me controlled mode (`open` / `onOpenChange`) + `side` prop add kiya; launcher sirf uncontrolled me render hota hai (controlled me parent launcher use karta hai).
+  - **Change:** `WhatsAppButton` floating social stack me chatbot ko **neeche** add kiya (WhatsApp ke neeche) — ab order top→bottom: **Instagram → Facebook → WhatsApp → Chatbot**. Chatbot button **round circle** (`w-12 h-12 rounded-full bg-secondary` + Bot icon) — WhatsApp/Facebook/Instagram jaisa hi style.
+  - **Panel:** `side="right"` pe panel right anchored se open hoga (launcher ab right side me hai).
+  - **RootLayout:** chatbot open state lift kiya + `<WhatsAppButton onOpenChatbot={...} />` + `<ChatbotWidget open onOpenChange side="right" />` mount kiya.
+  - ✅ **Verify:** `npm run lint` clean · `npm run build` OK (18 shells + 0 blog + 404 + sitemap 18 URLs; prerender blog retries 5x).
+  - ⚠️ **Deploy baaki:** changes local hain — GitHub push → Vercel auto-deploy → baad live verify karein.
+
 ## To-Do Notes
 
 - ✅ **Email ab FormSubmit primary** (2026-10-10) — user ne bataya FormSubmit activation pehle hi ho chuka hai, isliye `notify.ts` me `sendEmail()` ab **FormSubmit pehle** try karta hai (seedha `jaatlakshya496@gmail.com` par relay — koi key/domain nahi chahiye, spam risk kam), firbhi fail ho toh **Resend fallback** (`RESEND_API_KEY` set hai). ❗ Deploy ke baad ek form bhej kar verify karna (Inbox/Spam dono check).
