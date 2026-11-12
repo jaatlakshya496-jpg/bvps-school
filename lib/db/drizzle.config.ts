@@ -1,13 +1,17 @@
 import { defineConfig } from "drizzle-kit";
+import { resolveSsl } from "./src/ssl";
 
 if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL, ensure the database is provisioned");
 }
+
+const ssl = resolveSsl(process.env.DATABASE_URL, process.env.DATABASE_SSL);
 
 export default defineConfig({
   schema: "./src/schema/index.ts",
   dialect: "postgresql",
   dbCredentials: {
     url: process.env.DATABASE_URL,
+    ...(ssl ? { ssl } : {}),
   },
 });
