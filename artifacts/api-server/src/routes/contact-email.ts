@@ -86,7 +86,42 @@ router.post("/", formLimiter, async (req: Request, res: Response) => {
     }
     if (!insertedId) throw new Error("Contact insert returned no row");
   } catch (dbErr) {
-    console.error("Contact DB save error:", dbErr);
+    // Asli DB error Render logs me clearly dikhna chahiye — Postgres/pg errors
+    // par `code` (jaise ECONNREFUSED, 28P01, 42P01) aur `detail` pehchaan ke
+    // sabse tez tareeqe hain. Poori stack bhi print karte hain.
+    const pgErr = dbErr as { code?: string; detail?: string; message?: string };
+    console.error(
+      `[contact-email] DB save FAILED — code=${pgErr?.code ?? "unknown"} detail=${pgErr?.detail ?? "-"} message=${pgErr?.message ?? String(dbErr)}`,
+      dbErr,
+    );
+
+    // DB down ho toh bhi enquiry gum na ho: email/WhatsApp notify ki koshish
+    // karo. Agar koi channel deliver ho gaya toh visitor ko success dikhao —
+    // admin portal me row nahi banti, par owner ko message email me aa jata
+    // hai (aur user apne phone par WhatsApp fallback link use kar sakta hai).
+    let emailSent = false;
+    let whatsappSent = false;
+    try {
+      const fallback = await notify(notification);
+      emailSent = fallback.emailSent;
+      whatsappSent = fallback.whatsappSent;
+    } catch (notifyErr) {
+      console.error("[contact-email] fallback notify error:", notifyErr);
+    }
+
+    if (emailSent || whatsappSent) {
+      res.status(202).json({
+        success: true,
+        message:
+          "Message received — the school office has been notified. (Message archive is temporarily unavailable, so it was delivered by email instead.)",
+        savedToDb: false,
+        emailSent,
+        whatsappSent,
+        whatsappUrl,
+      });
+      return;
+    }
+
     res.status(503).json({
       success: false,
       savedToDb: false,
