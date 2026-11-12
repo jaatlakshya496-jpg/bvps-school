@@ -1,5 +1,6 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
+import { resolveSsl } from "./ssl";
 import * as schema from "./schema";
 
 const { Pool } = pg;
@@ -9,8 +10,13 @@ let pool: any;
 
 try {
   if (process.env.DATABASE_URL) {
+    const connectionString = process.env.DATABASE_URL;
+    // Supabase/managed Postgres par TLS chahiye (DATABASE_SSL=true ya host me
+    // "supabase"); local non-SSL setups pehle jaise hi chalte rahenge.
+    const ssl = resolveSsl(connectionString, process.env.DATABASE_SSL);
     pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
+      connectionString,
+      ...(ssl ? { ssl } : {}),
       max: 10,
       idleTimeoutMillis: 30_000,
       connectionTimeoutMillis: 10_000,
