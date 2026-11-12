@@ -294,6 +294,12 @@ Is file ka uddeshya: site ke saare **changes/decisions** ko track karna taaki bh
   - ⚠️ **Secrets:** DATABASE_URL/password kahin print/commit nahi kiya; user ko masked `Read-Host -MaskInput` wale PowerShell blocks diye. Supabase migrations app-side se chalengi (drizzle-kit), Supabase SQL editor se nahi — startup `migrate()` bhi mehfooz hai.
   - ⚠️ Commit **local only** (`9bf3e95` ke baad `chore/bvps-cleanup` par) — push/merge/vercel.json ko touch nahi kiya.
 
+- **[2026-11-12]** 🚀 **Deploy-ready: PR #2 (fix/db-supabase-and-contact-form) + render.yaml DB wiring**:
+  - Branch `origin/main` se bani (git worktree me, doosre agent ka tree untouched) — dono fix commits (`9bf3e95` contact-form resilience, `7b1176b` Supabase SSL) cherry-pick kiye. `git diff origin/main --stat` = exactly 5 files (AGENTS.md, contact-email.ts, ssl.ts, index.ts, drizzle.config.ts), `vercel.json` diff khaali. AGENTS.md conflict resolve karke sirf apni entries rakhi (doosre local-only commits ki changelog text exclude).
+  - **render.yaml:** `DATABASE_URL` ka `fromDatabase: bvps-db` hata kar `sync: false` — expired free DB (17-Oct) ki wiring ab Supabase dashboard URL ko clobber nahi karegi; `DATABASE_SSL` (sync:false) add kiya. **Koi DB URL/password repo me nahi** — Supabase URL sirf Render ke private dashboard me set hogi. `databases: bvps-db` declaration rakha (blueprint expired resource delete na kare — recovery option ke liye).
+  - ✅ Verify: api-server tsc + esbuild build pass is branch par; poore PR diff me credential scan clean (koi postgres:// URL, koi api key value nahi).
+  - **Merge = PR #2** (`gh pr merge 2`) → Vercel (frontend) + Render (backend) auto-deploy. ⚠️ Render dashboard me pehle `DATABASE_URL` (Supabase Session pooler URL) + `DATABASE_SSL=true` set hoga tabhi DB-backed routes (fees/blog/contact-save/admin messages) 503 se 200 honge; jab tak nahi set, contact form submissions naye email-fallback (202 + `savedToDb:false`) se owner ke Gmail me aayengi.
+
 ## To-Do Notes
 
 - ✅ **Email ab FormSubmit primary** (2026-10-10) — user ne bataya FormSubmit activation pehle hi ho chuka hai, isliye `notify.ts` me `sendEmail()` ab **FormSubmit pehle** try karta hai (seedha `jaatlakshya496@gmail.com` par relay — koi key/domain nahi chahiye, spam risk kam), firbhi fail ho toh **Resend fallback** (`RESEND_API_KEY` set hai). ❗ Deploy ke baad ek form bhej kar verify karna (Inbox/Spam dono check).
