@@ -27,10 +27,15 @@ services:
         sync: false
       - key: CORS_ORIGINS
         sync: false
+      # DATABASE_URL ab Render dashboard me privately set hota hai (Supabase
+      # Postgres pooler URL) — repo me kabhi nahi. Purana free `bvps-db`
+      # 2026-10-17 expire ho gaya tha, isliye `fromDatabase` wiring hataya.
+      # `DATABASE_SSL=true` bhi dashboard me set karo (Supabase TLS ke liye,
+      # lib/db/src/ssl.ts isko padhta hai).
       - key: DATABASE_URL
-        fromDatabase:
-          name: bvps-db
-          property: connectionString
+        sync: false
+      - key: DATABASE_SSL
+        sync: false
       - key: GMAIL_USER
         sync: false
       - key: GMAIL_APP_PASSWORD
