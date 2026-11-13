@@ -29,6 +29,8 @@ const ADMIN_SECRET = process.env.ADMIN_SECRET;
 const credentialSchema = z.object({
   email: z.string().trim().max(254).optional(),
   password: z.string().max(200).optional(),
+  // "Remember this device" — sirf exact boolean `true` 30-day session enable karta.
+  remember: z.boolean().optional(),
 });
 
 function adminConfigured(res: Response): boolean {
@@ -42,13 +44,14 @@ function adminConfigured(res: Response): boolean {
   return true;
 }
 
-function issueSession(res: Response, email: string) {
-  const created = createAdminSession(email);
+function issueSession(res: Response, email: string, remember = false) {
+  const created = createAdminSession(email, remember);
   if (!created) {
     res.status(500).json({ success: false, error: "Session could not be created. Check server configuration." });
     return false;
   }
-  setSessionCookie(res, created.token);
+  // Cookie maxAge server-side decide kar raha hai (8h default / 30 din remember).
+  setSessionCookie(res, created.token, created.ttlMs);
   res.json({
     success: true,
     data: {
@@ -62,6 +65,8 @@ function issueSession(res: Response, email: string) {
 
 // Email + password login. Success par HttpOnly cookie set hoti hai; response
 // me sirf email, CSRF token aur expiry jaati hai — ADMIN_SECRET kabhi nahi.
+// `remember` boolean optional hai; server hi decide karta hai ki session 8h (default)
+// ya 30 din (sirf exact boolean `true` pe) rahegi.
 router.post("/login", loginIpLimiter, loginEmailLimiter, (req: Request, res: Response) => {
   if (!adminConfigured(res)) return;
 
@@ -81,7 +86,7 @@ router.post("/login", loginIpLimiter, loginEmailLimiter, (req: Request, res: Res
     return;
   }
 
-  issueSession(res, ADMIN_EMAIL!);
+  issueSession(res, ADMIN_EMAIL!, parsed.data.remember === true);
 });
 
 // Fee editor ka passcode gate. Purana design ADMIN_SECRET ko localStorage me

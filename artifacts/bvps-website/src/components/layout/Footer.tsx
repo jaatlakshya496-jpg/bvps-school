@@ -11,7 +11,6 @@ export function Footer() {
   const [, navigate] = useLocation();
   const { get } = useSiteContent();
   const [logoTaps, setLogoTaps] = useState(0);
-  const [showAdminHint, setShowAdminHint] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const resetTimer = useRef<number | null>(null);
 
@@ -38,14 +37,11 @@ export function Footer() {
     if (logoTaps >= ADMIN_TAPS_NEEDED) {
       navigate('/admin');
       setLogoTaps(0);
-      setShowAdminHint(false);
       return;
     }
-    setShowAdminHint(true);
     if (resetTimer.current) window.clearTimeout(resetTimer.current);
     resetTimer.current = window.setTimeout(() => {
       setLogoTaps(0);
-      setShowAdminHint(false);
     }, 1500);
     return () => {
       if (resetTimer.current) window.clearTimeout(resetTimer.current);
@@ -191,11 +187,6 @@ export function Footer() {
             className="text-primary-foreground/60 text-sm text-center md:text-left hover:text-secondary transition-colors"
           >
             © {new Date().getFullYear()} Bal Vikas Public School, Kalayat. All rights reserved.
-            {showAdminHint && (
-              <span className="block text-[11px] text-secondary mt-1">
-                Admin portal kholne ke liye {ADMIN_TAPS_NEEDED - logoTaps} aur tap karein…
-              </span>
-            )}
           </button>
           <p className="text-primary-foreground/60 text-sm text-center md:text-right">
             Affiliated to BSEH | Est. 2004 | School Code: 06050300920

@@ -11,11 +11,13 @@ import type { CookieOptions, Request, Response } from "express";
  *  - logout ka koi server-side effect nahi tha.
  *
  * Ab browser sirf opaque signed session token rakhta hai (HttpOnly cookie),
- * token 8 ghante me expire hota hai, logout par `jti` revoke hota hai, aur
+ * token 8 ghante me expire hota hai (ya 30 din, jab owner ne "Remember this
+ * device" select kiya ho), logout par `jti` revoke hota hai, aur
  * state-changing requests ke liye alag CSRF token chahiye.
  */
 export const SESSION_COOKIE_NAME = "bvps_admin_session";
-export const SESSION_TTL_MS = 8 * 60 * 60 * 1000; // 8 hours
+export const SESSION_TTL_MS = 8 * 60 * 60 * 1000; // 8 hours (default session lifetime)
+export const REMEMBERED_SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days ("remember this device")
 const MAX_TOKEN_LENGTH = 4096;
 
 export type AdminSession = {
@@ -57,21 +59,35 @@ export function timingSafeStringEqual(a: string, b: string): boolean {
   return safeEqual(a, b);
 }
 
-export function createAdminSession(email: string): { token: string; session: AdminSession } | null {
+/**
+ * Admin session ki lifetime decide karta hai. Default 8 ghante; sirf
+ * "Remember this device" ke liye (login me exact boolean `true` bheja gaya ho)
+ * 30 din. Truthy strings / numbers kabhi 30-day session enable nahi karte —
+ * server hi strict check karta hai (sirf exact `true` accepted).
+ */
+export function resolveSessionTtlMs(remember: unknown): number {
+  return remember === true ? REMEMBERED_SESSION_TTL_MS : SESSION_TTL_MS;
+}
+
+export function createAdminSession(
+  email: string,
+  remember: boolean = false,
+): { token: string; session: AdminSession; ttlMs: number } | null {
   const secret = sessionSecret();
   if (!secret) return null;
 
+  const ttlMs = resolveSessionTtlMs(remember);
   const now = Date.now();
   const session: AdminSession = {
     email,
     csrf: crypto.randomBytes(32).toString("hex"),
     jti: crypto.randomBytes(16).toString("hex"),
     iat: now,
-    exp: now + SESSION_TTL_MS,
+    exp: now + ttlMs,
   };
   const payload = b64url(JSON.stringify(session));
   const token = `${payload}.${sign(payload, secret)}`;
-  return { token, session };
+  return { token, session, ttlMs };
 }
 
 export function verifySessionToken(token: string | undefined | null): AdminSession | null {
@@ -129,7 +145,7 @@ export function readSession(req: Request): AdminSession | null {
   return verifySessionToken(cookies?.[SESSION_COOKIE_NAME]);
 }
 
-export function sessionCookieOptions(): CookieOptions {
+export function sessionCookieOptions(ttlMs: number = SESSION_TTL_MS): CookieOptions {
   const isProd = process.env.NODE_ENV === "production";
   return {
     httpOnly: true,
@@ -138,12 +154,14 @@ export function sessionCookieOptions(): CookieOptions {
     secure: isProd,
     sameSite: isProd ? "none" : "lax",
     path: "/",
-    maxAge: SESSION_TTL_MS,
+    // maxAge express me milliseconds me hota hai; Set-Cookie Max-Age header
+    // isi ko seconds me convert karke deta hai (8h = 28800s, 30 din = 2592000s).
+    maxAge: ttlMs,
   };
 }
 
-export function setSessionCookie(res: Response, token: string) {
-  res.cookie(SESSION_COOKIE_NAME, token, sessionCookieOptions());
+export function setSessionCookie(res: Response, token: string, ttlMs: number = SESSION_TTL_MS) {
+  res.cookie(SESSION_COOKIE_NAME, token, sessionCookieOptions(ttlMs));
 }
 
 export function clearSessionCookie(res: Response) {
