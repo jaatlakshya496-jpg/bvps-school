@@ -7,6 +7,7 @@ import { setAdminSession } from '@/lib/admin-store';
 export function AdminLogin({ onSuccess, initialError }: { onSuccess: () => void; initialError?: string }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState(false);
   const [error, setError] = useState(initialError ?? '');
   const [loading, setLoading] = useState(false);
 
@@ -18,7 +19,7 @@ export function AdminLogin({ onSuccess, initialError }: { onSuccess: () => void;
     setLoading(true);
     setError('');
     try {
-      const res = await apiLogin(email.trim(), password);
+      const res = await apiLogin(email.trim(), password, remember);
       if (res.success && res.data?.csrfToken) {
         // Session HttpOnly cookie me hai; yahan sirf non-sensitive email hint
         // aur CSRF token (API helper ke memory me) set hota hai.
@@ -92,6 +93,23 @@ export function AdminLogin({ onSuccess, initialError }: { onSuccess: () => void;
                   className="w-full border-2 border-primary/30 focus:border-primary rounded-xl pl-10 pr-4 py-3.5 sm:py-3 text-base sm:text-sm text-black bg-white outline-none"
                 />
               </div>
+            </div>
+
+            <div>
+              <label className="flex items-start gap-3 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={remember}
+                  onChange={e => setRemember(e.target.checked)}
+                  className="mt-1 h-4 w-4 shrink-0 accent-primary"
+                />
+                <span className="min-w-0">
+                  <span className="block text-sm font-bold text-slate-900">Remember this device</span>
+                  <span className="block text-xs text-muted-foreground mt-0.5 leading-relaxed">
+                    Login 30 din tak rahega. Sirf personal phone ya laptop par isse select karein.
+                  </span>
+                </span>
+              </label>
             </div>
 
             <button

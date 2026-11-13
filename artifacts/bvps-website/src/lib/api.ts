@@ -143,6 +143,7 @@ export async function apiAdminStatus(): Promise<AdminSessionInfo> {
 export async function apiLogin(
   email: string,
   password: string,
+  remember = false,
 ): Promise<{ success: boolean; data?: AdminSessionInfo; error?: string; status?: number }> {
   try {
     const json = await request<{ success: boolean; data?: AdminSessionInfo; error?: string }>(
@@ -150,7 +151,7 @@ export async function apiLogin(
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, remember }),
       },
     );
     if (json?.success && json.data?.csrfToken) setCsrfToken(json.data.csrfToken);
